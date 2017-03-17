@@ -35,11 +35,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override  
     protected void configure(HttpSecurity http) throws Exception {  
-        http  
+        http
+        .headers().disable()
         .addFilterBefore(mySecurityFilter, FilterSecurityInterceptor.class)
-        .authorizeRequests()  
-        .antMatchers("/home").permitAll() 
-        .antMatchers("/register").permitAll()  
+        .authorizeRequests()
+        .antMatchers("/css/*").permitAll()
+        .antMatchers("/js/*").permitAll()
+        .antMatchers("/images/*").permitAll()
+        .antMatchers("/html/*").permitAll()
         .anyRequest().authenticated()  
         .and()  
         .formLogin()  
@@ -48,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .successHandler(loginSuccessHandler()) 
         .and()  
         .logout()  
-        .logoutSuccessUrl("/home")  
+        .logoutSuccessUrl("/login")  
         .permitAll()  
         .invalidateHttpSession(true)  
         .and()  

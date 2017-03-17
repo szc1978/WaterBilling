@@ -1,4 +1,4 @@
-package org.water.billing.entity;
+package org.water.billing.entity.admin;
 
 import java.util.Date;  
 

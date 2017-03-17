@@ -8,20 +8,20 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;  
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.water.billing.dao.LoginLogDao;
-import org.water.billing.entity.LoginLog;
-import org.water.billing.entity.SysUser;  
+import org.water.billing.dao.LoginHistoryDao;
+import org.water.billing.entity.LoginHistory;
+import org.water.billing.entity.admin.SysUser;  
   
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {  
 	@Autowired
-	LoginLogDao loginLogDao;
+	LoginHistoryDao loginLogDao;
 	
     @Override    
     public void onAuthenticationSuccess(HttpServletRequest request,    
             HttpServletResponse response, Authentication authentication) throws IOException,    
             ServletException {    
-        SysUser userDetails = (SysUser)authentication.getPrincipal();    
-        LoginLog login = new LoginLog(userDetails.getName(),getIpAddress(request));
+        SysUser userDetails = (SysUser)authentication.getPrincipal();  
+        LoginHistory login = new LoginHistory(userDetails.getName(),userDetails.getChineseName(),getIpAddress(request));
         loginLogDao.save(login);
         super.onAuthenticationSuccess(request, response, authentication);    
     }    

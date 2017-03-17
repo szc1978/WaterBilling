@@ -1,0 +1,29 @@
+package org.water.billing.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.water.billing.dao.LoginHistoryDao;
+import org.water.billing.entity.LoginHistory;
+
+@Service("loginHistoryService")
+public class LoginHistoryService {
+	
+	@Autowired
+	LoginHistoryDao loginLogDao;
+	
+	public Page<LoginHistory> findAll(int pageIndex,int number) {
+		Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC,"id"));
+		Pageable page = new PageRequest(pageIndex,number,sort);
+		Page<LoginHistory> history = loginLogDao.findAll(page);
+		return history;
+	}
+	
+	public long count() {
+		return loginLogDao.count();
+	}
+
+}

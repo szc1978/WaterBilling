@@ -7,8 +7,8 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;  
 import org.springframework.security.core.authority.SimpleGrantedAuthority;  
 import org.springframework.security.core.userdetails.UserDetails;
-import org.water.billing.entity.SysUserRole;
-import org.water.billing.entity.SysUser;  
+import org.water.billing.entity.admin.SysUser;
+import org.water.billing.entity.admin.SysUserRole;  
   
 public class SecurityUser extends SysUser implements UserDetails {  
 	private static final long serialVersionUID = -8942761076930874528L;

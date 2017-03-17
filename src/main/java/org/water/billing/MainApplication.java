@@ -14,8 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.water.billing.dao.SysUserDao;
 import org.water.billing.dao.SysUserRoleDao;
-import org.water.billing.entity.SysUser;
-import org.water.billing.entity.SysUserRole;
+import org.water.billing.entity.admin.SysUser;
+import org.water.billing.entity.admin.SysUserRole;
 import org.water.billing.security.support.Appctx;
 import org.water.billing.security.support.MyFilterSecurityInterceptor;  
  
@@ -31,7 +31,7 @@ public class MainApplication{
 
     @PostConstruct  
 	public void initApplication() throws IOException { 
-    	SysUserRole role = new SysUserRole();
+    	/*SysUserRole role = new SysUserRole();
     	role.setName("Admin4Test");
     	role.setRoleCode("XXXX");
     	BCryptPasswordEncoder bc=new BCryptPasswordEncoder(4);
@@ -41,7 +41,7 @@ public class MainApplication{
     	SysUser user = new SysUser("test", "test","aa@aa.aa", password, roles);
     	role.setSysUser(user);
     	sysUserDao.save(user);
-    	sysUserRoleDao.save(role);
+    	sysUserRoleDao.save(role);*/
     }  
        
     public static void main(String[] args) {  

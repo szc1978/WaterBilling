@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;  
 import org.springframework.security.core.userdetails.UsernameNotFoundException;  
 import org.springframework.stereotype.Component;
-import org.water.billing.entity.SysUser;
+import org.water.billing.entity.admin.SysUser;
 import org.water.billing.service.SysUserService;  
   
   

@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.water.billing.dao.SysUserRoleDao;
-import org.water.billing.entity.SysUserRole;
+import org.water.billing.entity.admin.SysUserRole;
 
 @Service("sysRoleService")
 public class SysRoleService {

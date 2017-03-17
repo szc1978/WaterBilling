@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.water.billing.dao.SysResourceDao;
 import org.water.billing.dao.SysResourceRoleDao;
 import org.water.billing.dao.SysUserRoleDao;
-import org.water.billing.entity.SysResource;
+import org.water.billing.entity.admin.SysResource;
 
 @Service
 public class SysResourceService {

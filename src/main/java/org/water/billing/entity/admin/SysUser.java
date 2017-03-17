@@ -1,4 +1,4 @@
-package org.water.billing.entity;
+package org.water.billing.entity.admin;
 
 import java.util.Date;  
 import java.util.HashSet;  
@@ -22,7 +22,7 @@ public class SysUser {
 	@Id  
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", unique = true, nullable = false,length=20)
-	private Integer id;
+	private Long id;
 	
 	@Column(name = "name", unique = true, nullable = false,length = 64)
 	private String name;
@@ -68,11 +68,11 @@ public class SysUser {
 		this.SysRoles = SysRoles;  
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

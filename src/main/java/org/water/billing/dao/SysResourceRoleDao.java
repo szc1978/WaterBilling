@@ -1,8 +1,8 @@
 package org.water.billing.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.water.billing.entity.SysResourceRole;
-import org.water.billing.entity.SysUser;
+import org.water.billing.entity.admin.SysResourceRole;
+import org.water.billing.entity.admin.SysUser;
 
 public interface SysResourceRoleDao extends JpaRepository<SysResourceRole, Integer> {
 

@@ -16,8 +16,8 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;  
 import org.springframework.security.web.util.matcher.RequestMatcher;  
 import org.springframework.stereotype.Service;
-import org.water.billing.entity.SysResource;
-import org.water.billing.entity.SysUserRole;
+import org.water.billing.entity.admin.SysResource;
+import org.water.billing.entity.admin.SysUserRole;
 import org.water.billing.service.SysResourceService;
 import org.water.billing.service.SysRoleService;  
   

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.water.billing.entity.SysResource;
-import org.water.billing.entity.SysUser;
+import org.water.billing.entity.admin.SysResource;
+import org.water.billing.entity.admin.SysUser;
 
 public interface SysResourceDao extends JpaRepository<SysResource, Integer> {
 
