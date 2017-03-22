@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 @Service  
 public class CustomAccessDecisionManager implements AccessDecisionManager {  
       
-    public void decide( Authentication authentication, Object object,   
-            Collection<ConfigAttribute> configAttributes)   
+    public void decide( Authentication authentication, Object object,Collection<ConfigAttribute> configAttributes)   
         throws AccessDeniedException, InsufficientAuthenticationException{  
         if( configAttributes == null ) {  
             return ;  
@@ -27,30 +26,20 @@ public class CustomAccessDecisionManager implements AccessDecisionManager {
         while( ite.hasNext()){  
             ConfigAttribute ca = ite.next();  
             String needRole = ((SecurityConfig)ca).getAttribute();  
-
             for( GrantedAuthority ga: authentication.getAuthorities()){  
-                  
                 if(needRole.trim().equals(ga.getAuthority().trim())){  
-  
                     return;  
                 }  
-                  
             }  
-              
         }  
-          
         throw new AccessDeniedException("权限不足");  
-          
     }  
       
     public boolean supports( ConfigAttribute attribute ){  
        return true;
-  
     }  
       
     public boolean supports(Class<?> clazz){  
         return true;
     }  
-      
-  
 } 

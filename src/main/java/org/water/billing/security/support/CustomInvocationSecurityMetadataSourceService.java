@@ -65,13 +65,10 @@ public class CustomInvocationSecurityMetadataSourceService implements FilterInvo
                     atts.add(ca);  
                     resourceMap.put(url, atts);  
                 }  
-  
             }  
         }  
-  
     }  
   
-
     public Collection<ConfigAttribute> getAllConfigAttributes() {  
          return new ArrayList<ConfigAttribute>();  
     }  
@@ -94,8 +91,7 @@ public class CustomInvocationSecurityMetadataSourceService implements FilterInvo
         return null;  
     }  
 
-    public boolean supports(Class<?> arg0) {  
-  
+    public boolean supports(Class<?> arg0) {
         return true;  
     }  
   

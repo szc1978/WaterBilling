@@ -1,4 +1,4 @@
-package org.water.billing.security.support;
+package org.water.billing;
 
 import org.springframework.context.ApplicationContext;  
 

@@ -1,21 +1,53 @@
 <!DOCTYPE html>  
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">  
-    <head>  
-        <title>Spring Security Example </title>  
-    </head>  
-    <body>  
-        <div th:if="${param.error}">  
-            Invalid username and password.  
-        </div>  
-        <div th:if="${param.logout}">  
-            You have been logged out.  
-        </div>  
-        <form th:action="@{/login}" method="post">  
-            <div><label> User Name : <input type="text" name="username"/> </label></div>  
-            <div><label> Password: <input type="password" name="password"/> </label></div>  
-            <div><input type="submit" value="Sign In"/></div>  
-            <input type="checkbox" name="remember-me" value="true" th:checked="checked"/><p>Remember me</p>  
-        </form>  
-    </body>  
-</html>  
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"> 
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>欢迎登录后台管理系统</title>
+		<link href="css/style.css" rel="stylesheet" type="text/css" />
+		<script src="js/jquery.js"></script>
+		<script src="js/cloud.js" type="text/javascript"></script>
+		<script>
+			if(window.top!==window.self){window.top.location=window.location};
+		</script>
+	 
+		<script>
+			$(function(){
+	    		$('.loginbox').css({'position':'absolute','left':($(window).width()-692)/2});
+				$(window).resize(function(){  
+	    		$('.loginbox').css({'position':'absolute','left':($(window).width()-692)/2});
+	    		})  
+			});  
+		</script> 
+	</head>
+
+	<body style="background-color:#1c77ac; background-image:url(images/light.png); background-repeat:no-repeat; background-position:center top; overflow:hidden;">
+	    <div id="mainBody">
+	      <div id="cloud1" class="cloud"></div>
+	      <div id="cloud2" class="cloud"></div>
+	    </div>  
+		
+		<div class="logintop">    
+	    	<span>欢迎登录后台管理界面平台</span>    
+	    </div>
+	    
+	    <div class="loginbody">
+		    <span class="systemlogo"></span> 
+		    <div class="loginbox">
+				<form th:action="@{/login}" method="post">  
+				    <ul>
+		    			<li><input name="username" type="text" class="loginuser" value="test" onclick="JavaScript:this.value=''"/></li>
+		    			<li><input name="password" type="password" class="loginpwd" value="pass" onclick="JavaScript:this.value=''"/></li>
+		    			<li><input name="login" type="submit" class="loginbtn" value="登录" /><label><input name="remember-me" type="checkbox" value="false" th:checked="checked" />记住密码</label></li>
+		    		</ul>
+					<div th:if="${param.error}">  
+			            Invalid username and password.  
+			        </div>  
+			        <div th:if="${param.logout}">  
+			            You have been logged out.  
+			        </div>
+				</form>
+		    </div>
+	    </div>   
+	</body>
+
+</html>

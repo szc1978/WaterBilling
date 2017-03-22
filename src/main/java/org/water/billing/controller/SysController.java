@@ -10,13 +10,12 @@ import org.water.billing.entity.LoginHistory;
 import org.water.billing.service.LoginHistoryService;
 
 @Controller
-@RequestMapping("/sys")
 public class SysController {
 	
 	@Autowired
 	LoginHistoryService loginHistoryService;
 	
-	@RequestMapping("/loginhistory")
+	@RequestMapping("/admin/loginhistory")
 	public String addUser(@RequestParam(value="page",required=false) String page,ModelMap map) {
 		int index = (page == null) ? 0 : Integer.valueOf(page);
 		Page<LoginHistory> historys = loginHistoryService.findAll(index,10);

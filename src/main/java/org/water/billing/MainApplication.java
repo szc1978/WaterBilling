@@ -16,7 +16,6 @@ import org.water.billing.dao.SysUserDao;
 import org.water.billing.dao.SysUserRoleDao;
 import org.water.billing.entity.admin.SysUser;
 import org.water.billing.entity.admin.SysUserRole;
-import org.water.billing.security.support.Appctx;
 import org.water.billing.security.support.MyFilterSecurityInterceptor;  
  
 @SpringBootApplication  
@@ -32,13 +31,13 @@ public class MainApplication{
     @PostConstruct  
 	public void initApplication() throws IOException { 
     	/*SysUserRole role = new SysUserRole();
-    	role.setName("Admin4Test");
+    	role.setName("Admin4Test1");
     	role.setRoleCode("XXXX");
     	BCryptPasswordEncoder bc=new BCryptPasswordEncoder(4);
     	String password = bc.encode("pass");
     	Set<SysUserRole> roles = new HashSet<SysUserRole>();
     	roles.add(role);
-    	SysUser user = new SysUser("test", "test","aa@aa.aa", password, roles);
+    	SysUser user = new SysUser("test1", "test1","aa1@aa.aa", password, roles);
     	role.setSysUser(user);
     	sysUserDao.save(user);
     	sysUserRoleDao.save(role);*/

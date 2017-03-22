@@ -29,7 +29,6 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor imp
     @Autowired  
     private AuthenticationManager authenticationManager;  
       
-      
     @PostConstruct  
     public void init(){  
         super.setAuthenticationManager(authenticationManager);  
@@ -40,13 +39,11 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor imp
         FilterInvocation fi = new FilterInvocation( request, response, chain );  
         invoke(fi);  
     }  
-  
       
     public Class<? extends Object> getSecureObjectClass(){  
         return FilterInvocation.class;  
     }  
-  
-      
+    
     public void invoke( FilterInvocation fi ) throws IOException, ServletException{   
         InterceptorStatusToken  token = super.beforeInvocation(fi);  
         try{  
@@ -54,10 +51,8 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor imp
         }finally{  
             super.afterInvocation(token, null);  
         }  
-          
     }  
           
-      
     public SecurityMetadataSource obtainSecurityMetadataSource(){   
         return this.mySecurityMetadataSource;  
     }  
