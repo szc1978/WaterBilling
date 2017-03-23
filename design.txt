@@ -1,0 +1,37 @@
+1. 一个User属于某些Role
+	a.)User存在一个表中 sys_user
+	b.)一个User属于多个Role，一条记录还是多条记录？表：sys_user_role
+2. 一个Role具备访问某些Resource的权限
+	a.)Resource用枚举定义
+	b.)一个Resource对应多个Role，一条记录还是多条记录？用RoleID表示，这个关系对应的表示sys_resource_role
+	如果一条记录，可以直接得出mapping关系（Role用特殊符号分割存在一个字段里），但是某个Role被删除的时候，这条记录难以更新
+	如果是多条记录，也可以得出关系
+	c.)Role要存在DB中，提供管理页面，
+
+验证关系 {“Resource1”：["Role1","Role2"],"Resource2":["Role2"]}
+
+初始化时，通过sys_resource_role得出上面的Mapping
+
+User登录时，得到Role List即可
+
+Table:User(id,name(key),chinese_name,email,password,create_time)(sys_user)
+id	name
+1	test
+2	admin
+
+Table:Role (id,name(key),code(key),type,memo,create_time)(sys_role)
+id	name
+1	admin
+2	user
+
+Table:User_Role (id,name(key),uid,rid,latest_modify_time) (sys_user_role)
+id	user_id	role_id
+1	1		1
+2	2		1
+3	2		2
+
+Table:Resource_Role (id,name(key),resource,rid,latest_modify_time) (sys_resource_role)
+id	resource	role_id
+1	/user		1
+2	/log		1
+3	/log		2
