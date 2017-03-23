@@ -19,19 +19,20 @@ public class SecurityUser extends SysUser implements UserDetails {
             this.setName(suser.getName());  
             this.setEmail(suser.getEmail());  
             this.setPassword(suser.getPassword());  
-            this.setSRoles(suser.getSysRoles());  
+            this.setSysUserRoles(suser.getSysUserRoles());  
             this.setChineseName(suser.getChineseName());
             this.setCreateDate(suser.getCreateDate());
+            this.setActive(suser.getActive());
         }         
     }  
       
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();  
-        Set<SysUserRole> userRoles = this.getSysRoles();  
+        Set<SysUserRole> userRoles = this.getSysUserRoles();  
           
         if(userRoles != null) {  
-            for (SysUserRole role : userRoles) {  
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getName());  
+            for (SysUserRole userRole : userRoles) {  
+                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(String.valueOf(userRole.getRid()));  
                 authorities.add(authority);  
             }  
         }  

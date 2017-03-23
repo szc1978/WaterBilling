@@ -16,57 +16,35 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;  
 import org.springframework.security.web.util.matcher.RequestMatcher;  
 import org.springframework.stereotype.Service;
-import org.water.billing.entity.admin.SysResource;
-import org.water.billing.entity.admin.SysUserRole;
-import org.water.billing.service.SysResourceService;
-import org.water.billing.service.SysRoleService;  
+import org.water.billing.entity.admin.SysResourceRole;
+import org.water.billing.service.SysResourceRoleService;  
   
 @Service  
 public class CustomInvocationSecurityMetadataSourceService implements FilterInvocationSecurityMetadataSource {  
       
     @Autowired  
-    private SysResourceService sysResourceService;  
-      
-    @Autowired  
-    private SysRoleService sysRoleService;  
+    private SysResourceRoleService sysResoureRoleService;  
       
     private static Map<String, Collection<ConfigAttribute>> resourceMap = null;  
   
     @PostConstruct
-    private void loadResourceDefine() {  
-        List<SysUserRole> list = sysRoleService.findAll();  
-        List<String> query = new ArrayList<String>();  
-        if(list!=null && list.size()>0) {  
-            for(SysUserRole sr :list){  
-                query.add(sr.getName());  
-            }  
-        }   
-        resourceMap = new HashMap<String, Collection<ConfigAttribute>>();  
-  
-        for (String auth : query) {  
-            ConfigAttribute ca = new SecurityConfig(auth);  
-            List<String> query1 = new ArrayList<String>();  
-            List<SysResource>  list1 = sysResourceService.findByRoleName(auth);  
-            if(list1!=null && list1.size()>0) {  
-                for(SysResource sysResource :list1){  
-                    query1.add(sysResource.getResourceString());  
-                }  
-            }  
-            for (String res : query1) {  
-                String url = res;  
-                   
-                if (resourceMap.containsKey(url)) {  
-  
-                    Collection<ConfigAttribute> value = resourceMap.get(url);  
-                    value.add(ca);  
-                    resourceMap.put(url, value);  
-                } else {  
-                    Collection<ConfigAttribute> atts = new ArrayList<ConfigAttribute>();  
-                    atts.add(ca);  
-                    resourceMap.put(url, atts);  
-                }  
-            }  
-        }  
+    private void loadResourceDefine() {
+    	resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
+    	List<SysResourceRole> resourceRoles = sysResoureRoleService.findAll();
+    	
+    	if(resourceRoles == null)
+    		return;
+    	
+    	for(SysResourceRole resourceRole : resourceRoles) {
+    		int rid = resourceRole.getRid();
+    		String resourceString = resourceRole.getResourceString();
+    		ConfigAttribute ca = new SecurityConfig(String.valueOf(rid));
+    		if(!resourceMap.containsKey(resourceString)) {
+    			Collection<ConfigAttribute> atts = new ArrayList<ConfigAttribute>();
+    			resourceMap.put(resourceString, atts);
+    		}
+    		resourceMap.get(resourceString).add(ca);
+    	}
     }  
   
     public Collection<ConfigAttribute> getAllConfigAttributes() {  
@@ -87,7 +65,6 @@ public class CustomInvocationSecurityMetadataSourceService implements FilterInvo
                 return resourceMap.get(resURL);  
             }  
         }  
-  
         return null;  
     }  
 

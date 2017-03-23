@@ -35,6 +35,9 @@ public class SysUser {
          
 	@Column(name = "password", length = 128)
 	private String password; 
+	
+	@Column(name = "active",length = 1)
+	private int active;
     
 	@Temporal(TemporalType.TIMESTAMP) 
 	@Column(name = "createDate", length = 32)  
@@ -45,27 +48,28 @@ public class SysUser {
     }
            
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sysUser")  
-	private Set<SysUserRole> SysRoles = new HashSet<SysUserRole>(0);
+	private Set<SysUserRole> SysUserRoles = new HashSet<SysUserRole>(0);
    
 	public SysUser() {  
          
 	}  
    
-	public SysUser(String name, String chineseName,String email, String password, Set<SysUserRole> SysRoles) {  
+	public SysUser(String name, String chineseName,String email, String password, Set<SysUserRole> SysUserRoles) {  
 		this.name = name;  
 		this.chineseName = chineseName;
 		this.email = email;  
 		this.password = password;  
-		this.SysRoles = SysRoles;  
+		this.SysUserRoles = SysUserRoles; 
+		this.active = 1;
 	}   
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sysUser")
-	public Set<SysUserRole> getSysRoles() { 
-		return this.SysRoles; 
+	public Set<SysUserRole> getSysUserRoles() { 
+		return this.SysUserRoles; 
 	}  
    
-	public void setSRoles(Set<SysUserRole> SysRoles) {  
-		this.SysRoles = SysRoles;  
+	public void setSysUserRoles(Set<SysUserRole> SysUserRoles) {  
+		this.SysUserRoles = SysUserRoles;  
 	}
 
 	public Long getId() {
@@ -116,7 +120,13 @@ public class SysUser {
 		this.createDate = createDate;
 	}
 
-	public void setSysRoles(Set<SysUserRole> sysRoles) {
-		SysRoles = sysRoles;
+	public int getActive() {
+		return active;
 	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
+
+
 }

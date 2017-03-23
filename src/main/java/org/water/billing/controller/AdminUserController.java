@@ -19,36 +19,19 @@ public class AdminUserController {
 	@RequestMapping(value="/admin/user",method=RequestMethod.GET)
 	public String user(@RequestParam(value="action",required=true) String action,
 						@RequestParam(value="page",required=false) String page,
-						@RequestParam(value="id",required=false) String id,
 						ModelMap map) {
-		String res = "/error";
 		int index = (page == null) ? 0 : Integer.valueOf(page);
-		switch(action) {
-		case "list":
-			res = "/listuser";
-			Page<SysUser> users = sysUserService.findAll(index,10);
-			long total = sysUserService.count();
-			map.addAttribute("users",users);
-			map.addAttribute("page",index);
-			map.addAttribute("total",total);
-			break;
-		case "create":
-			res = "/modifyuser";
-			break;
-		case "modify":
-			SysUser user = sysUserService.findById(Long.valueOf(id));
-			map.addAttribute("user",user);
-			res = "/modifyuser";
-			break;
-		default:
-			break;
-		}
-		return res;
+		Page<SysUser> users = sysUserService.findAll(index,10);
+		long total = sysUserService.count();
+		map.addAttribute("users",users);
+		map.addAttribute("page",index);
+		map.addAttribute("total",total);
+		return "/listuser";
 	}
 	
 	@RequestMapping(value="/admin/user",method=RequestMethod.POST)
-	public String user() {
+	public String user(@RequestParam(value="id") int id) {
 		
-		return "redirect:/admin/user?action=list";
+		return "/modifyuser";
 	}
 }

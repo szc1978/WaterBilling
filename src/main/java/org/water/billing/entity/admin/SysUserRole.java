@@ -1,5 +1,7 @@
 package org.water.billing.entity.admin;
 
+import java.util.Date;
+
 import javax.persistence.Column;  
 import javax.persistence.Entity;  
 import javax.persistence.FetchType;  
@@ -7,8 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;  
 import javax.persistence.Id;  
 import javax.persistence.JoinColumn;  
-import javax.persistence.ManyToOne;  
-import javax.persistence.Table;  
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;  
  
 @Entity  
 @Table(name="sys_user_role")  
@@ -19,17 +24,31 @@ public class SysUserRole {
     private int id;  
       
     @ManyToOne(fetch = FetchType.LAZY)  
-    @JoinColumn(name = "uid", nullable = false)  
+    @JoinColumn(name = "uid")  
     private SysUser sysUser;
       
-    @Column(name="name",length=100)  
+    @Column(name="name",unique = true, nullable = false,length=100)  
     private String name;
     
-    @Column(name="role_code",length=32)
-    private String roleCode;
+    @Column(name="rid",nullable = false,length=20)
+    private int rid;
+    
+    @Temporal(TemporalType.TIMESTAMP) 
+	@Column(name = "createDate", length = 32)  
+	private Date createDate; 
+	@PrePersist
+    protected void onCreate() {
+		createDate = new Date();
+    }
     
     public SysUserRole() {
     	
+    }
+    
+    public SysUserRole(String name,SysUser sysUser,int rid) {
+    	this.name = name;
+    	this.sysUser = sysUser;
+    	this.rid = rid;
     }
     
     public int getId() {  
@@ -59,12 +78,12 @@ public class SysUserRole {
 		return sysUser;
 	}
 
-	public String getRoleCode() {
-		return roleCode;
+	public int getRid() {
+		return rid;
 	}
 
-	public void setRoleCode(String roleCode) {
-		this.roleCode = roleCode;
+	public void setRid(int rid) {
+		this.rid = rid;
 	}
     
 	 

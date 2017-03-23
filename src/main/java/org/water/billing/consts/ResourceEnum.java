@@ -15,19 +15,19 @@ public enum ResourceEnum {
 	;
 	
 	
-	private ResourceEnum(String name,String resource) {
+	private ResourceEnum(String name,String resourceString) {
 		this.name = name;
-		this.resource = resource;
+		this.resourceString = resourceString;
 	}
 	
 	public String getName() {
 		return name;
 	}
 	
-	public String getResource() {
-		return resource;
+	public String getResourceString() {
+		return resourceString;
 	}
 	
 	private String name = "";
-	private String resource = "";
+	private String resourceString = "";
 }

@@ -17,7 +17,7 @@ public class SysUserService {
 	@Autowired
 	SysUserDao userDao;
 	
-	public SysUser findByName(String name) {
+	public SysUser findActiveUserByName(String name) {
 		return userDao.findByName(name);
 	}
 	

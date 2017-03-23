@@ -1,11 +1,16 @@
 package org.water.billing.entity.admin;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="sys_role")
@@ -26,6 +31,14 @@ public class SysRole {
     
     @Column(name="memo",length=128)
     private String memo;
+    
+    @Temporal(TemporalType.TIMESTAMP) 
+	@Column(name = "createDate", length = 32)  
+	private Date createDate; 
+	@PrePersist
+    protected void onCreate() {
+		createDate = new Date();
+    }
     
     public SysRole() {
     	
