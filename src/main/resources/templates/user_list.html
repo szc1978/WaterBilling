@@ -34,7 +34,7 @@
     	</div>
     	<div class="rightinfo">
  			<div class="tools">
- 			<form name="create_user" th:action="@{/admin/user}" method="post"><input type="hidden" name="id" value="0"></input></form>
+ 			<form name="create_user" th:action="@{/admin/user/create}" method="post"></form>
 	    		<ul class="toolbar">
 			        <li ><a href="javascript:document:create_user.submit();" class="tablelink"><span><img src="/images/t01.png" /></span>添加</a></li>
 	        	</ul>
@@ -61,7 +61,12 @@
 			        <td th:text="${user.password}"></td>
 			        <td th:text="${user.active}"></td>
 			        <td th:text="${user.createDate}"></td>
-			        <td><a th:href="@{/admin/user(id=${user.id},action=modify)}" class="tablelink">更新</a></td>
+			        <td>
+			        	<form th:name="${user.name}" th:action="@{/admin/user/modify}" method="post">
+			        		<input type="hidden" name="id" th:value="${user.id}"></input>
+			        		<input type="submit" name="submit" value="更新" class="txtbtn"></input>
+			        	</form>
+			        </td>
 		        </tr>        
 		        </tbody>
 		    </table>

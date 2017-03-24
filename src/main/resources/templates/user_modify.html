@@ -18,16 +18,20 @@
     
 	    <div class="formbody">
 	    	<div class="formtitle"><span>基本信息</span></div>
-	    	<ul class="forminfo">
-				   <li><label>系统用户名</label><input name="username" type="text" class="dfinput" /><i>(长度16，英文字母、数字、_)</i></li>
-				   <li><label>中文名</label><input name="chinesename" type="text" class="dfinput" /><i></i></li>
-				    <li><label>用户组</label>
-				    	<input name="sysadmin" type="checkbox" value="" />系统管理员 <br></br>
+	    	<form name="update_user" th:action="@{/admin/user}" method="post">
+	    		<ul class="forminfo">
+				   <li><label>系统用户名</label><input name="username" id="username" type="text" class="dfinput" th:value="${user.name}" readonly="true" /><i></i></li>
+				   <li><label>中文名</label><input name="chinesename" type="text" class="dfinput" th:value="${user.chineseName}" readonly="true"  /><i></i></li>
+				   <li><label>用户组</label>
+				   		<input name="sysadmin" type="checkbox" value="" />系统管理员 <br></br>
 				    	<input name="useradmin" type="checkbox" value=""  />用户管理员 <br></br>
 				    	<input name="useradmin" type="checkbox" value="" />用户管理员<br></br>
 	   				</li>
-	    		<li><input name="" type="button" class="btn" value="保存"/> <input name="" type="button" class="btn" value="删除"/></li>
-			</ul>
+	   				
+	    			<li><input name="" type="button" class="btn" value="保存"/> <input name="" type="button" class="btn" value="删除"/></li>
+	    			<input type="hidden" name="id" th:value="${user.id}"></input>
+				</ul>
+			</form>
 		</div>
 	</body>
 

@@ -21,6 +21,10 @@ public class SysUserService {
 		return userDao.findByName(name);
 	}
 	
+	public SysUser findByName(String name) {
+		return userDao.findByName(name);
+	}
+	
 	public SysUser findById(long id) {
 		return userDao.findById(id);
 	}
