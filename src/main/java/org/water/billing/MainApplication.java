@@ -14,10 +14,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.water.billing.dao.SysRoleDao;
 import org.water.billing.dao.SysUserDao;
-import org.water.billing.dao.SysUserRoleDao;
 import org.water.billing.entity.admin.SysRole;
 import org.water.billing.entity.admin.SysUser;
-import org.water.billing.entity.admin.SysUserRole;
 import org.water.billing.security.support.MyFilterSecurityInterceptor;  
  
 @SpringBootApplication  
@@ -29,8 +27,8 @@ public class MainApplication{
 	@Autowired
 	SysUserDao sysUserDao;
 	
-	@Autowired
-	SysUserRoleDao sysUserRoleDao;
+	//@Autowired
+	//SysUserRoleDao sysUserRoleDao;
 	
 	@Autowired
 	SysRoleDao sysRoleDao;
@@ -57,12 +55,11 @@ public class MainApplication{
 		SysUser user = sysUserDao.findByName("test");
 		if(user != null)
 			return;
-		Set<SysUserRole> roles = new HashSet<SysUserRole>();
+		Set<SysRole> roles = new HashSet<SysRole>();
 		user = new SysUser("test", "test","test@water.com", bc.encode("pass"), roles);
-		SysUserRole userRole = new SysUserRole("User4Test",user,role.getId());
-		roles.add(userRole);
+		
+		//roles.add(role);
 		sysUserDao.save(user);
-		sysUserRoleDao.save(userRole);
 	}
 	
 	public void initAdmin() {
@@ -75,15 +72,12 @@ public class MainApplication{
 		SysUser user = sysUserDao.findByName("admin");
 		if(user != null)
 			return;
-		Set<SysUserRole> roles = new HashSet<SysUserRole>();
+		Set<SysRole> roles = new HashSet<SysRole>();
 		user = new SysUser("admin", "admin","admin@water.com", bc.encode("pass"), roles);
-		SysUserRole userNormalRole = new SysUserRole("User4Admin",user,normalRole.getId());
-		SysUserRole userAdminRole = new SysUserRole("Admin4Admin",user,adminRole.getId());
-		roles.add(userNormalRole);
-		roles.add(userAdminRole);
+		
+		//roles.add(normalRole);
+		//roles.add(adminRole);
 		sysUserDao.save(user);
-		sysUserRoleDao.save(userNormalRole);
-		sysUserRoleDao.save(userAdminRole);
 	}
 
     @PostConstruct  

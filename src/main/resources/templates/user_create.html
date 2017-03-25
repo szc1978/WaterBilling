@@ -4,13 +4,14 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title></title>
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript" src="/js/jquery.js"></script>
 		<script>
 			$(document).ready(function(){ 
 				checkConfirm(); 
-			}); 
+			});
 			function checkConfirm(){ 
-				$("#username").blur(function(){ 
+				$("#name").blur(function(){ 
 					var gradename = $(this).val(); 
 					var changeUrl = "/api/getuserbyname?name="+gradename; 
 				$.get(changeUrl,function(str){ 
@@ -37,22 +38,60 @@
 		    </ul>
    		</div>
     
-	    <div class="formbody">
-	    	<div class="formtitle"><span>基本信息</span></div>
-	    	<form name="update_user" th:action="@{/admin/user}" method="post">
-	    		<ul class="forminfo">
-				   <li><label>系统用户名</label><input name="username" id="username" type="text" class="dfinput" /><i>(长度16，英文字母、数字、_)</i>
-				   <span id="gradeInfo">*</span></li>
-				   <li><label>中文名</label><input name="chinesename" type="text" class="dfinput" /><i></i></li>
-				   <li><label>随机密码</label><input name="password" type="text" class="dfinput" th:value="${random_password}" /></li>
-				   <li><label>用户组</label>
-				   		<input name="sysadmin" type="checkbox" value="" />系统管理员 <br></br>
-				    	<input name="useradmin" type="checkbox" value=""  />用户管理员 <br></br>
-				    	<input name="useradmin" type="checkbox" value="" />用户管理员<br></br>
-	   				</li>
-	    			<li><input name="" type="button" class="btn" value="保存"/> </li>
-	    		
-				</ul>
+    	<div class="blank-lin-20"></div>
+	    <div class="con-mid-8">
+	    	<form name="create_user" th:action="@{/admin/user}" th:object="${user}" method="post">
+	    		<div class="col-sm-9" >
+		    		<div class="form-group">
+		    			<label>用户名(字幕、数字、_):</label>
+		    			<div class="row">
+		    				<div class="col-sm-8">
+		    					<input id="name" class="form-control" th:value="${user.name}" th:field="*{name}"></input>
+		    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
+		    				</div>
+		    			</div>
+		    		</div>
+		    		<div class="form-group">
+		    			<label>中文名:</label>
+		    			<div class="row">
+		    				<div class="col-sm-8">
+		    					<input id="chinese_name" class="form-control" th:value="${user.chineseName}" th:field="*{chineseName}"></input>
+		    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
+		    				</div>
+		    			</div>
+		    		</div>
+		    		<div class="form-group">
+		    			<label>E-Mail:</label>
+		    			<div class="row">
+		    				<div class="col-sm-8">
+		    					<input id="email" class="form-control" th:value="${user.email}" th:field="*{email}"></input>
+		    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
+		    				</div>
+		    			</div>
+		    		</div>
+		    		<div class="form-group">
+		    			<label>密码:</label>
+		    			<div class="row">
+		    				<div class="col-sm-8">
+		    					<input id="password" class="form-control" th:value="${user.password}" th:field="*{password}"></input>
+		    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
+		    				</div>
+		    			</div>
+		    		</div>
+		    		<div class="form-group">
+		    			<label>角色组:</label>
+		    			<div class="row">
+		    				<div class="col-sm-8" th:each="role,roleStat : ${roles}">
+				   				<input th:id="${role.name}" type="checkbox" th:value="${role.id}" th:text="${role.name}" th:field="*{sysRoles}" > </input>
+		    				</div>
+		    			</div>
+		    		</div>
+		    		<div class="con-mid-9">
+	    				<input type="hidden" id="active" th:value="${user.active}" th:field="*{active}"></input>
+	    				<input type="hidden" id="id" th:value="${user.id}" th:field="*{id}"></input>
+	    				<input type="submit" name="保存" id="add" value="保存" class="btn btn-primary"></input>
+	    			</div>
+				</div>
 			</form>
 		</div>
 	</body>

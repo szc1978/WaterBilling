@@ -11,7 +11,8 @@ public interface SysUserDao extends JpaRepository<SysUser, Integer> {
 	
 	public SysUser findByNameAndActive(String name,int active);
 	
-	public SysUser findById(long id);
+	public SysUser findById(int id);
 	
 	public Page<SysUser> findAll(Pageable page);
+
 }

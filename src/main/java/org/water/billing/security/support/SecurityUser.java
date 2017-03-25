@@ -7,8 +7,8 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;  
 import org.springframework.security.core.authority.SimpleGrantedAuthority;  
 import org.springframework.security.core.userdetails.UserDetails;
-import org.water.billing.entity.admin.SysUser;
-import org.water.billing.entity.admin.SysUserRole;  
+import org.water.billing.entity.admin.SysRole;
+import org.water.billing.entity.admin.SysUser;  
   
 public class SecurityUser extends SysUser implements UserDetails {  
 	private static final long serialVersionUID = -8942761076930874528L;
@@ -19,7 +19,7 @@ public class SecurityUser extends SysUser implements UserDetails {
             this.setName(suser.getName());  
             this.setEmail(suser.getEmail());  
             this.setPassword(suser.getPassword());  
-            this.setSysUserRoles(suser.getSysUserRoles());  
+            this.setSysRoles(suser.getSysRoles());  
             this.setChineseName(suser.getChineseName());
             this.setCreateDate(suser.getCreateDate());
             this.setActive(suser.getActive());
@@ -28,11 +28,11 @@ public class SecurityUser extends SysUser implements UserDetails {
       
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();  
-        Set<SysUserRole> userRoles = this.getSysUserRoles();  
+        Set<SysRole> roles = this.getSysRoles();  
           
-        if(userRoles != null) {  
-            for (SysUserRole userRole : userRoles) {  
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(String.valueOf(userRole.getRid()));  
+        if(roles != null) {  
+            for (SysRole role : roles) {  
+                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(String.valueOf(role.getId()));  
                 authorities.add(authority);  
             }  
         }  

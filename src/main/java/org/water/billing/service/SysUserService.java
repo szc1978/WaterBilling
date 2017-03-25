@@ -25,7 +25,7 @@ public class SysUserService {
 		return userDao.findByName(name);
 	}
 	
-	public SysUser findById(long id) {
+	public SysUser findById(int id) {
 		return userDao.findById(id);
 	}
 	
@@ -38,6 +38,10 @@ public class SysUserService {
 	
 	public List<SysUser> findAll() {
 		return userDao.findAll();
+	}
+	
+	public SysUser save(SysUser sysUser) {
+		return userDao.save(sysUser);
 	}
 	
 	public long count() {

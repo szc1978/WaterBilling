@@ -1,16 +1,18 @@
 package org.water.billing.entity.admin;
 
-import java.util.Date;  
-import java.util.HashSet;  
-import java.util.Set;  
-  
+import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;  
 import javax.persistence.Entity;  
 import javax.persistence.FetchType;  
 import javax.persistence.GeneratedValue;  
 import javax.persistence.GenerationType;  
-import javax.persistence.Id;  
-import javax.persistence.OneToMany;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;  
 import javax.persistence.Temporal;  
@@ -21,8 +23,8 @@ import javax.persistence.TemporalType;
 public class SysUser {
 	@Id  
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", unique = true, nullable = false,length=20)
-	private Long id;
+	@Column(name = "id", unique = true, nullable = false,length=10)
+	private int id = 0;
 	
 	@Column(name = "name", unique = true, nullable = false,length = 64)
 	private String name;
@@ -47,36 +49,28 @@ public class SysUser {
 		createDate = new Date();
     }
            
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sysUser")  
-	private Set<SysUserRole> SysUserRoles = new HashSet<SysUserRole>(0);
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch=FetchType.EAGER)
+    @JoinTable(name="user_role",joinColumns={@JoinColumn(name="u_id")},inverseJoinColumns={@JoinColumn(name="r_id")})
+    private Set<SysRole> sysRoles;
    
 	public SysUser() {  
          
 	}  
    
-	public SysUser(String name, String chineseName,String email, String password, Set<SysUserRole> SysUserRoles) {  
+	public SysUser(String name, String chineseName,String email, String password, Set<SysRole> sysRoles) {  
 		this.name = name;  
 		this.chineseName = chineseName;
 		this.email = email;  
 		this.password = password;  
-		this.SysUserRoles = SysUserRoles; 
+		this.sysRoles = sysRoles; 
 		this.active = 1;
 	}   
-	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "sysUser")
-	public Set<SysUserRole> getSysUserRoles() { 
-		return this.SysUserRoles; 
-	}  
-   
-	public void setSysUserRoles(Set<SysUserRole> SysUserRoles) {  
-		this.SysUserRoles = SysUserRoles;  
-	}
-
-	public Long getId() {
+ 
+	public int getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -126,6 +120,14 @@ public class SysUser {
 
 	public void setActive(int active) {
 		this.active = active;
+	}
+
+	public Set<SysRole> getSysRoles() {
+		return sysRoles;
+	}
+
+	public void setSysRoles(Set<SysRole> sysRoles) {
+		this.sysRoles = sysRoles;
 	}
 
 

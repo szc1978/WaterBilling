@@ -1,24 +1,19 @@
 package org.water.billing.entity.admin;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="sys_role")
 public class SysRole {
 	@Id  
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", unique = true, nullable = false,length=20)
-	private Integer id;
+	@Column(name = "id", length=10)
+	private Integer id = 0;
 	
 	@Column(name="name",unique = true, nullable = false,length=100)  
     private String name;
@@ -32,13 +27,8 @@ public class SysRole {
     @Column(name="memo",length=128)
     private String memo;
     
-    @Temporal(TemporalType.TIMESTAMP) 
-	@Column(name = "createDate", length = 32)  
-	private Date createDate; 
-	@PrePersist
-    protected void onCreate() {
-		createDate = new Date();
-    }
+    @Column(name="active",length=1)
+    private int active = 1;
     
     public SysRole() {
     	
@@ -50,6 +40,27 @@ public class SysRole {
     	this.code = code;
     	this.memo = memo;
     }
+    
+    public SysRole(Integer id,String name,String type,String code,String memo) {
+    	this.id = id;
+    	this.name = name;
+    	this.type = type;
+    	this.code = code;
+    	this.memo = memo;
+    }
+    
+    public int hashCode() {
+		return new Integer(id).hashCode();
+	}
+	
+	public boolean equals(Object obj) {
+		if(obj == null)
+			return false;
+		if (! (obj instanceof SysRole)) {
+            return false;
+        }
+        return this.id == ((SysRole)obj).getId();
+	}
 
 	public Integer getId() {
 		return id;
@@ -89,5 +100,13 @@ public class SysRole {
 
 	public void setMemo(String memo) {
 		this.memo = memo;
+	}
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
 	}
 }
