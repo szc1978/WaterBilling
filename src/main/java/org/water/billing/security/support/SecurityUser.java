@@ -1,9 +1,10 @@
 package org.water.billing.security.support;
 
 import java.util.ArrayList;  
-import java.util.Collection;  
-import java.util.Set;  
-  
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.security.core.GrantedAuthority;  
 import org.springframework.security.core.authority.SimpleGrantedAuthority;  
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +13,7 @@ import org.water.billing.entity.admin.SysUser;
   
 public class SecurityUser extends SysUser implements UserDetails {  
 	private static final long serialVersionUID = -8942761076930874528L;
-
+	
 	public SecurityUser(SysUser suser) {  
         if(suser != null) {  
             this.setId(suser.getId());  
@@ -28,14 +29,22 @@ public class SecurityUser extends SysUser implements UserDetails {
       
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();  
-        Set<SysRole> roles = this.getSysRoles();  
           
-        if(roles != null) {  
-            for (SysRole role : roles) {  
+        if("sys".equals(this.getName())) {
+        	List<SysRole> roles = RoleManagement.All_Roles;
+        	for (SysRole role : roles) {  
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority(String.valueOf(role.getId()));  
                 authorities.add(authority);  
-            }  
-        }  
+            } 
+        } else {
+        	Set<SysRole> roles = this.getSysRoles();  
+            if(roles != null) {  
+                for (SysRole role : roles) {  
+                    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(String.valueOf(role.getId()));  
+                    authorities.add(authority);  
+                }  
+            }
+        }
         return authorities;  
     }  
   

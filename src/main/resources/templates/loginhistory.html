@@ -54,17 +54,36 @@
 		        </tbody>
 		    </table>
 		    <div class="pagin">
-		    	<div class="message">共<i class="blue" th:text="${total}">0</i>条记录，当前显示第&nbsp;<i class="blue" th:text="${page} + 1">1</i>页</div>
+		    	<div class="message">共<i class="blue" th:text="${totalCount}"></i>条记录，当前显示第&nbsp;<i class="blue" th:text="${pageNum}"></i>页</div>
 		        <ul class="paginList">
-			        <li class="paginItem"><a href="javascript:;"><span class="pagepre"></span></a></li>
-			        <li class="paginItem"><a href="javascript:;">1</a></li>
-			        <li class="paginItem current"><a href="javascript:;">2</a></li>
-			        <li class="paginItem"><a href="javascript:;">3</a></li>
-			        <li class="paginItem"><a href="javascript:;">4</a></li>
-			        <li class="paginItem"><a href="javascript:;">5</a></li>
-			        <li class="paginItem more"><a href="javascript:;">...</a></li>
-			        <li class="paginItem"><a href="javascript:;">10</a></li>
-			        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
+			        <li class="paginItem">
+	                    <a th:if="${isFirstPage == false}" th:href="@{${'/admin/loginhistory'}(page=${pageNum-1},size=${pageSize})}"><span class="pagepre"></span></a>
+	                    <a th:if="${isFirstPage == true}" href="javascript:;"><span class="pagepre"></span></a>
+	                </li>
+	                <li class="paginItem">
+	                	<a th:if="${pageNum gt 3}" th:href="@{${'/admin/loginhistory'}(page=1,size=${pageSize})}">1</a>
+	                </li>
+	                <li class="paginItem">
+	                	<a th:if="${pageNum-2 gt 1}" href="javascript:;">...</a>
+	                </li>
+			        <li th:each="pageNo : ${#numbers.sequence(pageNum - 2, pageNum + 2)}" class="paginItem">
+						<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo ne pageNum}" th:href="@{${'/admin/loginhistory'}(page=${pageNo},size=${pageSize})}">
+                        	<font th:text="${pageNo}"></font>
+                    	</a>
+                    	<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo eq pageNum}" href="javascript:;">
+                        	<i th:text="${pageNo}"></i>
+                    	</a>
+                	</li>
+                	<li class="paginItem">
+	                	<a th:if="${pageNum+2 lt totalPages}" href="javascript:;">...</a>
+	                </li>
+                	<li class="paginItem">
+	                	<a th:if="${pageNum+2 lt totalPages}" th:href="@{${'/admin/loginhistory'}(page=${totalPages},size=${pageSize})}" th:text="${totalPages}"></a>
+	                </li>
+                	<li class="paginItem">
+                        <a th:if="${isLastPage == false}" th:href="@{${'/admin/loginhistory'}(page=${pageNum+1},size=${pageSize})}"><span class="pagenxt"></span></a>
+                        <a th:if="${isLastPage == true}" href="javascript:;"><span class="pagenxt"></span></a>
+                    </li>
 		        </ul>
 		    </div>
 		</div>

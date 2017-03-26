@@ -17,13 +17,18 @@ public class SysController {
 	LoginHistoryService loginHistoryService;
 	
 	@RequestMapping("/admin/loginhistory")
-	public String loginHistory(@RequestParam(value="page",required=false) String page,ModelMap map) {
-		int index = (page == null) ? 0 : Integer.valueOf(page);
-		Page<LoginHistory> historys = loginHistoryService.findAll(index,10);
-		long total = loginHistoryService.count();
-		map.addAttribute("historys",historys);
-		map.addAttribute("page",index);
-		map.addAttribute("total",total);
+	public String loginHistory(@RequestParam(defaultValue="1") int page,
+								@RequestParam(defaultValue="10") int size,
+								ModelMap map) {
+		page = page < 1 ? 1:page;
+		Page<LoginHistory> pageInfo = loginHistoryService.findAll(page-1,size);
+		map.addAttribute("historys",pageInfo.getContent());
+		map.addAttribute("pageNum",pageInfo.getNumber() + 1);
+		map.addAttribute("pageSize",pageInfo.getSize());
+		map.addAttribute("totalCount",pageInfo.getTotalElements());
+		map.addAttribute("totalPages",pageInfo.getTotalPages());
+		map.addAttribute("isFirstPage",pageInfo.isFirst());
+		map.addAttribute("isLastPage",pageInfo.isLast());
 		return "/loginhistory";
 	}
 	

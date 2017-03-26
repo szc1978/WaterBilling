@@ -40,13 +40,13 @@
     
     	<div class="blank-lin-20"></div>
 	    <div class="con-mid-8">
-	    	<form name="create_user" th:action="@{/admin/user}" th:object="${user}" method="post">
+	    	<form name="create_user" th:action="@{/admin/user}" th:object="${sysUser}" method="post">
 	    		<div class="col-sm-9" >
 		    		<div class="form-group">
 		    			<label>用户名(字幕、数字、_):</label>
 		    			<div class="row">
 		    				<div class="col-sm-8">
-		    					<input id="name" class="form-control" th:value="${user.name}" th:field="*{name}"></input>
+		    					<input id="name" class="form-control" th:value="${sysUser.name}" th:field="*{name}"></input>
 		    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
 		    				</div>
 		    			</div>
@@ -55,8 +55,7 @@
 		    			<label>中文名:</label>
 		    			<div class="row">
 		    				<div class="col-sm-8">
-		    					<input id="chinese_name" class="form-control" th:value="${user.chineseName}" th:field="*{chineseName}"></input>
-		    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
+		    					<input id="chinese_name" class="form-control" th:value="${sysUser.chineseName}" th:field="*{chineseName}"></input>
 		    				</div>
 		    			</div>
 		    		</div>
@@ -64,8 +63,7 @@
 		    			<label>E-Mail:</label>
 		    			<div class="row">
 		    				<div class="col-sm-8">
-		    					<input id="email" class="form-control" th:value="${user.email}" th:field="*{email}"></input>
-		    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
+		    					<input id="email" class="form-control" th:value="${sysUser.email}" th:field="*{email}"></input>
 		    				</div>
 		    			</div>
 		    		</div>
@@ -73,8 +71,10 @@
 		    			<label>密码:</label>
 		    			<div class="row">
 		    				<div class="col-sm-8">
-		    					<input id="password" class="form-control" th:value="${user.password}" th:field="*{password}"></input>
-		    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
+		    					<input id="password" class="form-control" th:value="${sysUser.password}" th:field="*{password}"></input>
+		    					<div class="checkbox">
+									<label><input name="resetpwd" type="checkbox" value="1"/>重置密码（仅对编辑用户有效）</label>
+								</div>
 		    				</div>
 		    			</div>
 		    		</div>
@@ -87,8 +87,8 @@
 		    			</div>
 		    		</div>
 		    		<div class="con-mid-9">
-	    				<input type="hidden" id="active" th:value="${user.active}" th:field="*{active}"></input>
-	    				<input type="hidden" id="id" th:value="${user.id}" th:field="*{id}"></input>
+	    				<input type="hidden" id="active" th:value="${sysUser.active}" th:field="*{active}"></input>
+	    				<input type="hidden" id="id" th:value="${sysUser.id}" th:field="*{id}"></input>
 	    				<input type="submit" name="保存" id="add" value="保存" class="btn btn-primary"></input>
 	    			</div>
 				</div>

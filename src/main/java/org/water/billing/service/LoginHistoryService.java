@@ -21,9 +21,5 @@ public class LoginHistoryService {
 		Page<LoginHistory> history = loginLogDao.findAll(page);
 		return history;
 	}
-	
-	public long count() {
-		return loginLogDao.count();
-	}
 
 }

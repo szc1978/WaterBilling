@@ -82,18 +82,16 @@
 					        <td th:text="${role.type}"></td>
 					        <td th:text="${role.memo}"></td>
 					        <td>
-					        	<form th:name="${role.name}" th:action="@{/admin/role/update}" method="post">
-					        		<input type="hidden" name="id" th:value="${role.id}"></input>
-					        		<input type="submit" name="action" value="更新" class="txtbtn"></input>
-					        		<input type="submit" name="action" value="激活" class="txtbtn"></input>
-					        		<input type="submit" name="action" value="删除" class="txtbtn"></input>
-					        	</form>
+					        	<a th:href="@{/admin/role/update(id=${role.id},action=update)}">更新</a>
+			        			<a th:href="@{/admin/role/update(id=${role.id},action=enable)}">激活</a>
+			        			<a th:href="@{/admin/role/update(id=${role.id},action=disable)}">禁用</a>
 					        </td>
 				        </tr>        
 				        </tbody>
 				    </table>
 				    <p></p>
 				    <span><font color="#ff0000">* 状态为0表示被禁用，删除后角色状态为0！！</font></span>
+				    <span><font color="#ff0000">* 当增加或删除角色后，需要重新登录！！</font></span>
 				</div>
 				
     		</div>

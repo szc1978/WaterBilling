@@ -2,49 +2,30 @@ package org.water.billing.security.support;
 
 import java.util.ArrayList;  
 import java.util.Collection;  
-import java.util.HashMap;  
 import java.util.Iterator;  
-import java.util.List;  
-import java.util.Map;  
+import java.util.Map;
 import javax.annotation.PostConstruct;  
   
 import org.springframework.beans.factory.annotation.Autowired;  
 import org.springframework.security.access.ConfigAttribute;  
-import org.springframework.security.access.SecurityConfig;  
 import org.springframework.security.web.FilterInvocation;  
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;  
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;  
 import org.springframework.security.web.util.matcher.RequestMatcher;  
-import org.springframework.stereotype.Service;
-import org.water.billing.entity.admin.SysResourceRole;
-import org.water.billing.service.SysResourceRoleService;  
+import org.springframework.stereotype.Service;  
   
 @Service  
 public class CustomInvocationSecurityMetadataSourceService implements FilterInvocationSecurityMetadataSource {  
       
     @Autowired  
-    private SysResourceRoleService sysResoureRoleService;  
+    RoleManagement roleMgr;  
       
-    private static Map<String, Collection<ConfigAttribute>> resourceMap = null;  
+    private static Map<String, Collection<ConfigAttribute>> resourceMap = null;
   
     @PostConstruct
     private void loadResourceDefine() {
-    	resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
-    	List<SysResourceRole> resourceRoles = sysResoureRoleService.findAll();
-    	
-    	if(resourceRoles == null)
-    		return;
-    	
-    	for(SysResourceRole resourceRole : resourceRoles) {
-    		int rid = resourceRole.getRid();
-    		String resourceString = resourceRole.getResourceString();
-    		ConfigAttribute ca = new SecurityConfig(String.valueOf(rid));
-    		if(!resourceMap.containsKey(resourceString)) {
-    			Collection<ConfigAttribute> atts = new ArrayList<ConfigAttribute>();
-    			resourceMap.put(resourceString, atts);
-    		}
-    		resourceMap.get(resourceString).add(ca);
-    	}
+    	roleMgr.initial();
+    	resourceMap = RoleManagement.Resource_Role_Map;
     }  
   
     public Collection<ConfigAttribute> getAllConfigAttributes() {  

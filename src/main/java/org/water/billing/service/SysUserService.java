@@ -18,7 +18,7 @@ public class SysUserService {
 	SysUserDao userDao;
 	
 	public SysUser findActiveUserByName(String name) {
-		return userDao.findByName(name);
+		return userDao.findByNameAndActive(name,1);
 	}
 	
 	public SysUser findByName(String name) {
@@ -36,6 +36,13 @@ public class SysUserService {
 		return users;
 	}
 	
+	public Page<SysUser> fuzzeFind(String keyword,int pageIndex,int number) {
+		Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC,"id"));
+		Pageable page = new PageRequest(pageIndex,number,sort);
+		Page<SysUser> users = userDao.findByNameOrChineseName(keyword,page);
+		return users;
+	}
+	
 	public List<SysUser> findAll() {
 		return userDao.findAll();
 	}
@@ -43,9 +50,4 @@ public class SysUserService {
 	public SysUser save(SysUser sysUser) {
 		return userDao.save(sysUser);
 	}
-	
-	public long count() {
-		return userDao.count();
-	}
-
 }

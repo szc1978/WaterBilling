@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>listuser</title>
+		<title>用户列表</title>
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="/js/jquery.js"></script>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 		<script type="text/javascript">
 			$(document).ready(function(){
   				$(".click").click(function(){
@@ -33,22 +33,29 @@
     		</ul>
     	</div>
     	<div class="rightinfo">
- 			<div class="tools">
- 			<form name="create_user" th:action="@{/admin/user/create}" method="post"></form>
-	    		<ul class="toolbar">
-			        <li ><a href="javascript:document:create_user.submit();" class="tablelink"><span><img src="/images/t01.png" /></span>添加</a></li>
-	        	</ul>
+    		<div class="tools">
+    			<div class="col-sm-6">
+    				<ul class="toolbar">
+    					<li><a th:href="@{/admin/user/create}"><span><img src="/images/t01.png" /></span>新增</a></li>
+    				</ul>
+    			</div>
+    			<div class="col-sm-6" align="right">
+    				<form name="search" method="get" th:action="@{/admin/user}">
+    					<input type="text" name="k" placeholder="用户名或者中文名" class="scinput" /> <input type="submit" value="搜索" class="btn btn-default"/>
+    				</form>
+    			</div>
     		</div>
+
 		    <table class="tablelist">
 		    	<thead>
 		    		<tr>
-		        		<th>编号<i class="sort"><img src="/images/px.gif" /></i></th>
+		        		<th>编号<i class="sort"></i></th>
 		        		<th>用户名</th>
 		        		<th>中文名</th>
 		        		<th>邮件地址</th>
 		        		<th>权限列表</th>
 		        		<th>状态</th>
-		        		<th>创建日期</th>
+		        		<th>最后修改日期</th>
 		        		<th>操作</th>
 		        	</tr>
 		        </thead>
@@ -58,54 +65,58 @@
 			        <td th:text="${user.name}"></td> 
 			        <td th:text="${user.chineseName}"></td>
 			        <td th:text="${user.email}"></td>
-			        <td th:text="${user.password}"></td>
+			        <td>
+			        	<font th:each="myrole:${user.sysRoles}">
+			        		[<b th:text="${myrole.name}"/>]
+			        	</font>
+			        </td>
 			        <td th:text="${user.active}"></td>
 			        <td th:text="${user.createDate}"></td>
 			        <td>
-			        	<form th:name="${user.name}" th:action="@{/admin/user/modify}" method="post">
-			        		<input type="hidden" name="id" th:value="${user.id}"></input>
-			        		<input type="submit" name="submit" value="更新" class="txtbtn"></input>
-			        	</form>
+			        	<a th:href="@{/admin/user/modify(id=${user.id},action=update)}">编辑</a>
+			        	<a th:href="@{/admin/user/modify(id=${user.id},action=enable)}">恢复</a>
+			        	<a th:href="@{/admin/user/modify(id=${user.id},action=disable)}">删除</a>
 			        </td>
 		        </tr>        
 		        </tbody>
 		    </table>
 		    <div class="pagin">
-		    	<div class="message">共<i class="blue" th:text="${total}">0</i>条记录，当前显示第&nbsp;<i class="blue" th:text="${page} + 1">1</i>页</div>
+		    	<div class="message">共<i class="blue" th:text="${totalCount}"></i>条记录，当前显示第&nbsp;<i class="blue" th:text="${pageNum}"></i>页</div>
 		        <ul class="paginList">
-			        <li class="paginItem"><a href="javascript:;"><span class="pagepre"></span></a></li>
-			        <li class="paginItem"><a href="javascript:;">1</a></li>
-			        <li class="paginItem current"><a href="javascript:;">2</a></li>
-			        <li class="paginItem"><a href="javascript:;">3</a></li>
-			        <li class="paginItem"><a href="javascript:;">4</a></li>
-			        <li class="paginItem"><a href="javascript:;">5</a></li>
-			        <li class="paginItem more"><a href="javascript:;">...</a></li>
-			        <li class="paginItem"><a href="javascript:;">10</a></li>
-			        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
+			        <li class="paginItem">
+	                    <a th:if="${isFirstPage == false}" th:href="@{${pageUrl}(page=${pageNum-1},size=${pageSize})}"><span class="pagepre"></span></a>
+	                    <a th:if="${isFirstPage == true}" href="javascript:;"><span class="pagepre"></span></a>
+	                </li>
+	                <li class="paginItem">
+	                	<a th:if="${pageNum gt 3}" th:href="@{${pageUrl}(page=1,size=${pageSize})}">1</a>
+	                </li>
+	                <li class="paginItem">
+	                	<a th:if="${pageNum-2 gt 1}" href="javascript:;">...</a>
+	                </li>
+			        <li th:each="pageNo : ${#numbers.sequence(pageNum - 2, pageNum + 2)}" class="paginItem">
+						<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo ne pageNum}" th:href="@{${pageUrl}(page=${pageNo},size=${pageSize})}">
+                        	<font th:text="${pageNo}"></font>
+                    	</a>
+                    	<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo eq pageNum}" href="javascript:;">
+                        	<u th:text="${pageNo}"></u>
+                    	</a>
+                	</li>
+                	<li class="paginItem">
+	                	<a th:if="${pageNum+2 lt totalPages}" href="javascript:;">...</a>
+	                </li>
+                	<li class="paginItem">
+	                	<a th:if="${pageNum+2 lt totalPages}" th:href="@{${pageUrl}(page=${totalPages},size=${pageSize})}" th:text="${totalPages}"></a>
+	                </li>
+                	<li class="paginItem">
+                        <a th:if="${isLastPage == false}" th:href="@{${'/admin/user'}(page=${pageNum+1},size=${pageSize})}"><span class="pagenxt"></span></a>
+                        <a th:if="${isLastPage == true}" href="javascript:;"><span class="pagenxt"></span></a>
+                    </li>
 		        </ul>
 		    </div>
-		    <div class="tip">
-		    	<div class="tiptop"><span>提示信息</span><a></a></div>
-		      	<div class="tipinfo">
-		        	<span><img src="/images/ticon.png" /></span>
-		        	<div class="tipright">
-		        	<p>是否确认对信息的修改 ？</p>
-		        	<cite>如果是请点击确定按钮 ，否则请点取消。</cite>
-		        </div>
-		        </div>
-		        
-		        <div class="tipbtn">
-		        <input name="" type="button"  class="sure" value="确定" />&nbsp;
-		        <input name="" type="button"  class="cancel" value="取消" />
-		        </div>
-		    
-		    </div>
-    </div>
-    
-    <script type="text/javascript">
-	$('.tablelist tbody tr:odd').addClass('odd');
-	</script>
-
-</body>
+    	</div>
+    	<div class="con-mid-9">
+    		<span>注意：状态为1表示可用，删除操作仅仅改变状态为0，仍然可以恢复</span>
+    	</div>
+	</body>
 
 </html>

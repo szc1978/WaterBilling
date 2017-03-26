@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.water.billing.entity.admin.SysRole;
+import org.water.billing.security.support.RoleManagement;
 import org.water.billing.service.SysRoleService;
 
 @Controller
@@ -17,16 +18,19 @@ public class AdminRoleController {
 	
 	@Autowired
 	SysRoleService sysRoleService;
+	
+	@Autowired
+	RoleManagement roleMgr;
 
 	@RequestMapping(value="/admin/role",method=RequestMethod.GET)
-	public String roleList(@RequestParam(value="id",required=false) String id,ModelMap map) {
+	public String roleList(@RequestParam(defaultValue="0") int id,ModelMap map) {
 		List<SysRole> roles = sysRoleService.findAll();
 		map.addAttribute("roles", roles);
 		SysRole role = null;
-		if(id == null)
+		if(id == 0)
 			role = new SysRole();
 		else
-			role = sysRoleService.findById(Integer.valueOf(id));
+			role = sysRoleService.findById(id);
 		map.addAttribute("role",role);
 		return "/role";
 	}
@@ -34,21 +38,22 @@ public class AdminRoleController {
 	@RequestMapping(value="/admin/role",method=RequestMethod.POST)
 	public String roleUpdate(@ModelAttribute SysRole sysRole) {
 		sysRoleService.save(sysRole);
+		roleMgr.refreshRoleList();
 		return "redirect:/admin/role";
 	}
 	
-	@RequestMapping(value="/admin/role/update",method=RequestMethod.POST)
-	public String delRole(@RequestParam(value="id") int id,@RequestParam(value="action") String action) {
+	@RequestMapping(value="/admin/role/update",method=RequestMethod.GET)
+	public String delRole(@RequestParam int id,@RequestParam String action) {
 		SysRole role = sysRoleService.findById(id);
 		if(role != null) {
 			switch(action) {
-				case "更新":
+				case "update":
 					return "redirect:/admin/role?id=" + id;
-				case "激活":
+				case "enable":
 					role.setActive(1);
 					sysRoleService.save(role);
 					break;
-				case "删除":
+				case "disable":
 					role.setActive(0);
 					sysRoleService.save(role);
 				default:
