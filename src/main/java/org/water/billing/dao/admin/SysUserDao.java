@@ -1,4 +1,4 @@
-package org.water.billing.dao;
+package org.water.billing.dao.admin;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

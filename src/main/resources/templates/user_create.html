@@ -46,7 +46,8 @@
 		    			<label>用户名(字幕、数字、_):</label>
 		    			<div class="row">
 		    				<div class="col-sm-8">
-		    					<input id="name" class="form-control" th:value="${sysUser.name}" th:field="*{name}"></input>
+		    					<input th:if="${sysUser.id eq 0}" id="name" class="form-control" th:value="${sysUser.name}" th:field="*{name}"></input>
+		    					<input th:if="${sysUser.id ne 0}" id="name1" class="form-control" th:value="${sysUser.name}" th:field="*{name}"></input>
 		    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
 		    				</div>
 		    			</div>

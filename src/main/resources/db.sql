@@ -26,11 +26,6 @@ CREATE TABLE `login_log` (
 
 )
 
-CREATE TABLE `biz_log` (
-
-
-
-)
 
 CREATE TABLE `persistent_logins` (
 

@@ -1,4 +1,4 @@
-package org.water.billing.service;
+package org.water.billing.service.admin;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.water.billing.dao.SysUserDao;
+import org.water.billing.dao.admin.SysUserDao;
 import org.water.billing.entity.admin.SysUser;
 
 @Service("sysUserService")

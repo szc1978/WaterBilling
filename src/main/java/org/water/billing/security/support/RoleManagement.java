@@ -13,8 +13,8 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.stereotype.Service;
 import org.water.billing.entity.admin.SysResource;
 import org.water.billing.entity.admin.SysRole;
-import org.water.billing.service.SysResourceService;
-import org.water.billing.service.SysRoleService;
+import org.water.billing.service.admin.SysResourceService;
+import org.water.billing.service.admin.SysRoleService;
 
 @Service
 public class RoleManagement {

@@ -1,4 +1,4 @@
-package org.water.billing.controller;
+package org.water.billing.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,8 +7,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.water.billing.entity.LoginHistory;
-import org.water.billing.service.LoginHistoryService;
+import org.water.billing.entity.admin.LoginHistory;
+import org.water.billing.service.admin.LoginHistoryService;
 
 @Controller
 public class SysController {

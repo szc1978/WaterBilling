@@ -1,4 +1,4 @@
-package org.water.billing.service;
+package org.water.billing.service.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -6,8 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.water.billing.dao.LoginHistoryDao;
-import org.water.billing.entity.LoginHistory;
+import org.water.billing.dao.admin.LoginHistoryDao;
+import org.water.billing.entity.admin.LoginHistory;
 
 @Service("loginHistoryService")
 public class LoginHistoryService {

@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;  
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
-import org.water.billing.dao.LoginHistoryDao;
-import org.water.billing.entity.LoginHistory;
+import org.water.billing.dao.admin.LoginHistoryDao;
+import org.water.billing.entity.admin.LoginHistory;
 import org.water.billing.entity.admin.SysUser;  
   
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {  

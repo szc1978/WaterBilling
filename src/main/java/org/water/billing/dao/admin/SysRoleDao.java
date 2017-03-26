@@ -1,4 +1,4 @@
-package org.water.billing.dao;
+package org.water.billing.dao.admin;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.water.billing.entity.admin.SysRole;

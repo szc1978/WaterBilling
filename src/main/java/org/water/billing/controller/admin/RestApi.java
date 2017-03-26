@@ -1,4 +1,4 @@
-package org.water.billing.controller;
+package org.water.billing.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.water.billing.entity.admin.SysUser;
-import org.water.billing.service.SysUserService;
+import org.water.billing.service.admin.SysUserService;
 
 @RestController
 public class RestApi {

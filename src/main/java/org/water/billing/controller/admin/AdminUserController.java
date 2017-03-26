@@ -1,4 +1,4 @@
-package org.water.billing.controller;
+package org.water.billing.controller.admin;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.water.billing.entity.admin.SysRole;
 import org.water.billing.entity.admin.SysUser;
-import org.water.billing.service.SysRoleService;
-import org.water.billing.service.SysUserService;
+import org.water.billing.service.admin.SysRoleService;
+import org.water.billing.service.admin.SysUserService;
 
 @Controller
 public class AdminUserController {
