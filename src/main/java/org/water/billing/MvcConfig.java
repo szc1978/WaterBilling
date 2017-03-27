@@ -13,14 +13,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/index").setViewName("index"); 
         registry.addViewController("/top").setViewName("top");
         registry.addViewController("/login").setViewName("login");
-        
-        //sys level
-        //registry.addViewController("/admin/user").setViewName("listuser");
-       // registry.addViewController("/managesysrole").setViewName("managesysrole");
-        //admin level
-        registry.addViewController("/sysuserprivilege").setViewName("sysuserprivilege");
-        registry.addViewController("/manageresource").setViewName("manageresource");
-        //sys user level
-        registry.addViewController("/managebizuser").setViewName("managebizuser");
+        registry.addViewController("/top").setViewName("top");
+        registry.addViewController("/left").setViewName("left");
+        registry.addViewController("/right").setViewName("right");
     }
 } 

@@ -27,7 +27,7 @@ public class AdminUserController {
 
 	@RequestMapping(value="/admin/user",method=RequestMethod.GET)
 	public String user(@RequestParam(defaultValue="1") int page,
-						@RequestParam(defaultValue="1")  int size,
+						@RequestParam(defaultValue="10")  int size,
 						@RequestParam(required=false) String k,
 						ModelMap map) {
 		page = page < 1?1:page;
@@ -46,7 +46,7 @@ public class AdminUserController {
 		map.addAttribute("isLastPage",pageInfo.isLast());
 		map.addAttribute("totalCount",pageInfo.getTotalElements());
 		map.addAttribute("users",pageInfo.getContent());
-		return "/user_list";
+		return "/admin/user_list";
 	}
 	
 	@RequestMapping(value="/admin/user/create",method=RequestMethod.GET)
@@ -60,7 +60,7 @@ public class AdminUserController {
 			sysUser = sysUserService.findById(id);
 		Collections.addAll(sysRoles);
 		map.addAttribute("sysUser",sysUser);
-		return "/user_create";
+		return "/admin/user_create";
 	}
 	
 	@RequestMapping(value="/admin/user",method=RequestMethod.POST)

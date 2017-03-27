@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>用户列表</title>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<style>
+			.pagination.pagination-sm {
+				margin: -20px;
+			}
+			.blank_line {
+				height:20px;
+			}
+		</style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+  				$(".click").click(function(){
+  					$(".tip").fadeIn(200);
+  				});
+	  			$(".tiptop a").click(function(){
+	  				$(".tip").fadeOut(200);
+				});
+	 			$(".sure").click(function(){
+	  				$(".tip").fadeOut(100);
+				});
+	  			$(".cancel").click(function(){
+	  				$(".tip").fadeOut(100);
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+    	<div class="container-fluid">
+    		<div class="col-sm-13" align="right">
+    			<form class="form-inline" role="form" method="get" th:action="@{/admin/user}">
+    				<div class="form-group">
+   						 <input type="text" class="form-control" name="k" placeholder="用户名或者中文名" />
+  					</div>
+  					<input type="submit" value="搜索用户" class="btn btn-default"/>
+  					<div class="btn-group">
+    					<a th:href="@{/admin/user/create}"><button type="button" class="btn btn-default">新增用户</button></a>
+    				</div>
+  				</form>
+    		</div>
+    		<p class="blank_line"></p>
+			<div>
+			    <table class="table table-striped">
+			    	<thead>
+			    		<tr>
+			        		<th>编号<i class="sort"></i></th>
+			        		<th>用户名</th>
+			        		<th>中文名</th>
+			        		<th>邮件地址</th>
+			        		<th>权限列表</th>
+			        		<th>状态</th>
+			        		<th>最后修改日期</th>
+			        		<th>操作</th>
+			        	</tr>
+			        </thead>
+			        <tbody>
+			        <tr th:each="user,userStat : ${users}"> 
+				        <td th:text="${userStat.index} + 1">1</td> 
+				        <td th:text="${user.name}"></td> 
+				        <td th:text="${user.chineseName}"></td>
+				        <td th:text="${user.email}"></td>
+				        <td>
+				        	<font th:each="myrole:${user.sysRoles}">
+				        		[<b th:text="${myrole.name}"/>]
+				        	</font>
+				        </td>
+				        <td th:text="${user.active}"></td>
+				        <td th:text="${user.createDate}"></td>
+				        <td>
+				        	<a th:href="@{/admin/user/modify(id=${user.id},action=update)}">编辑</a>
+				        	<a th:href="@{/admin/user/modify(id=${user.id},action=enable)}">恢复</a>
+				        	<a th:href="@{/admin/user/modify(id=${user.id},action=disable)}">删除</a>
+				        </td>
+			        </tr>        
+			        </tbody>
+			    </table>
+		    </div>
+		    <div>
+		    	<div class="col-sm-6">共<i th:text="${totalCount}"></i>条记录，当前显示第&nbsp;<i th:text="${pageNum}"></i>页</div>
+		    	<div class="col-sm-6" align="right">
+			        <ul class="pagination pagination-sm">
+				        <li>
+		                    <a th:if="${isFirstPage == false}" th:href="@{${pageUrl}(page=${pageNum-1},size=${pageSize})}">&laquo;</a>
+		                    <a th:if="${isFirstPage == true}" href="javascript:;">&laquo;</a>
+		                </li>
+		                <li>
+		                	<a th:if="${pageNum gt 3}" th:href="@{${pageUrl}(page=1,size=${pageSize})}">1</a>
+		                </li>
+		                <li>
+		                	<a th:if="${pageNum-2 gt 1}" href="javascript:;">...</a>
+		                </li>
+				        <li th:each="pageNo : ${#numbers.sequence(pageNum - 2, pageNum + 2)}" class="paginItem">
+							<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo ne pageNum}" th:href="@{${pageUrl}(page=${pageNo},size=${pageSize})}">
+	                        	<font th:text="${pageNo}"></font>
+	                    	</a>
+	                    	<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo eq pageNum}" href="javascript:;">
+	                        	<u th:text="${pageNo}"></u>
+	                    	</a>
+	                	</li>
+	                	<li>
+		                	<a th:if="${pageNum+2 lt totalPages}" href="javascript:;">...</a>
+		                </li>
+	                	<li>
+		                	<a th:if="${pageNum+2 lt totalPages}" th:href="@{${pageUrl}(page=${totalPages},size=${pageSize})}" th:text="${totalPages}"></a>
+		                </li>
+	                	<li>
+	                        <a th:if="${isLastPage == false}" th:href="@{${'/admin/user'}(page=${pageNum+1},size=${pageSize})}">&raquo;</a>
+	                        <a th:if="${isLastPage == true}" href="javascript:;">&raquo;</a>
+	                    </li>
+			        </ul>	
+		        </div>
+		    </div>
+    	</div>
+    	
+	</body>
+
+</html>

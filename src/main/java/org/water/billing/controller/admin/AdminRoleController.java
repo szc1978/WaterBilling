@@ -32,7 +32,7 @@ public class AdminRoleController {
 		else
 			role = sysRoleService.findById(id);
 		map.addAttribute("role",role);
-		return "/role";
+		return "/admin/role";
 	}
 	
 	@RequestMapping(value="/admin/role",method=RequestMethod.POST)

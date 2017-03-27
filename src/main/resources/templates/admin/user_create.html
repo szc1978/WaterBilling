@@ -3,9 +3,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title></title>
-		<link href="/css/style.css" rel="stylesheet" type="text/css" />
 		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="/js/jquery.js"></script>
+		<script type="text/javascript" src="/js/jquery-3.2.0.min.js"></script>
 		<script>
 			$(document).ready(function(){ 
 				checkConfirm(); 
@@ -29,16 +28,6 @@
 	</head>
 
 	<body>
-		<div class="place">
-    		<span>位置：</span>
-		    <ul class="placeul">
-		    	<li>首页</li>
-		    	<li>用户管理</li>
-		    	<li>添加|删除|修改	</li>
-		    </ul>
-   		</div>
-    
-    	<div class="blank-lin-20"></div>
 	    <div class="con-mid-8">
 	    	<form name="create_user" th:action="@{/admin/user}" th:object="${sysUser}" method="post">
 	    		<div class="col-sm-9" >
