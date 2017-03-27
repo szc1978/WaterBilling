@@ -67,7 +67,7 @@ public class AdminUserController {
 	public String addUser(@ModelAttribute SysUser sysUser,
 							@RequestParam(defaultValue="0") int resetpwd,
 							ModelMap map) {
-		if(resetpwd == 0 || sysUser.getId() == 0) {
+		if(resetpwd == 1 || sysUser.getId() == 0) {
 			BCryptPasswordEncoder bc=new BCryptPasswordEncoder(4);
 			sysUser.setPassword(bc.encode(sysUser.getPassword()));
 		}

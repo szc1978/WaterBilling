@@ -17,13 +17,13 @@
     		</ul>
     	</div>
     	<div class="blank-lin-20"></div>
-    	<div class="con-mid-9">
+    	<div class="con-mid-10">
     		<form name="create_role" th:action="@{/admin/role}" th:object="${role}" method="post">
-	    		<div class="col-sm-6" >
+	    		<div class="col-sm-4" >
 	    			<div class="form-group">
 	    				<label>角色名:</label>
 	    				<div class="row">
-	    					<div class="col-sm-8">
+	    					<div class="col-sm-10">
 	    						<input name="name" id="name" class="form-control" th:value="${role.name}" th:field="*{name}"></input>
 	    					</div>
 	    				</div>
@@ -31,7 +31,7 @@
 	    			<div class="form-group">
 	    				<label>角色代码:</label>
 	    				<div class="row">
-	    					<div class="col-sm-8">
+	    					<div class="col-sm-10">
 	    						<input name="code" id="code" class="form-control" th:value="${role.code}"  th:field="*{code}"></input>
 	    					</div>
 	    				</div>
@@ -39,7 +39,7 @@
 	    			<div class="form-group">
 	    				<label>角色类型:</label>
 	    				<div class="row">
-	    					<div class="col-sm-8">
+	    					<div class="col-sm-10">
 	    						<input name="type" id="type" class="form-control"  th:value="${role.type}" th:field="*{type}"></input>
 	    					</div>
 	    				</div>
@@ -47,7 +47,7 @@
 	    			<div class="form-group">
 	    				<label>角色备注:</label>
 	    				<div class="row">
-	    					<div class="col-sm-8">
+	    					<div class="col-sm-10">
 	    						<input name="memo" id="memo" class="form-control" th:value="${role.memo}"  th:field="*{memo}"></input>
 	    					</div>
 	    				</div>
@@ -59,7 +59,7 @@
 	    			</div>
 	    		</div>
 	    	</form>
-    		<div class="col-sm-6">
+    		<div class="col-sm-8">
     			<div class="con-mid-9">
     				<table class="tablelist">
 				    	<thead>
