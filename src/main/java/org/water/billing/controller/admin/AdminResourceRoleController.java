@@ -41,7 +41,7 @@ public class AdminResourceRoleController {
 			sysResource = new SysResource();
 		Collections.addAll(sysRoles);
 		map.addAttribute("sysResource",sysResource);
-		return "/resourcerole";
+		return "/admin/resourcerole";
 	}
 	
 	@RequestMapping(value="/admin/privilege/modifyresource",method=RequestMethod.POST)

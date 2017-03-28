@@ -83,7 +83,7 @@
                                <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul id="bizop" class="nav nav-list collapse secondmenu" style="height: 0px;">
-                            <li><a href="#"><i class="glyphicon glyphicon-usd"></i> 客户缴费</a></li>
+                            <li><a href="/biz/charge" target="rightFrame"><i class="glyphicon glyphicon-usd"></i> 客户缴费</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-pencil"></i> 数据录入</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-import"></i> 数据导入</a></li>
                         </ul>
@@ -95,7 +95,7 @@
                                <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul id="biz" class="nav nav-list collapse secondmenu" style="height: 0px;">
-                            <li><a href="#"><i class="glyphicon glyphicon-user"></i> 客户管理</a></li>
+                            <li><a href="/biz/customer" target="rightFrame"><i class="glyphicon glyphicon-user"></i> 客户管理</a></li>
 							<li><a href="#"><i class="glyphicon glyphicon-screenshot"></i> 客户字段管理</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-th-list"></i> 客户类型管理</a></li>
                             <li><a href="#"><i class="glyphicon glyphicon-gbp"></i> 资费管理</a></li>
@@ -110,16 +110,16 @@
                         <ul id="admin" class="nav nav-list collapse secondmenu" style="height: 0px;">
                             <li><a href="/admin/user" target="rightFrame"><i class="glyphicon glyphicon-user"></i> 业务用户管理</a></li>
                             <li><a href="/admin/role" target="rightFrame"><i class="glyphicon glyphicon-usd"></i> 用户组管理</a></li>
-                            <li><a href="#"><i class="glyphicon glyphicon-th-large"></i> 页面功能管理</a></li>
-                            <li><a href="#"><i class="	glyphicon glyphicon-list-alt"></i> 操作日志</a></li>
-                            <li><a href="#"><i class="glyphicon glyphicon-eye-open"></i> 登录日志</a></li>
+                            <li><a href="/admin/resourcerole" target="rightFrame"><i class="glyphicon glyphicon-th-large"></i> 页面功能管理</a></li>
+                            <li><a href="/admin/oplog" target="rightFrame"><i class="	glyphicon glyphicon-list-alt"></i> 操作日志</a></li>
+                            <li><a href="/admin/loginhistory" target="rightFrame"><i class="glyphicon glyphicon-eye-open"></i> 登录日志</a></li>
                         </ul>
                     </li>
                     <li>
                         <a href="#"><i class="glyphicon glyphicon-question-sign"></i> 说明书</a>
                     </li>
                     <li>
-                        <a th:href="@{/logout}"><i class="glyphicon glyphicon-log-out"></i> 退出系统</a>
+                        <a href="#"><i class="glyphicon glyphicon-log-out"></i> 退出系统</a>
                     </li>
                 </ul>
             </div>

@@ -29,12 +29,12 @@ public class SysController {
 		map.addAttribute("totalPages",pageInfo.getTotalPages());
 		map.addAttribute("isFirstPage",pageInfo.isFirst());
 		map.addAttribute("isLastPage",pageInfo.isLast());
-		return "/loginhistory";
+		return "/admin/loginhistory";
 	}
 	
 	@RequestMapping(value="/admin/oplog",method=RequestMethod.GET)
 	public String opLog(@RequestParam(value="page",required=false) String page,ModelMap map) {
 		
-		return "/oplog";
+		return "/admin/oplog";
 	}
 }

@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>自来水管理系统</title>
 	<style>
 		body{font:12px/180% Arial,Helvetica,Verdana;color:#5a5a5a; margin:0; background:#eeeeee;}
 		.login_m{ width:403px; margin:0 auto; height:375px; margin-top:98px; /*position: absolute;left:50%;top:50%;margin-left:-202px;margin-top:-188px;*/}
 		.login_logo{ text-align:center; margin-bottom:25px;}
-		.login_boder{ background: url(/images/login_m_bg.png) no-repeat; height:302px; overflow:hidden;}
+		.login_boder{ background: url(../static/images/login_m_bg.png) no-repeat; height:302px; overflow:hidden;}
 		.login_padding{ padding:28px 47px 20px 47px ;}
 		.login_boder h2{ color:#4f5d80; text-transform:uppercase; font-size:12px; font-weight:normal; margin-bottom:11px;}
 		.login_boder input.txt_input{ width:295px; height:36px; border:1px solid #cad2db; background:url(../images/txt_input_bg.gif) no-repeat;  padding:0 5px; -moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px; line-height:36px; margin-bottom:10px; font-size:14px; color:#717171; font-family:Arial;}
@@ -25,7 +25,7 @@
 	</script>
 </head>
 
-<body class="login" >
+<body class="login" mycollectionplug="bind">
 	<div class="login_m">
 		<div class="login_logo"><h2>自来水管理系统</h2></div>
 		<div class="login_boder">
@@ -33,19 +33,19 @@
 				<div class="login_padding" id="login_model">
 					<h2>USERNAME<font th:if="${param.error}" color="#ff0000">&nbsp;&nbsp;&nbsp;&nbsp;用户名或密码错误!</font><font th:if="${param.logout}">&nbsp;&nbsp;&nbsp;&nbsp;您已经登出. </font></h2>
 					<label>
-						<input type="text" id="username" class="txt_input txt_input2" onfocus="if (value ==&#39;Your name&#39;){value =&#39;&#39;}" onblur="if (value ==&#39;&#39;){value=&#39;Your name&#39;}" value="Your name" />
+						<input type="text" id="username" class="txt_input txt_input2" onfocus="if (value ==&#39;Your name&#39;){value =&#39;&#39;}" onblur="if (value ==&#39;&#39;){value=&#39;Your name&#39;}" value="Your name">
 					</label>
 					<h2>PASSWORD</h2>
 					<label>
-						<input type="password" name="password" id="userpwd" class="txt_input" onfocus="if (value ==&#39;******&#39;){value =&#39;&#39;}" onblur="if (value ==&#39;&#39;){value=&#39;******&#39;}" value="******" />
+						<input type="password" name="textfield2" id="userpwd" class="txt_input" onfocus="if (value ==&#39;******&#39;){value =&#39;&#39;}" onblur="if (value ==&#39;&#39;){value=&#39;******&#39;}" value="******">
 					</label>
 					<div class="rem_sub">
 						<div class="rem_sub_l">
-							<input type="checkbox" name="checkbox" id="save_me" />
+							<input type="checkbox" name="checkbox" id="save_me">
 							<label for="checkbox">Remember me</label>
 						</div>
 						<label>
-							<input type="submit" class="sub_button" name="login" id="button" value="Login" />
+							<input type="submit" class="sub_button" name="button" id="button" value="Login" >
 						</label>
 						
 					</div>

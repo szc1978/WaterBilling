@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>客户管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="container">
+		<div><h3>客户管理</h3></div>
+		<div>
+			<form class="form-inline" role="form">
+				<div class="form-group">
+					 <label for="name">用户姓名:</label>
+					 <input type="text" class="form-control" id="name" placeholder="" />
+					 <label for="name">用户地址：</label>
+					 <input type="text" class="form-control" id="address" placeholder="" />
+					 <label for="name">用户电话：</label>
+					 <input type="text" class="form-control" id="phone" placeholder="" />
+				</div>
+				<div class="form-group">
+					 <label for="name">账户编号:</label>
+					 <input type="text" class="form-control" id="name" placeholder="" />
+					 <label for="name"> 用户编号：</label>
+					 <input type="text" class="form-control" id="address" placeholder="" />
+					 <label for="name"> 供水片区：</label>
+					 <select name="provider" class="form-control">
+					 	<option value="ly">庐阳区</option>
+					 	<option value="gx">高新区</option>
+					 </select>
+				</div>
+				<div class="form-group">
+					 <label for="name">抄表周期:</label>
+					 <input type="text" class="form-control" id="name" placeholder="" />
+					 <label for="name"> 水表起度：</label>
+					 <input type="text" class="form-control" id="address" placeholder="" />
+					 <label for="name"> 是否计费：</label>
+					 <input type="checkbox" class="form-control" id="address"/>
+				</div>
+				<div class="form-group">
+					 <label for="name">污水费:</label>
+					 <input type="checkbox" class="form-control" id="address"/>
+					 <label for="name">关水费:</label>
+					 <input type="checkbox" class="form-control" id="address"/>
+					 <label for="name">违章罚款:</label>
+					 <input type="checkbox" class="form-control" id="address"/>
+					 <label for="name">:</label>
+					 <input type="checkbox" class="form-control" id="address"/>
+					 <label for="name">资费类型:</label>
+					 <input type="checkbox" class="form-control" id="address"/>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

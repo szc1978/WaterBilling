@@ -8,35 +8,31 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "customer")
-public class Customer {
+@Table(name = "charge")
+public class Charge {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column ( name = "id",length=10)
 	private int id;
 	
-	@Column(name = "name",nullable=false)
+	@Column(name="name")
 	private String name;
 	
 	@Column(name="code")
 	private String code;
 	
-	@Column(name="certificate_name")
-	private String certificateName;
+	@Column(name="can_free",length=1)
+	private int canFree;
 	
-	@Column(name="certificate_number")
-	private String certificateNumber;
+	@Column(name="needVat",length=1)
+	private int needVat;
 	
-	@Column(name="address")
-	private String address;
+	@Column(name="data_source")
+	private String dataSource;
 	
-	@Column(name="tel")
-	private String tel;
+	@Column(name="description")
+	private String description;
 	
-	@Column(name="mobile")
-	private String mobile;
-	
-	@Column(name="active",length=1)
-	private int active;
-	
+	@Column(name="calculate_type")
+	private String calculateType;
 }

@@ -1,7 +1,7 @@
 package org.water.billing.consts;
 
 public enum ResourceEnum {
-	BIZ_USER("用户管理","/biz/user"),
+	BIZ_USER("用户管理","/biz/customer"),
 	BIZ_USER_DOC("用户档案管理","/biz/userdoc"),
 	BIZ_USER_TYPE("用户类别管理","/biz/usertype"),
 	BIZ_USER_KEY("用户字段管理","/biz/userkey"),

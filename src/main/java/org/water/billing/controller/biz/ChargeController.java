@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.water.billing.service.admin.LoginHistoryService;
 
 @Controller
-public class BizUserController {
+public class ChargeController {
 	
 	@Autowired
 	LoginHistoryService loginHistoryService;
 	
-	@RequestMapping("/biz/user")
+	@RequestMapping("/biz/customer")
 	public String bizuser() {
 
-		return "/biz/userprofile";
+		return "/biz/customer";
 	}
 
 }
