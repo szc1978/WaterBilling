@@ -80,41 +80,7 @@
 			        </tbody>
 			    </table>
 		    </div>
-		    <div>
-		    	<div class="col-sm-6">共<i th:text="${totalCount}"></i>条记录，当前显示第&nbsp;<i th:text="${pageNum}"></i>页</div>
-		    	<div class="col-sm-6" align="right">
-			        <ul class="pagination pagination-sm">
-				        <li>
-		                    <a th:if="${isFirstPage == false}" th:href="@{${pageUrl}(page=${pageNum-1},size=${pageSize})}">&laquo;</a>
-		                    <a th:if="${isFirstPage == true}" href="javascript:;">&laquo;</a>
-		                </li>
-		                <li>
-		                	<a th:if="${pageNum gt 3}" th:href="@{${pageUrl}(page=1,size=${pageSize})}">1</a>
-		                </li>
-		                <li>
-		                	<a th:if="${pageNum-2 gt 1}" href="javascript:;">...</a>
-		                </li>
-				        <li th:each="pageNo : ${#numbers.sequence(pageNum - 2, pageNum + 2)}" class="paginItem">
-							<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo ne pageNum}" th:href="@{${pageUrl}(page=${pageNo},size=${pageSize})}">
-	                        	<font th:text="${pageNo}"></font>
-	                    	</a>
-	                    	<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo eq pageNum}" href="javascript:;">
-	                        	<u th:text="${pageNo}"></u>
-	                    	</a>
-	                	</li>
-	                	<li>
-		                	<a th:if="${pageNum+2 lt totalPages}" href="javascript:;">...</a>
-		                </li>
-	                	<li>
-		                	<a th:if="${pageNum+2 lt totalPages}" th:href="@{${pageUrl}(page=${totalPages},size=${pageSize})}" th:text="${totalPages}"></a>
-		                </li>
-	                	<li>
-	                        <a th:if="${isLastPage == false}" th:href="@{${'/admin/user'}(page=${pageNum+1},size=${pageSize})}">&raquo;</a>
-	                        <a th:if="${isLastPage == true}" href="javascript:;">&raquo;</a>
-	                    </li>
-			        </ul>	
-		        </div>
-		    </div>
+		    <div th:include="paging :: paging"></div>
     	</div>
     	
 	</body>

@@ -3,74 +3,37 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>listuser</title>
-		<link href="/css/style.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="/js/jquery.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function(){
-  				$(".click").click(function(){
-  					$(".tip").fadeIn(200);
-  				});
-	  			$(".tiptop a").click(function(){
-	  				$(".tip").fadeOut(200);
-				});
-	 			$(".sure").click(function(){
-	  				$(".tip").fadeOut(100);
-				});
-	  			$(".cancel").click(function(){
-	  				$(".tip").fadeOut(100);
-				});
-			});
-		</script>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
-		<div class="place">
-    		<span>位置：</span>
-    		<ul class="placeul">
-	    		<li>首页</li>
-	    		<li>系统管理</li>
-	    		<li>用户列表</li>
-    		</ul>
-    	</div>
-    	<div class="rightinfo" style="width:70%;margin: 0 auto;">
-		    <table class="tablelist">
+    	<div>
+		    <table class="table table-striped">
 		    	<thead>
 		    		<tr>
 		        		<th>编号</th>
 		        		<th>用户名</th>
-		        		<th>姓名</th>
-		        		<th>登录IP</th>
-		        		<th>登录日期</th>
+		        		<th>功能</th>
+		        		<th>IP</th>
+		        		<th>内容</th>
+		        		<th>级别</th>
+		        		<th>日期</th>
 		        	</tr>
 		        </thead>
 		        <tbody>
 		        <tr th:each="history,historyStat : ${historys}"> 
 			        <td th:text="${historyStat.index} + 1">1</td> 
 			        <td th:text="${history.userName}"></td> 
-			        <td th:text="${history.chineseName}"></td>
+			        <td th:text="${history.functionName}"></td>
 			        <td th:text="${history.ip}"></td>
+			        <td th:text="${history.content}"></td>
+			        <td th:text="${history.type}"></td>
 			        <td th:text="${history.loginTime}"></td>
 		        </tr>        
 		        </tbody>
 		    </table>
-		    <div class="pagin">
-		    	<div class="message">共<i class="blue" th:text="${total}">0</i>条记录，当前显示第&nbsp;<i class="blue" th:text="${page} + 1">1</i>页</div>
-		        <ul class="paginList">
-			        <li class="paginItem"><a href="javascript:;"><span class="pagepre"></span></a></li>
-			        <li class="paginItem"><a href="javascript:;">1</a></li>
-			        <li class="paginItem current"><a href="javascript:;">2</a></li>
-			        <li class="paginItem"><a href="javascript:;">3</a></li>
-			        <li class="paginItem"><a href="javascript:;">4</a></li>
-			        <li class="paginItem"><a href="javascript:;">5</a></li>
-			        <li class="paginItem more"><a href="javascript:;">...</a></li>
-			        <li class="paginItem"><a href="javascript:;">10</a></li>
-			        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
-		        </ul>
-		    </div>
+		    <div th:include="paging :: paging"></div>
 		</div>
-		<script type="text/javascript">
-			$('.tablelist tbody tr:odd').addClass('odd');
-		</script>
 	</body>
 
 </html>

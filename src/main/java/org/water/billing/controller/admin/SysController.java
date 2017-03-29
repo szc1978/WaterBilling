@@ -8,13 +8,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.water.billing.entity.admin.LoginHistory;
+import org.water.billing.entity.admin.OperationHistory;
 import org.water.billing.service.admin.LoginHistoryService;
+import org.water.billing.service.admin.OperationHistoryService;
 
 @Controller
 public class SysController {
 	
 	@Autowired
 	LoginHistoryService loginHistoryService;
+	
+	@Autowired
+	OperationHistoryService opService;
 	
 	@RequestMapping("/admin/loginhistory")
 	public String loginHistory(@RequestParam(defaultValue="1") int page,
@@ -33,8 +38,18 @@ public class SysController {
 	}
 	
 	@RequestMapping(value="/admin/oplog",method=RequestMethod.GET)
-	public String opLog(@RequestParam(value="page",required=false) String page,ModelMap map) {
-		
+	public String opLog(@RequestParam(defaultValue="1") int page,
+						@RequestParam(defaultValue="10") int size,
+						ModelMap map) {
+		page = page < 1 ? 1:page;
+		Page<OperationHistory> pageInfo = opService.findAll(page-1,size);
+		map.addAttribute("historys",pageInfo.getContent());
+		map.addAttribute("pageNum",pageInfo.getNumber() + 1);
+		map.addAttribute("pageSize",pageInfo.getSize());
+		map.addAttribute("totalCount",pageInfo.getTotalElements());
+		map.addAttribute("totalPages",pageInfo.getTotalPages());
+		map.addAttribute("isFirstPage",pageInfo.isFirst());
+		map.addAttribute("isLastPage",pageInfo.isLast());
 		return "/admin/oplog";
 	}
 }

@@ -3,37 +3,12 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>listuser</title>
-		<link href="/css/style.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="/js/jquery.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function(){
-  				$(".click").click(function(){
-  					$(".tip").fadeIn(200);
-  				});
-	  			$(".tiptop a").click(function(){
-	  				$(".tip").fadeOut(200);
-				});
-	 			$(".sure").click(function(){
-	  				$(".tip").fadeOut(100);
-				});
-	  			$(".cancel").click(function(){
-	  				$(".tip").fadeOut(100);
-				});
-			});
-		</script>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
-		<div class="place">
-    		<span>位置：</span>
-    		<ul class="placeul">
-	    		<li>首页</li>
-	    		<li>系统管理</li>
-	    		<li>用户列表</li>
-    		</ul>
-    	</div>
-    	<div class="rightinfo" style="width:70%;margin: 0 auto;">
-		    <table class="tablelist">
+    	<div>
+		    <table class="table table-striped">
 		    	<thead>
 		    		<tr>
 		        		<th>编号</th>
@@ -53,43 +28,8 @@
 		        </tr>        
 		        </tbody>
 		    </table>
-		    <div class="pagin">
-		    	<div class="message">共<i class="blue" th:text="${totalCount}"></i>条记录，当前显示第&nbsp;<i class="blue" th:text="${pageNum}"></i>页</div>
-		        <ul class="paginList">
-			        <li class="paginItem">
-	                    <a th:if="${isFirstPage == false}" th:href="@{${'/admin/loginhistory'}(page=${pageNum-1},size=${pageSize})}"><span class="pagepre"></span></a>
-	                    <a th:if="${isFirstPage == true}" href="javascript:;"><span class="pagepre"></span></a>
-	                </li>
-	                <li class="paginItem">
-	                	<a th:if="${pageNum gt 3}" th:href="@{${'/admin/loginhistory'}(page=1,size=${pageSize})}">1</a>
-	                </li>
-	                <li class="paginItem">
-	                	<a th:if="${pageNum-2 gt 1}" href="javascript:;">...</a>
-	                </li>
-			        <li th:each="pageNo : ${#numbers.sequence(pageNum - 2, pageNum + 2)}" class="paginItem">
-						<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo ne pageNum}" th:href="@{${'/admin/loginhistory'}(page=${pageNo},size=${pageSize})}">
-                        	<font th:text="${pageNo}"></font>
-                    	</a>
-                    	<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo eq pageNum}" href="javascript:;">
-                        	<i th:text="${pageNo}"></i>
-                    	</a>
-                	</li>
-                	<li class="paginItem">
-	                	<a th:if="${pageNum+2 lt totalPages}" href="javascript:;">...</a>
-	                </li>
-                	<li class="paginItem">
-	                	<a th:if="${pageNum+2 lt totalPages}" th:href="@{${'/admin/loginhistory'}(page=${totalPages},size=${pageSize})}" th:text="${totalPages}"></a>
-	                </li>
-                	<li class="paginItem">
-                        <a th:if="${isLastPage == false}" th:href="@{${'/admin/loginhistory'}(page=${pageNum+1},size=${pageSize})}"><span class="pagenxt"></span></a>
-                        <a th:if="${isLastPage == true}" href="javascript:;"><span class="pagenxt"></span></a>
-                    </li>
-		        </ul>
-		    </div>
+		    <div th:include="paging :: paging"></div>
 		</div>
-		<script type="text/javascript">
-			$('.tablelist tbody tr:odd').addClass('odd');
-		</script>
 	</body>
 
 </html>
