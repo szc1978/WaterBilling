@@ -29,10 +29,11 @@ public class WebLogAspect {
         HttpServletRequest request = attributes.getRequest();
 
         //logger.info("URL : " + request.getRequestURL().toString());
-        //logger.info("HTTP_METHOD : " + request.getMethod());
-        //logger.info("IP : " + request.getRemoteAddr());
-        //logger.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        //logger.info("ARGS : " + Arrays.toString(joinPoint.getArgs()));
+        String msg = request.getMethod();
+        msg += ",IP : " + request.getRemoteAddr();
+        msg += "CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
+        msg += "ARGS : " + Arrays.toString(joinPoint.getArgs());
+        logger.info("AOP:" + msg);
     }
     
     @AfterReturning(returning = "ret", pointcut = "webLog()")

@@ -17,4 +17,12 @@ public class CustomerType {
 	
 	@Column(name="name")
 	private String name;
+	
+	@Column(name="default_charge")
+	private String defaultCharge;
+	
+	public CustomerType() {
+		
+	}
+	
 }
