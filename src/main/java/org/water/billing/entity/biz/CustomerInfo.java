@@ -16,12 +16,6 @@ public class CustomerInfo {
 	@Column ( name = "id",length=10)
 	private int id;
 	
-	@Column(name="customer_id",nullable = false)
-	private int customerId;
-	
-	@Column(name="name",nullable = false)
-	private String name;
-	
 	@Column(name="code",nullable = false, unique = true)
 	private String code;
 	
@@ -55,9 +49,7 @@ public class CustomerInfo {
 		
 	}
 	
-	public CustomerInfo(String name,int customerId,String code,String address,String telephony,String mobile,String certificateName,String certificateId) {
-		this.name = name;
-		this.customerId = customerId;
+	public CustomerInfo(String code,String address,String telephony,String mobile,String certificateName,String certificateId) {
 		this.code = code;
 		this.address = address;
 		this.telephony = telephony;
@@ -72,22 +64,6 @@ public class CustomerInfo {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getCode() {
