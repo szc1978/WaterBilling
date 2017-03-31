@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>角色管理</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<body>
+    	<div class="container">
+    		<div class="formtitle"><span>管理员权限列表</span></div>
+    		<div class="col-sm-13" align="right">
+    			<form class="form-inline" th:role="form" method="get" th:action="@{/admin/user}">
+  					<div class="btn-group">
+    					<a th:href="@{/admin/role/form}"><button type="button" class="btn btn-default">新增角色</button></a>
+    				</div>
+  				</form>
+    		</div>
+    		<div>
+    			<table class="table table-striped">
+				    <thead>
+				    	<tr>
+				        	<th>编号</th>
+				        	<th>角色名</th>
+				        	<th>状态</th>
+				        	<th>角色代码</th>
+				        	<th>角色类型</th>
+				        	<th>角色备注</th>
+				        	<th>操作</th>
+				        </tr>
+					</thead>
+					<tbody>
+						<tr th:each="role,roleStat : ${roles}"> 
+					        <td th:text="${roleStat.index} + 1">1</td> 
+					        <td th:text="${role.name}"></td> 
+					        <td th:text="${role.active}"></td> 
+					        <td th:text="${role.code}"></td>
+					        <td th:text="${role.type}"></td>
+					        <td th:text="${role.memo}"></td>
+					        <td>
+					        	<a th:href="@{/admin/role/form(id=${role.id})}">更新</a>
+			        			<a th:href="@{/admin/role/activate(id=${role.id})}">激活</a>
+			        			<a th:href="@{/admin/role/deactivate(id=${role.id})}">禁用</a>
+					        </td>
+				        </tr>        
+					</tbody>
+				</table>
+			</div>
+    	</div>
+    	
+	</body>
+
+</html>

@@ -29,26 +29,32 @@ public class AdminResourceRoleController {
 	RoleManagement roleMgr;
 
 	@RequestMapping(value="/admin/privilege",method=RequestMethod.GET)
-	public String resources(@RequestParam(defaultValue="0") int id,ModelMap map) {
+	public String resources(ModelMap map) {
 		List<SysResource> resources = resourceService.findAll();
 		map.addAttribute("resources", resources);
-		List<SysRole> sysRoles = sysRoleService.findAll();
-		map.addAttribute("roles",sysRoles);
-		SysResource sysResource = null;
-		if(id != 0) 
-			sysResource = resourceService.findById(id);
-		else
-			sysResource = new SysResource();
-		Collections.addAll(sysRoles);
-		map.addAttribute("sysResource",sysResource);
-		return "/admin/resourcerole";
+		return "/admin/resourcerole_list";
 	}
 	
-	@RequestMapping(value="/admin/privilege/modifyresource",method=RequestMethod.POST)
+	@RequestMapping(value="/admin/privilege/form",method=RequestMethod.GET)
+	public String form(@RequestParam(defaultValue="0") int id,ModelMap map) {
+		SysResource sysResource = resourceService.findById(id);
+		if(sysResource == null) 
+			return "redirect:/admin/privilege";
+		
+		map.addAttribute("resource", sysResource);
+		
+		List<SysRole> sysRoles = sysRoleService.findAll();
+		Collections.addAll(sysRoles);
+		map.addAttribute("roles",sysRoles);
+		return "/admin/resourcerole_form";
+	}
+	
+	@RequestMapping(value="/admin/privilege",method=RequestMethod.POST)
 	public String modifyResource(@ModelAttribute SysResource sysResource) {
 		SysResource tmp = resourceService.findById(sysResource.getId());
 		if(tmp != null) {
-			resourceService.save(sysResource);
+			tmp.setSysRoles(sysResource.getSysRoles());
+			resourceService.save(tmp);
 			roleMgr.refreshResourceRoleMap();
 		}
 		return "redirect:/admin/privilege";

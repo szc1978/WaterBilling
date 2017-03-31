@@ -5,9 +5,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<style>
-		.div-hide {visibility:hidden; display:none}
-	</style>
 	<script type="text/javascript" src="/js/jquery-3.2.0.min.js"></script>
 	<script>
 		function change_charge_type() {
@@ -15,25 +12,20 @@
 			if(type == "3") {
 				document.getElementById("pricepernumber").style.display="none";
 				document.getElementById("pricebydedicate").style.display="none";
-				document.getElementById("pricebyste").style.display="";
-				document.getElementById("pricebyste").style.visibility ="visible";
+				document.getElementById("pricebystep").style.display="";
+				//document.getElementById("pricebystep").style.visibility ="visible";
 			}
 			if(type == "2") {
 				document.getElementById("pricepernumber").style.display="none";
 				document.getElementById("pricebydedicate").style.display="";
-				document.getElementById("pricebydedicate").style.visibility ="visible";
-				document.getElementById("pricebyste").style.display="none";
+				//document.getElementById("pricebydedicate").style.visibility ="visible";
+				document.getElementById("pricebystep").style.display="none";
 			}
 			if(type == "1") {
 				document.getElementById("pricepernumber").style.display="";
-				document.getElementById("pricepernumber").style.visibility ="visible";
+				//document.getElementById("pricepernumber").style.visibility ="visible";
 				document.getElementById("pricebydedicate").style.display="none";
-				document.getElementById("pricebyste").style.display="none";
-			}
-			if(type == "01") {
-				document.getElementById("pricepernumber").style.display="none";
-				document.getElementById("pricebydedicate").style.display="none";
-				document.getElementById("pricebyste").style.display="none";
+				document.getElementById("pricebystep").style.display="none";
 			}
 		}
 	</script>
@@ -41,7 +33,7 @@
 
 <body>
 	<div class="container">
-		<div><h3>资费管理</h3></div>
+		<div class="formtitle"><span>资费管理</span></div>
 		<form th:action="@{/biz/charge}" method="post" th:object="${charge}">
 			<div class="col-sm-6">
 				<div class="form-group">
@@ -72,19 +64,19 @@
 				<div class="form-group  form-inline">
 					 <label for="name">计费方式：</label>
 					 <select class="form-control" name="charge_type" id="charge_type" onchange="change_charge_type()">
-					 	<option value="0" th:selected="true">请选择计费方式</option>
-					 	<option th:each="chargeType : ${chargeTypes}" th:value="${chargeType.id}" th:text="${chargeType.name}"></option>
+					 	<option th:each="chargeType : ${chargeTypes}" th:value="${chargeType.id}" th:text="${chargeType.name}" th:if="${chargeType.id == '1'}" th:selected="true"></option>
+					 	<option th:each="chargeType : ${chargeTypes}" th:value="${chargeType.id}" th:text="${chargeType.name}" th:if="${chargeType.id != '1'}" ></option>
 					</select>
 				</div>
-				<div class="form-group form-inline" id="pricepernumber">
+				<div class="div-hide form-group form-inline" id="pricepernumber">
 					<label for="name">每吨水价(元/吨)：</label>
 					<input type="text" class="form-control" name="price_per_number" />
 				</div>
-				<div class="div-hide form-group form-inline" id="pricebydedicate">
+				<div class="div-hide form-group form-inline" id="pricebydedicate" style="display:none">
 					<label for="name">每月收费(元/月)：</label>
 					<input type="text" class="form-control" name="price_by_dedicate" />
 				</div>
-				<div class="div-hide" id="pricebyste">
+				<div class="div-hide" id="pricebystep" style="display:none">
 					<div class="form-group  form-inline">
 						<label for="step1">一级阶梯(吨)：</label>
 						<input type="text" class="form-control" name="step1" />
@@ -103,8 +95,11 @@
 						<label for="step1">价格：</label>
 						<input type="text" class="form-control" name="step1" />
 					</div>
+					<label><font color="#ff0000">* 不够级别的保持空白</font></label>
 				</div>
-				<input type="submit" class="form-control" value="保存" />
+				<div class="col-sm-4" align="center">
+					<input type="submit" class="form-control" value="保存" />
+				</div>
 			</div>
 		</form>
 	</div>

@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>角色管理</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<body>
+    	<div class="container">
+    		<div class="formtitle"><span>功能权限列表</span></div>
+	    	<div>
+	    		<table class="table table-striped">
+					<thead>
+					    <tr>
+							<th>编号</th>
+					        <th>功能</th>
+					        <th>拥有角色</th>
+					        <th>修改</th>
+					    </tr>
+					</thead>
+					<tbody>
+						<tr th:each="resource,resourceStat : ${resources}"> 
+							<td th:text="${resourceStat.index} + 1">1</td> 
+							<td th:text="${resource.name}"></td> 
+							<td>
+						    	<font th:each="myrole:${resource.sysRoles}">
+				        				[<b th:text="${myrole.name}"/>]
+				        		</font>
+							</td>
+							<td><a th:href="@{/admin/privilege/form(id=${resource.id})}">修改</a></td>
+						</tr>        
+					</tbody>
+				</table>
+	    	</div>
+    	</div>
+	</body>
+
+</html>

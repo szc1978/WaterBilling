@@ -1,6 +1,8 @@
 @charset "utf-8";
 
-/*right frame*/
-.title {height:50px;}
-.formtitle{border-bottom:solid 1px #d0dee5; line-height:35px; position:relative; height:35px; margin-bottom:28px;}
-.formtitle span,.formtitle1 span{font-weight:bold;font-size:14px; border-bottom:solid 3px #F99331;float:left; position:absolute; z-index:100; bottom:-1px; padding:0 3px; height:30px; line-height:30px;}
+/*Right Frame*/
+.formtitle{border-bottom:solid 1px #bbbbbb; line-height:35px; position:relative; height:35px; margin-top:14px;margin-bottom:28px;}
+.formtitle span{font-weight:bold;font-size:22px; border-bottom:solid 3px #cccccc;float:left; position:absolute; z-index:100; bottom:-1px; padding:0 3px; height:30px; line-height:30px;}
+
+/*Paging*/
+.pagination.pagination-sm { margin: -20px; }

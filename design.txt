@@ -75,3 +75,11 @@
 	11.计算清单(费用名|金额；费用名|金额）
 	12.是否结算
 	
+controller(example:/admin/user)
+	list: /admin/user : user_list.html
+	modify:/admin/user/modify : user_form.html (from /admin/user)
+	active:/admin/user/active (from /admin/user) --> redirect: /admin/user?id=??
+	deactivate: /admin/user/deactivate (from /admin/user) --> redirect: /admin/user?id=??
+	create:/admin/user/create : user_form.html (from /admin/user)
+	
+	

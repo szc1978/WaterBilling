@@ -29,10 +29,10 @@ public class WebLogAspect {
         HttpServletRequest request = attributes.getRequest();
 
         //logger.info("URL : " + request.getRequestURL().toString());
-        String msg = request.getMethod();
-        msg += ",IP : " + request.getRemoteAddr();
-        msg += "CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
-        msg += "ARGS : " + Arrays.toString(joinPoint.getArgs());
+        String msg = "";
+        msg += request.getRemoteAddr();
+        msg += "," + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
+        msg += "," + Arrays.toString(joinPoint.getArgs());
         logger.info("AOP:" + msg);
     }
     

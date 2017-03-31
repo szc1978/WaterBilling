@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>角色管理</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<body>
+		<div class="container">
+	    	<div class="formtitle"><span>管理员权限修改</span></div>
+	    	<div class="con-mid-10">
+	    		<form name="create_role" th:action="@{/admin/role}" th:object="${role}" method="post">
+		    		<div class="col-sm-4" >
+		    			<div class="form-group">
+		    				<label>角色名:</label>
+		    				<div class="row">
+		    					<div class="col-sm-10">
+		    						<input name="name" id="name" class="form-control" th:value="${role.name}" th:field="*{name}"></input>
+		    					</div>
+		    				</div>
+		    			</div>
+		    			<div class="form-group">
+		    				<label>角色代码:</label>
+		    				<div class="row">
+		    					<div class="col-sm-10">
+		    						<input name="code" id="code" class="form-control" th:value="${role.code}"  th:field="*{code}"></input>
+		    					</div>
+		    				</div>
+		    			</div>
+		    			<div class="form-group">
+		    				<label>角色类型:</label>
+		    				<div class="row">
+		    					<div class="col-sm-10">
+		    						<input name="type" id="type" class="form-control"  th:value="${role.type}" th:field="*{type}"></input>
+		    					</div>
+		    				</div>
+		    			</div>
+		    			<div class="form-group">
+		    				<label>角色备注:</label>
+		    				<div class="row">
+		    					<div class="col-sm-10">
+		    						<input name="memo" id="memo" class="form-control" th:value="${role.memo}"  th:field="*{memo}"></input>
+		    					</div>
+		    				</div>
+		    			</div>
+		    			<div class="con-mid-9">
+		    				<input type="hidden" id="active" th:value="${role.active}" th:field="*{active}"></input>
+		    				<input type="hidden" id="id" th:value="${role.id}" th:field="*{id}"></input>
+		    				<input type="submit" name="保存" id="add" value="保存" class="btn btn-primary"></input>
+		    			</div>
+		    		</div>
+		    	</form>
+	    		
+	    	</div>
+    	</div>
+	</body>
+
+</html>
