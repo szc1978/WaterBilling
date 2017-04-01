@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>客户管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>客户管理</span></div>
+		<form th:action="@{/biz/customer}" method="post" th:object="${customer}" >
+			<div class="col-sm-8">
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户姓名:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.name}" th:field="*{name}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户编号:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.customerInfo.code}" th:field="*{customerInfo.code}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户地址:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.customerInfo.address}" th:field="*{customerInfo.address}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">供水片区:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.customerInfo.address}" th:field="*{customerInfo.address}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户电话:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.customerInfo.telephony}" th:field="*{customerInfo.telephony}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户手机:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.customerInfo.mobile}" th:field="*{customerInfo.mobile}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户证件:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateName}" th:field="*{customerInfo.certificateName}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">证件号码:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateId}" th:field="*{customerInfo.certificateId}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">抄表周期:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateName}" th:field="*{customerInfo.certificateName}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">应缴费日:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateId}" th:field="*{customerInfo.certificateId}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户水表数:</label>
+					 <input type="text" class="form-control" th:value="${customer.waterNumber}" th:field="*{waterNumber}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户余额:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.balance}" th:field="*{balance}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户类型:</label>
+					 <input type="text" class="form-control" th:value="${customer.waterNumber}" th:field="*{waterNumber}" />
+				</div>
+				<div class="col-sm-6 form-group form-inline">
+					 <label for="name">客户余额:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+					 <input type="text" class="form-control" th:value="${customer.balance}" th:field="*{balance}" />
+				</div>
+			</div>
+			
+			<div class="col-sm-8 form-group">
+				<label>资费列表</label>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

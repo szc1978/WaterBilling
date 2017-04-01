@@ -21,5 +21,9 @@ public class OperationHistoryService {
 		Page<OperationHistory> history = opHistoryDao.findAll(page);
 		return history;
 	}
+	
+	public OperationHistory save(OperationHistory op) {
+		return opHistoryDao.save(op);
+	}
 
 }

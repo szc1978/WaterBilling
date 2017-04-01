@@ -2,6 +2,7 @@ package org.water.billing.utils;
 
 import org.springframework.data.domain.Page;
 import org.springframework.ui.ModelMap;
+import org.water.billing.consts.ChargeTypeEnum;
 
 public class Utils {
 	
@@ -22,5 +23,13 @@ public class Utils {
 			map.addAttribute("isLastPage",true);
 			map.addAttribute("totalCount",1);
 		}
+	}
+	
+	public static ChargeTypeEnum getChargeTypeById(int id) {
+		for(ChargeTypeEnum type : ChargeTypeEnum.values()) {
+			if(type.getId() == id)
+				return type;
+		}
+		return null;
 	}
 }

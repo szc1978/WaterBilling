@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>客户管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script>
+		function show_detail(id) {
+			$("#detailed_info").load("http://127.0.0.1:8080/biz/customer_type/list_charge?id=" + id); 
+		}
+	</script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>客户类别管理</span></div>
+    	<div class="col-sm-12 btn-group" align="right">
+    		<a th:href="@{/biz/customer_type/edit/form}"><button type="button" class="btn btn-default">新增</button></a>
+    	</div>
+		<div>
+			<div class="col-sm-6" id="type_list">
+				<table class="table table-striped">
+					<thead>
+				    	<tr>
+				        	<th>编号<i class="sort"></i></th>
+				        	<th>用户类别</th>
+				        	<th>备注</th>
+				        	<th>操作</th>
+				        </tr>
+					</thead>
+					<tbody>
+						<tr th:each="customerType,customerTypeStat : ${customerTypes}"> 
+							<td th:text="${customerTypeStat.index} + 1">1</td> 
+							<td >
+								<a href="Javascript:show_detail(1)" th:text="${customerType.name}"></a>
+							</td> 
+							<td th:text="${customerType.description}"></td>
+							<td>
+						    	<a th:href="@{/biz/customer_type/edit/form(id=${customerType.id})}">编辑</a>
+						    	<a th:href="@{/biz/customer_type/activate(id=${customerType.id})}">恢复</a>
+						    	<a th:href="@{/biz/customer_type/deactivate(id=${customerType.id})}">删除</a>
+							</td>
+						</tr>        
+					</tbody>
+				</table>
+			</div>
+			<div class="col-sm-6" id="detailed_info">
+			</div>
+		</div>
+	</div>
+</body>
+</html>

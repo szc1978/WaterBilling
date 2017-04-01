@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title></title>
@@ -40,7 +40,7 @@
 			    			<div class="row">
 			    				<div class="col-sm-8">
 			    					<input th:if="${sysUser.id eq 0}" id="name" class="form-control" th:value="${sysUser.name}" th:field="*{name}"></input>
-			    					<input th:if="${sysUser.id ne 0}" id="name1" class="form-control" th:value="${sysUser.name}" th:field="*{name}" readonly="true"></input>
+			    					<input th:if="${sysUser.id ne 0}" id="name1" class="form-control" th:value="${sysUser.name}" th:field="*{name}" th:readonly="true"></input>
 			    					<font color="#ff0000"> <span id="gradeInfo"></span></font>
 			    				</div>
 			    			</div>

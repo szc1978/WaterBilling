@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>客户管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+			<div class="col-sm-6" id="detailed_info">
+				<table class="table table-striped">
+					<thead>
+				    	<tr>
+				        	<th>编号<i class="sort"></i></th>
+				        	<th>收费类别</th>
+				        </tr>
+					</thead>
+					<tbody>
+						<tr th:each="charge,chargeStat:${charges}"> 
+							<td th:text="${chargeStat.index} + 1">1</td> 
+							<td th:text="${charge.name}"></td> 
+						</tr>        
+					</tbody>
+				</table>
+			</div>
+</body>
+</html>

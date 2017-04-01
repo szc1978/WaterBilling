@@ -13,22 +13,22 @@
 		    		<tr>
 		        		<th>编号</th>
 		        		<th>用户名</th>
-		        		<th>功能</th>
+		        		<th>模块</th>
+		        		<th>操作</th>
 		        		<th>IP</th>
 		        		<th>内容</th>
-		        		<th>级别</th>
 		        		<th>日期</th>
 		        	</tr>
 		        </thead>
 		        <tbody>
 		        <tr th:each="history,historyStat : ${historys}"> 
 			        <td th:text="${historyStat.index} + 1">1</td> 
-			        <td th:text="${history.userName}"></td> 
-			        <td th:text="${history.functionName}"></td>
+			        <td th:text="${history.userChineseName}"></td> 
+			        <td th:text="${history.moduleName}"></td>
+			        <td th:text="${history.opName}"></td>
 			        <td th:text="${history.ip}"></td>
 			        <td th:text="${history.content}"></td>
-			        <td th:text="${history.type}"></td>
-			        <td th:text="${history.loginTime}"></td>
+			        <td th:text="${history.opTime}"></td>
 		        </tr>        
 		        </tbody>
 		    </table>

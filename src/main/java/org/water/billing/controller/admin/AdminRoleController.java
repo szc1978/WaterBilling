@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.entity.admin.SysRole;
 import org.water.billing.security.support.RoleManagement;
 import org.water.billing.service.admin.SysRoleService;
@@ -39,11 +40,12 @@ public class AdminRoleController {
 		return "/admin/role_list";
 	}
 	
+	@OpAnnotation(moduleName="角色管理",option="修改角色")
 	@RequestMapping(value="/admin/role",method=RequestMethod.POST)
 	public String roleUpdate(@ModelAttribute SysRole sysRole) {
 		SysRole role = sysRoleService.save(sysRole);
 		roleMgr.refreshRoleList();
-		return "redirect:/admin/role/" + role.getId();
+		return "redirect:/admin/role/" + String.valueOf(role.getId());
 	}
 	
 	@RequestMapping(value="/admin/role/form",method=RequestMethod.GET)
@@ -56,6 +58,7 @@ public class AdminRoleController {
 		return "/admin/role_form";
 	}
 	
+	@OpAnnotation(moduleName="角色管理",option="激活角色")
 	@RequestMapping(value="/admin/role/activate",method=RequestMethod.GET)
 	public String activateRole(@RequestParam int id) {
 		SysRole role = sysRoleService.findById(id);
@@ -63,9 +66,10 @@ public class AdminRoleController {
 			return "redirect:/admin/role";
 		role.setActive(1);
 		sysRoleService.save(role);
-		return "redirect:/admin/role/" + id;
+		return "redirect:/admin/role/" + String.valueOf(id);
 	}
 	
+	@OpAnnotation(moduleName="角色管理",option="禁用角色")
 	@RequestMapping(value="/admin/role/deactivate",method=RequestMethod.GET)
 	public String deactivateRole(@RequestParam int id) {
 		SysRole role = sysRoleService.findById(id);
@@ -73,7 +77,7 @@ public class AdminRoleController {
 			return "redirect:/admin/role";
 		role.setActive(0);
 		sysRoleService.save(role);
-		return "redirect:/admin/role/" + id;
+		return "redirect:/admin/role/" + String.valueOf(id);
 	}
 	
 	@RequestMapping(value="/admin/role/{id}",method=RequestMethod.GET)

@@ -20,11 +20,14 @@ public class OperationHistory {
 	@Column (name="id",length=20)
 	private long id; 
 	
-	@Column(name = "function_name",length=64)
-	private String functionName;
+	@Column(name = "module_name",length=64)
+	private String moduleName;
 	
-	@Column(name = "user_name",length=64)
-	private String userName;
+	@Column(name = "op_name",length=64)
+	private String opName;
+	
+	@Column(name = "user_chinese_name",length=64)
+	private String userChineseName;
 	
 	@Column(name = "ip",length=64)
 	private String ip;
@@ -32,67 +35,69 @@ public class OperationHistory {
 	@Column(name = "content",length=64)
 	private String content;
 	
-	@Column(name = "type",length=64)
-	private String type;
+	//map OpTypeEnum
+	@Column(name = "type",length=1)
+	private int type;
 	
-	@Column(name = "login_time",length=64)
+	@Column(name = "op_time",length=64)
 	@Temporal(TemporalType.TIMESTAMP) 
-	private Date loginTime; 
+	private Date opTime; 
 	@PrePersist
     protected void onCreate() {
-		loginTime = new Date();
+		opTime = new Date();
     }
 	
 	public OperationHistory() {
 		
 	}
 	
-	public OperationHistory(String functionName,String userName,String ip,String content,String type) {
-		this.userName = userName;
-		this.functionName = functionName;
+	public OperationHistory(String userChineseName,String moduleName,String opName,String ip,String content,int type) {
+		this.userChineseName = userChineseName;
+		this.opName = opName;
+		this.moduleName = moduleName;
 		this.ip = ip;
 		this.content = content;
 		this.type = type;
 	}
-	
+
 	public long getId() {
 		return id;
 	}
-	
+
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-	public String getUserName() {
-		return userName;
+
+	public String getModuleName() {
+		return moduleName;
 	}
-	
-	public void setUserName(String userName) {
-		this.userName = userName;
+
+	public void setModuleName(String moduleName) {
+		this.moduleName = moduleName;
 	}
-	
+
+	public String getOpName() {
+		return opName;
+	}
+
+	public void setOpName(String opName) {
+		this.opName = opName;
+	}
+
+	public String getUserChineseName() {
+		return userChineseName;
+	}
+
+	public void setUserChineseName(String userChineseName) {
+		this.userChineseName = userChineseName;
+	}
+
 	public String getIp() {
 		return ip;
 	}
-	
+
 	public void setIp(String ip) {
 		this.ip = ip;
-	}
-	
-	public Date getLoginTime() {
-		return loginTime;
-	}
-	
-	public void setLoginTime(Date loginTime) {
-		this.loginTime = loginTime;
-	}
-
-	public String getFunctionName() {
-		return functionName;
-	}
-
-	public void setFunctionName(String functionName) {
-		this.functionName = functionName;
 	}
 
 	public String getContent() {
@@ -103,12 +108,22 @@ public class OperationHistory {
 		this.content = content;
 	}
 
-	public String getType() {
+	public int getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(int type) {
 		this.type = type;
 	}
+
+	public Date getOpTime() {
+		return opTime;
+	}
+
+	public void setOpTime(Date opTime) {
+		this.opTime = opTime;
+	}
+	
+	
 
 }

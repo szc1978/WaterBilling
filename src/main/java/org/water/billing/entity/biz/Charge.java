@@ -2,11 +2,14 @@ package org.water.billing.entity.biz;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,17 +23,17 @@ public class Charge {
 	@Column ( name = "id",length=10)
 	private int id;
 	
-	@Column(name="name",unique=true)
+	@Column(name="name",unique=true,nullable=true)
 	private String name;
 	
 	@Column(name="code",unique=true)
 	private String code;
 	
 	@Column(name="can_free",length=1)
-	private int canFree;
+	private int canFree = 0;
 	
 	@Column(name="need_vat",length=1)
-	private int needVat;
+	private int needVat = 0;
 	
 	@Column(name="data_source")
 	private String dataSource;
@@ -38,11 +41,12 @@ public class Charge {
 	@Column(name="description")
 	private String description;
 	
-	@Column(name="charge_type")
-	private String chargeType;
+	@Column(name="charge_type",length=1)
+	private int chargeType = 0;
 	
-	@Column(name="charge_parameters")
-	private String chargeParameters;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="parameter_id")
+	private ChargeParameter chargeParameter = new ChargeParameter();
 	
 	@Column(name = "create_time",length=64)
 	@Temporal(TemporalType.TIMESTAMP) 
@@ -112,20 +116,20 @@ public class Charge {
 		this.description = description;
 	}
 
-	public String getChargeType() {
+	public int getChargeType() {
 		return chargeType;
 	}
 
-	public void setChargeType(String chargeType) {
+	public void setChargeType(int chargeType) {
 		this.chargeType = chargeType;
 	}
 
-	public String getChargeParameters() {
-		return chargeParameters;
+	public ChargeParameter getChargeParameter() {
+		return chargeParameter;
 	}
 
-	public void setChargeParameters(String chargeParameters) {
-		this.chargeParameters = chargeParameters;
+	public void setChargeParameter(ChargeParameter chargeParameter) {
+		this.chargeParameter = chargeParameter;
 	}
 
 	public Date getCreateTime() {

@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>资费管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/js/jquery-3.2.0.min.js"></script>
+	<script>
+		function change_charge_type() {
+			var type = document.getElementById("charge_type").value;
+			if(type == "3") {
+				document.getElementById("pricepernumber").style.display="none";
+				document.getElementById("pricebydedicate").style.display="none";
+				document.getElementById("pricebystep").style.display="";
+			}
+			if(type == "2") {
+				document.getElementById("pricepernumber").style.display="none";
+				document.getElementById("pricebydedicate").style.display="";
+				document.getElementById("pricebystep").style.display="none";
+			}
+			if(type == "1") {
+				document.getElementById("pricepernumber").style.display="";
+				document.getElementById("pricebydedicate").style.display="none";
+				document.getElementById("pricebystep").style.display="none";
+			}
+		}
+	</script>
+</head>
+
+<body onload="change_charge_type();">
+	<div class="container">
+		<div class="formtitle"><span>资费管理</span></div>
+		<form th:action="@{/biz/charge}" method="post" th:object="${charge}">
+			<div class="col-sm-6">
+				<div class="form-group">
+					 <label for="name">名称:</label>
+					 <input type="text" class="form-control" th:value="${charge.name}" th:field="*{name}" />
+				</div>
+				<div class="form-group ">
+					 <label for="name">编号：</label>
+					 <input type="text" class="form-control" th:value="${charge.code}" th:field="*{code}" />
+				</div>
+				<div class="form-group">
+					 <label for="name">描述:</label>
+					 <input type="text" class="form-control" th:value="${charge.description}" th:field="*{description}"/>
+				</div>
+				<div class="form-group form-inline">
+					 <label for="name">允许减免:</label>
+					 <label for="name">是:</label>
+					 <input name="canFree" type="radio" class="form-control" th:if="${charge.canFree eq 1}" value="1" th:field="*{canFree}" th:checked="true" />
+					 <input name="canFree" type="radio" class="form-control" th:if="${charge.canFree ne 1}" value="1" th:field="*{canFree}" />
+					 <label for="name">否:</label>
+					 <input name="canFree" type="radio" class="form-control" th:if="${charge.canFree eq 0}" value="0" th:field="*{canFree}" th:checked="true" />
+					 <input name="canFree" type="radio" class="form-control" th:if="${charge.canFree ne 0}" value="0" th:field="*{canFree}" />
+					 &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+					 <label for="name">计算增值税：</label>
+					 <label for="name">是:</label>
+					 <input name="needVat" type="radio" class="form-control" th:if="${charge.needVat eq 1}" value="1" th:field="*{needVat}" th:checked="true"/>
+					 <input name="needVat" type="radio" class="form-control" th:if="${charge.needVat ne 1}" value="1" th:field="*{needVat}" />
+					 <label for="name">否:</label>
+					 <input name="needVat" type="radio" class="form-control" th:if="${charge.needVat eq 0}" value="0" th:field="*{needVat}" th:checked="true"/>
+					 <input name="needVat" type="radio" class="form-control" th:if="${charge.needVat ne 0}" value="0" th:field="*{needVat}" />
+				</div>
+				<div class="form-group  form-inline">
+					 <label for="name">费用来源：</label>
+					 <select class="form-control" name="charge_from" th:field="*{dataSource}" >
+					 	<option th:each="chargeFrom : ${chargeFroms}" th:value="${chargeFrom}" th:text="${chargeFrom}" th:if="${chargeFrom == dataSource}" th:selected="true"></option>
+					 	<option th:each="chargeFrom : ${chargeFroms}" th:value="${chargeFrom}" th:text="${chargeFrom}" th:if="${chargeFrom != dataSource}"></option>
+					 </select>
+				</div>
+				<div class="form-group  form-inline">
+					 <label for="name">计费方式：</label>
+					 <select class="form-control" name="charge_type" id="charge_type" th:field="*{chargeType}" onchange="change_charge_type()">
+					 	<option th:each="chargeType : ${chargeTypes}" th:value="${chargeType.id}" th:text="${chargeType.name}" th:if="${chargeType.id == '1'}" th:selected="true"></option>
+					 	<option th:each="chargeType : ${chargeTypes}" th:value="${chargeType.id}" th:text="${chargeType.name}" th:if="${chargeType.id != '1'}" ></option>
+					</select>
+				</div>
+				
+				<div class="form-group form-inline" id="pricepernumber">
+					<label for="name">每吨水价(元/吨)：</label>
+					<input type="text" class="form-control" th:value="${charge.chargeParameter.pricePerNumber}" th:field="*{chargeParameter.pricePerNumber}" />
+				</div>
+				
+				<div class="form-group form-inline" id="pricebydedicate">
+					<label for="name">每月收费(元/月)：</label>
+					<input type="text" class="form-control" th:value="${charge.chargeParameter.priceByDedicated}" th:field="*{chargeParameter.priceByDedicated}"  />
+				</div>
+				<div id="pricebystep" style="display:none">
+					<div class="form-group  form-inline">
+						<label for="step1">一级阶梯(吨)：</label>
+						<input type="text" class="form-control" th:value="${charge.chargeParameter.step1Number}" th:field="*{chargeParameter.step1Number}" />
+						<label for="step1">价格：</label>
+						<input type="text" class="form-control" th:value="${charge.chargeParameter.step1Price}" th:field="*{chargeParameter.step1Price}" />
+					</div>
+					<div class="form-group  form-inline">
+						<label for="step1">二级阶梯(吨)：</label>
+						<input type="text" class="form-control" th:value="${charge.chargeParameter.step2Number}" th:field="*{chargeParameter.step2Number}" />
+						<label for="step1">价格：</label>
+						<input type="text" class="form-control" th:value="${charge.chargeParameter.step2Price}" th:field="*{chargeParameter.step2Price}" />
+					</div>
+					<div class="form-group form-inline ">
+						<label for="step1">三级阶梯(吨)：</label>
+						<input type="text" class="form-control" th:value="${charge.chargeParameter.step3Number}" th:field="*{chargeParameter.step3Number}" />
+						<label for="step1">价格：</label>
+						<input type="text" class="form-control" th:value="${charge.chargeParameter.step3Price}" th:field="*{chargeParameter.step3Price}" />
+					</div>
+					<label><font color="#ff0000">* 不够级别的保持空白</font></label>
+				</div>
+				<div class="col-sm-4" align="center">
+					<input type="submit" class="form-control" value="保存" />
+				</div>
+				<input type="hidden" name="id" th:value="${charge.id}" th:field="*{id}"/>
+				<input type="hidden" name="parameter_id" th:value="${charge.chargeParameter.id}" th:field="*{chargeParameter.id}" />
+			</div>
+		</form>
+	</div>
+</body>
+</html>

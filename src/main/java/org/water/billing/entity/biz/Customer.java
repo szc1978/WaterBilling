@@ -34,23 +34,23 @@ public class Customer {
 	@Column(name="active",length=1)
 	private int active = 1;
 	
-	@Column(name="water_number")
-	private int waterNumber;
+	@Column(name="water_number",length=1)
+	private float waterNumber = new Float(0.00);
 	
 	@Column(name="balance")
-	private float balance;
+	private float balance = new Float(0.00);
 	
 	@ManyToOne()
 	@JoinColumn(name="water_provider_id")
-	private WaterProvider waterProvider;
+	private WaterProvider waterProvider = new WaterProvider();
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="customer_type_id")
-	private CustomerType customerType;
+	private CustomerType customerType = new CustomerType();
 	
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "info_id")
-	private CustomerInfo customerInfo;
+	private CustomerInfo customerInfo = new CustomerInfo();
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name="customer_charge",joinColumns={@JoinColumn(name="customer_id")},inverseJoinColumns={@JoinColumn(name="charge_id")})
@@ -121,11 +121,11 @@ public class Customer {
 		this.active = active;
 	}
 
-	public int getWaterNumber() {
+	public float getWaterNumber() {
 		return waterNumber;
 	}
 
-	public void setWaterNumber(int waterNumber) {
+	public void setWaterNumber(float waterNumber) {
 		this.waterNumber = waterNumber;
 	}
 

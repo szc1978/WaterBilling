@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>资费管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="container">
+    	<div class="formtitle"><span>资费种类列表</span></div>
+    		<div class="col-sm-13 btn-group" align="right">
+    			<a th:href="@{/biz/charge/form}"><button type="button" class="btn btn-default">新增资费</button></a>
+    		</div>
+		<div>
+			<table class="table table-striped">
+				<thead>
+			    	<tr>
+			        	<th>编号<i class="sort"></i></th>
+			        		<th>资费名称</th>
+			        		<th>资费代码</th>
+			        		<th>资费来源</th>
+			        		<th>资费种类</th>
+			        		<th>可否减免</th>
+			        		<th>是否收增值税</th>
+			        		<th>操作</th>
+			        	</tr>
+			        </thead>
+			        <tbody>
+			        <tr th:each="charge,chargeStat : ${charges}"> 
+				        <td th:text="${chargeStat.index} + 1">1</td> 
+				        <td th:text="${charge.name}"></td> 
+				        <td th:text="${charge.code}"></td>
+				        <td th:text="${charge.dataSource}"></td>
+				        <td th:text="${charge.chargeType}"></td>
+				        <td th:text="${charge.canFree}"></td>
+				        <td th:text="${charge.needVat}"></td>
+				        <td>
+				        	<a th:href="@{/biz/charge/form(id=${charge.id})}">编辑</a>
+				        	<a th:href="@{/biz/charge/activate(id=${charge.id})}">恢复</a>
+				        	<a th:href="@{/biz/charge/deactivate(id=${charge.id})}">删除</a>
+				        </td>
+			        </tr>        
+			        </tbody>
+			    </table>
+		    </div>
+		    <div th:include="paging :: paging"></div>
+    	</div>
+</body>
+</html>
