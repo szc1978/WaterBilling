@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.water.billing.dao.biz.CustomerDao;
+import org.water.billing.dao.biz.CustomerInfoDao;
 import org.water.billing.entity.biz.Customer;
 
 @Service("CustomerService")
@@ -16,6 +17,9 @@ public class CustomerService {
 	
 	@Autowired
 	CustomerDao customerDao;
+	
+	@Autowired
+	CustomerInfoDao customerInfoDao;
 	
 	public Page<Customer> findAll(int pageIndex,int number) {
 		Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC,"id"));
@@ -34,5 +38,9 @@ public class CustomerService {
 	
 	public Customer findById(int id) {
 		return customerDao.findById(id);
+	}
+	
+	public Customer findByCode(String code) {
+		return customerDao.findByCode(code);
 	}
 }

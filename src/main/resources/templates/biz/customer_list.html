@@ -10,7 +10,7 @@
 <body>
 	<div class="container">
 		<div class="formtitle"><span>客户列表</span></div>
-    	<div class="col-sm-13 btn-group" align="right">
+    	<div class="col-sm-13" align="right">
     		<a th:href="@{/biz/customer/edit/form}"><button type="button" class="btn btn-default">新增客户</button></a>
     	</div>
 		<div>
@@ -23,7 +23,7 @@
 			        		<th>客户手机</th>
 			        		<th>当前水表数字</th>
 			        		<th>账户余额</th>
-			        		<th>抄表日期</th>
+			        		<th>状态</th>
 			        		<th>操作</th>
 			        	</tr>
 			        </thead>
@@ -35,11 +35,11 @@
 				        <td th:text="${customer.customerInfo.mobile}"></td>
 				        <td th:text="${customer.waterNumber}"></td>
 				        <td th:text="${customer.balance}"></td>
-				        <td th:text="${customer.createTime}"></td>
+				        <td th:text="${customer.status}"></td>
 				        <td>
-				        	<a th:href="@{/biz/customer/edit/form(id=${charge.id})}">编辑</a>
-				        	<a th:href="@{/biz/customer/activate(id=${charge.id})}">恢复</a>
-				        	<a th:href="@{/biz/customer/deactivate(id=${charge.id})}">删除</a>
+				        	<a th:href="@{/biz/customer/edit/form(id=${customer.id})}">编辑</a>
+				        	<a th:href="@{/biz/customer/activate(id=${customer.id})}">恢复</a>
+				        	<a th:href="@{/biz/customer/deactivate(id=${customer.id})}">删除</a>
 				        </td>
 			        </tr>        
 			        </tbody>

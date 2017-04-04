@@ -40,8 +40,8 @@ public class Bill {
 	@Column(name="detail_content",length=1024)
 	private String detailContent;
 	
-	@Column(name="is_charged",length=1)
-	private int isCharged = 0;
+	@Column(name="status",length=1)
+	private int status = 0;
 	
 	@Column(name = "get_date",length=64)
 	@Temporal(TemporalType.TIMESTAMP) 
@@ -123,12 +123,12 @@ public class Bill {
 		this.detailContent = detailContent;
 	}
 
-	public int getIsCharged() {
-		return isCharged;
+	public int getStatus() {
+		return status;
 	}
 
-	public void setIsCharged(int isCharged) {
-		this.isCharged = isCharged;
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 	public Date getGetDate() {

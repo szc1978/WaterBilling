@@ -7,7 +7,11 @@
 	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<script>
 		function show_detail(id) {
-			$("#detailed_info").load("http://127.0.0.1:8080/biz/customer_type/list_charge?id=" + id); 
+			var mydiv = $("#detailed_info").val();
+			var url = "/biz/customer_type/list_charge?id=" + id;
+			$(mydiv).load(url,"",function() {
+				 $("#detailed_info").fadeIn("slow");
+			} 
 		}
 	</script>
 </head>
@@ -15,11 +19,11 @@
 <body>
 	<div class="container">
 		<div class="formtitle"><span>客户类别管理</span></div>
-    	<div class="col-sm-12 btn-group" align="right">
+    	<div class="col-sm-12" align="right">
     		<a th:href="@{/biz/customer_type/edit/form}"><button type="button" class="btn btn-default">新增</button></a>
     	</div>
 		<div>
-			<div class="col-sm-6" id="type_list">
+			<div class="col-sm-8" id="type_list">
 				<table class="table table-striped">
 					<thead>
 				    	<tr>
@@ -33,7 +37,7 @@
 						<tr th:each="customerType,customerTypeStat : ${customerTypes}"> 
 							<td th:text="${customerTypeStat.index} + 1">1</td> 
 							<td >
-								<a href="Javascript:show_detail(1)" th:text="${customerType.name}"></a>
+								<a th:href="@{/biz/customer_type(id=${customerType.id})}" th:text="${customerType.name}"></a>
 							</td> 
 							<td th:text="${customerType.description}"></td>
 							<td>
@@ -45,7 +49,21 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="col-sm-6" id="detailed_info">
+			<div class="col-sm-4" id="detailed_info">
+				<table class="table table-striped">
+					<thead>
+				    	<tr>
+				        	<th>编号<i class="sort"></i></th>
+				        	<th>收费类别</th>
+				        </tr>
+					</thead>
+					<tbody>
+						<tr th:each="charge,chargeStat:${type.charges}"> 
+							<td th:text="${chargeStat.index} + 1">1</td> 
+							<td th:text="${charge.name}"></td> 
+						</tr>        
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

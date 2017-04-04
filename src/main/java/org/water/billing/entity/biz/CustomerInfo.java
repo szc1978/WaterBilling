@@ -19,7 +19,7 @@ public class CustomerInfo {
 	@Column(name="code",nullable = false, unique = true)
 	private String code;
 	
-	@Column(name="address")
+	@Column(name="address",nullable = false)
 	private String address;
 	
 	@Column(name="telephony")
@@ -31,7 +31,7 @@ public class CustomerInfo {
 	@Column(name="certificate_name",nullable = false)
 	private String certificateName;
 	
-	@Column(name="certificate_id",nullable = false, unique = true)
+	@Column(name="certificate_id",nullable = false)
 	private String certificateId;
 	
 	@OneToOne(mappedBy = "customerInfo")

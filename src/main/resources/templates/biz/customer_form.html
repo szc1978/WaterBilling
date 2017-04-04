@@ -12,66 +12,75 @@
 		<div class="formtitle"><span>客户管理</span></div>
 		<form th:action="@{/biz/customer}" method="post" th:object="${customer}" >
 			<div class="col-sm-8">
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">客户姓名:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				<div class="col-sm-6 form-group ">
+					 <label for="name">客户姓名:</label>
 					 <input type="text" class="form-control" th:value="${customer.name}" th:field="*{name}" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">客户编号:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				<div class="col-sm-6 form-group ">
+					 <label for="name">客户编号:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.code}" th:field="*{customerInfo.code}" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">客户地址:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				<div class="col-sm-12 form-group ">
+					 <label for="name">客户地址:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.address}" th:field="*{customerInfo.address}" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">供水片区:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					 <input type="text" class="form-control" th:value="${customer.customerInfo.address}" th:field="*{customerInfo.address}" />
-				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">客户电话:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				
+				<div class="col-sm-6 form-group ">
+					 <label for="name">客户电话:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.telephony}" th:field="*{customerInfo.telephony}" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">客户手机:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				<div class="col-sm-6 form-group ">
+					 <label for="name">客户手机:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.mobile}" th:field="*{customerInfo.mobile}" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">客户证件:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateName}" th:field="*{customerInfo.certificateName}" />
+				<div class="col-sm-6 form-group ">
+					 <label for="name">客户证件:</label>
+					 <select class="form-control" th:value="${customer.customerInfo.certificateName}" th:field="*{customerInfo.certificateName}" >
+					 	<option th:each="certificateName : ${certificateNames}" th:value="${certificateName}" th:text="${certificateName}"></option>
+					 </select>
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">证件号码:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				<div class="col-sm-6 form-group ">
+					 <label for="name">证件号码:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateId}" th:field="*{customerInfo.certificateId}" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">抄表周期:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateName}" th:field="*{customerInfo.certificateName}" />
+				<div class="col-sm-6 form-group ">
+					 <label for="name">抄表周期:</label>
+					 <select class="form-control" th:value="${customer.readMeterCycle}" th:field="*{readMeterCycle}" >
+					 	<option th:each="cycle : ${readMeterCycles}" th:value="${cycle}" th:text="${cycle}"></option>
+					 </select>
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">应缴费日:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateId}" th:field="*{customerInfo.certificateId}" />
+				<div class="col-sm-6 form-group ">
+					 <label for="name">应缴费日:</label>
+					 <input type="text" class="form-control" th:value="${customer.billingDay}" th:field="*{billingDay}" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
+				<div class="col-sm-6 form-group ">
+					 <label for="name">供水片区:</label>
+					 <select class="form-control" th:field="*{waterProvider.id}">
+					 	<option th:each="waterProvider : ${waterProviders}" th:value="${waterProvider.id}" th:text="${waterProvider.name}" th:if="${customer.waterProvider.id eq waterProvider.id}" th:selected="true"></option>
+					 	<option th:each="waterProvider : ${waterProviders}" th:value="${waterProvider.id}" th:text="${waterProvider.name}" th:if="${customer.waterProvider.id ne waterProvider.id}"></option>
+					 </select>
+				</div>
+				<div class="col-sm-6 form-group ">
+					 <label for="name">客户类型:</label>
+					 <select class="form-control" th:field="*{customerType.id}">
+					 	<option th:each="customerType : ${customerTypes}" th:value="${customerType.id}" th:text="${customerType.name}" th:if="${customer.customerType.id eq customerType.id}" th:selected="true"></option>
+					 	<option th:each="customerType : ${customerTypes}" th:value="${customerType.id}" th:text="${customerType.name}" th:if="${customer.customerType.id ne customerType.id}"></option>
+					 </select>
+				</div>
+				<div class="col-sm-6 form-group ">
 					 <label for="name">客户水表数:</label>
 					 <input type="text" class="form-control" th:value="${customer.waterNumber}" th:field="*{waterNumber}" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">客户余额:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				<div class="col-sm-6 form-group ">
+					 <label for="name">客户余额:</label>
 					 <input type="text" class="form-control" th:value="${customer.balance}" th:field="*{balance}" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">客户类型:</label>
-					 <input type="text" class="form-control" th:value="${customer.waterNumber}" th:field="*{waterNumber}" />
+				<div class="col-sm-4">
+					<input type="submit" class="btn btn-default" value="保存" />
 				</div>
-				<div class="col-sm-6 form-group form-inline">
-					 <label for="name">客户余额:&nbsp;&nbsp;&nbsp;&nbsp;</label>
-					 <input type="text" class="form-control" th:value="${customer.balance}" th:field="*{balance}" />
-				</div>
-			</div>
-			
-			<div class="col-sm-8 form-group">
-				<label>资费列表</label>
+				<input type="hidden" th:value="${customer.id}" th:field="*{id}"/>
+				<input type="hidden" th:value="${customer.customerInfo.id}" th:field="*{customerInfo.id}"/>
+				<input type="hidden" th:value="${customer.status}" th:field="*{status}" />
 			</div>
 		</form>
 	</div>

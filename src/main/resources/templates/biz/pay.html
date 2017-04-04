@@ -5,72 +5,83 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script>
+		function search_customer() {
+			document.search_customer_by_code.submit();
+		}
+	</script>
 </head>
 
 <body>
 	<div class="container">
-		<div><h3>客户缴费</h3></div>
-		<div>
-			<form>
-				<div class="col-sm-4 form-group ">
-					 <label for="name">用户编号:</label>
-					 <input type="text" class="form-control" id="name" />
-				</div>
-				<div class="col-sm-4 form-group ">
-					 <label for="name">用户姓名：</label>
-					 <input type="text" class="form-control" id="address" />
-				</div>
-				<div class="col-sm-4 form-group ">
-					 <label for="name">用户地址：</label>
-					 <input type="text" class="form-control" id="phone" />
-				</div>
-				<div class="col-sm-4 form-group">
-					 <label for="name">上月读表数:</label>
-					 <input type="text" class="form-control" id="name" />
-				</div>
-				<div class="col-sm-4 form-group ">
-					 <label for="name">本月读表数：</label>
-					 <input type="text" class="form-control" id="address" />
-				</div>
-				<div class="col-sm-4 form-group ">
-					 <label for="name">本月用水量：</label>
-					 <input type="text" class="form-control" id="address" />
-				</div>
-				<div class="col-sm-4 form-group">
-					 <label for="name">阶梯费率:</label>
-					 <input type="text" class="form-control" id="name" />
-				</div>
-				<div class="col-sm-4 form-group ">
-					 <label for="name">固定费率：</label>
-					 <input type="text" class="form-control" id="address" />
-				</div>
-				<div class="col-sm-4 form-group ">
-					 <label for="name">滞纳金：</label>
-					 <input type="text" class="form-control" id="address"/>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-4 form-group">
-						 <label for="name">合计:</label>
-						 <input type="text" class="form-control" id="address"/>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-4 form-group">
-						 <label for="name">上次结余:</label>
-						 <input type="text" class="form-control" id="address"/>
-					</div>
-					<div class="col-sm-4 form-group ">
-						 <label for="name">应付:</label>
-						 <input type="text" class="form-control" id="address"/>
-					</div>
-				</div>
-				<div class="col-sm-12">
-					<div class="col-sm-4 form-group">
-						 <label for="name">缴费金额:</label>
-						 <input type="text" class="form-control" id="address"/>
+		<div class="formtitle"><span>客户缴费</span></div>
+		<div class="col-sm-8">
+			<form name="search_customer_by_code" th:action="@{/biz/pay}" method="get" th:object="${customer}">
+				<div class="col-sm-12 form-group ">
+					<label for="name">用户编号:</label>
+				 	<div class="form-inline">
+						<input type="text" class="form-control" name="code" th:value="${customer.customerInfo.code}" />
+						<a href="#" onclick="search_customer();"><span class="glyphicon glyphicon-search"></span></a>
 					</div>
 				</div>
 			</form>
+			<div class="col-sm-12">
+				<div class="col-sm-4 form-group ">
+					<label for="name">用户姓名：</label>
+					<input type="text" class="form-control" th:disabled="true" th:value="${customer.name}"/>
+				</div>
+				<div class="col-sm-8 form-group ">
+					<label for="name">用户地址：</label>
+					<input type="text" class="form-control" th:disabled="true" th:value="${customer.customerInfo.address}"/>
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<div class="col-sm-4 form-group">
+					<label for="name">上期读表数:</label>
+					<input type="text" class="form-control" th:disabled="true" th:value="${customer.latestWaterNumber}"/>
+				</div>
+				<div class="col-sm-4 form-group ">
+					<label for="name">本期读表数：</label>
+					<input type="text" class="form-control" th:disabled="true" th:value="${customer.waterNumber}"/>
+				</div>
+				<div class="col-sm-4 form-group ">
+					<label for="name">本期用水量：</label>
+					<input type="text" class="form-control" th:disabled="true" th:value="${customer.waterNumber - customer.latestWaterNumber}" />
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<div class="col-sm-4 form-group ">
+					<label for="name">本期合计:</label>
+					<input type="text" class="form-control" th:disabled="true" />
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<div class="col-sm-4 form-group ">
+					<label for="name">未缴费用：</label>
+					<input type="text" class="form-control" th:disabled="true" />
+				</div>
+				<div class="col-sm-4 form-group ">
+					<label for="name">滞纳金：</label>
+					<input type="text" class="form-control" th:disabled="true" />
+				</div>
+				</div>
+			<div class="col-sm-12">
+				<div class="col-sm-4 form-group">
+					<label for="name">上次结余:</label>
+					<input type="text" class="form-control" th:disabled="true"/>
+				</div>
+				<div class="col-sm-4 form-group ">
+					<label for="name">应付:</label>
+					<input type="text" class="form-control" th:disabled="true"/>
+				</div>
+			</div>
+			<div class="col-sm-12">
+				<div class="col-sm-4 form-group">
+					<label for="name">缴费金额:</label>
+					<input type="text" class="form-control form-group" id="address"/>
+					<input type="submit" class="btn btn-default" value="缴费" />
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
