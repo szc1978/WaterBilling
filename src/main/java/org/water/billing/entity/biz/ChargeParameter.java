@@ -40,6 +40,12 @@ public class ChargeParameter {
 	@Column(name="step3_price")
 	private Float step3Price = new Float(0.00);
 	
+	@Column(name="bottom_number")
+	private Float bottomNumber = new Float(0.00);
+	
+	@Column(name="bottom_price")
+	private Float bottomPrice = new Float(0.00);
+	
 	@OneToOne(mappedBy = "chargeParameter")
 	private Charge charge;
 	
@@ -118,4 +124,21 @@ public class ChargeParameter {
 	public void setStep3Price(Float step3Price) {
 		this.step3Price = step3Price;
 	}
+
+	public Float getBottomNumber() {
+		return bottomNumber;
+	}
+
+	public void setBottomNumber(Float bottomNumber) {
+		this.bottomNumber = bottomNumber;
+	}
+
+	public Float getBottomPrice() {
+		return bottomPrice;
+	}
+
+	public void setBottomPrice(Float bottomPrice) {
+		this.bottomPrice = bottomPrice;
+	}
+	
 }

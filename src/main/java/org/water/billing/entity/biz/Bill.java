@@ -22,14 +22,17 @@ public class Bill {
 	@Column(name="name")
 	private String name;
 	
+	@Column(name="customer_id")
+	private int customerId;
+	
 	@Column(name="begin_water_word")
 	private Float beginWaterWord;
 	
 	@Column(name="end_water_word")
 	private Float endWaterWord;
 	
-	@Column(name="cby_name")
-	private String cbyName;
+	@Column(name="inputer_name")
+	private String inputerName;
 	
 	@Column(name="total_postage")
 	private Float totalPostage;
@@ -43,10 +46,9 @@ public class Bill {
 	@Column(name="status",length=1)
 	private int status = 0;
 	
-	@Column(name = "get_date",length=64)
-	@Temporal(TemporalType.TIMESTAMP) 
-	private Date getDate; 
-	
+	@Column(name="is_charged",length=1)
+	private int isCharged = 0;
+		
 	@Column(name="input_date",length=64)
 	@Temporal(TemporalType.TIMESTAMP) 
 	private Date inputDate; 
@@ -91,12 +93,12 @@ public class Bill {
 		this.endWaterWord = endWaterWord;
 	}
 
-	public String getCbyName() {
-		return cbyName;
+	public String getInputerName() {
+		return inputerName;
 	}
 
-	public void setCbyName(String cbyName) {
-		this.cbyName = cbyName;
+	public void setInputerName(String inputerName) {
+		this.inputerName = inputerName;
 	}
 
 	public Float getTotalPostage() {
@@ -131,14 +133,6 @@ public class Bill {
 		this.status = status;
 	}
 
-	public Date getGetDate() {
-		return getDate;
-	}
-
-	public void setGetDate(Date getDate) {
-		this.getDate = getDate;
-	}
-
 	public Date getInputDate() {
 		return inputDate;
 	}
@@ -153,6 +147,22 @@ public class Bill {
 
 	public void setChargeDate(Date chargeDate) {
 		this.chargeDate = chargeDate;
+	}
+
+	public int getIsCharged() {
+		return isCharged;
+	}
+
+	public void setIsCharged(int isCharged) {
+		this.isCharged = isCharged;
+	}
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
 	}
 	
 	

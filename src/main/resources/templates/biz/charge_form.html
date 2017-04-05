@@ -9,20 +9,29 @@
 	<script>
 		function change_charge_type() {
 			var type = document.getElementById("charge_type").value;
+			if(type == "4") {
+				document.getElementById("pricepernumber").style.display="none";
+				document.getElementById("pricebydedicate").style.display="none";
+				document.getElementById("pricebystep").style.display="none";
+				document.getElementById("pricebybottom").style.display="";
+			}
 			if(type == "3") {
 				document.getElementById("pricepernumber").style.display="none";
 				document.getElementById("pricebydedicate").style.display="none";
 				document.getElementById("pricebystep").style.display="";
+				document.getElementById("pricebybottom").style.display="none";
 			}
 			if(type == "2") {
 				document.getElementById("pricepernumber").style.display="none";
 				document.getElementById("pricebydedicate").style.display="";
 				document.getElementById("pricebystep").style.display="none";
+				document.getElementById("pricebybottom").style.display="none";
 			}
 			if(type == "1") {
 				document.getElementById("pricepernumber").style.display="";
 				document.getElementById("pricebydedicate").style.display="none";
 				document.getElementById("pricebystep").style.display="none";
+				document.getElementById("pricebybottom").style.display="none";
 			}
 		}
 	</script>
@@ -86,23 +95,29 @@
 					<label for="name">每月收费(元/月)：</label>
 					<input type="text" class="form-control" th:value="${charge.chargeParameter.priceByDedicated}" th:field="*{chargeParameter.priceByDedicated}"  />
 				</div>
+				<div class="form-group form-inline" id="pricebybottom">
+					<label for="name">保底用水量(吨)：</label>
+					<input type="text" class="form-control" th:value="${charge.chargeParameter.bottomNumber}" th:field="*{chargeParameter.bottomNumber}"  />
+					<label for="name">保底价(元)：</label>
+					<input type="text" class="form-control" th:value="${charge.chargeParameter.bottomPrice}" th:field="*{chargeParameter.bottomPrice}"  />
+				</div>
 				<div id="pricebystep" style="display:none">
 					<div class="form-group  form-inline">
 						<label for="step1">一级阶梯(吨)：</label>
-						<input type="text" class="form-control" th:value="${charge.chargeParameter.step1Number}" th:field="*{chargeParameter.step1Number}" />
-						<label for="step1">价格：</label>
+						<input type="text" class="form-control" th:value="0.0" th:readonly="true" />
+						<label for="step1">起，价格：</label>
 						<input type="text" class="form-control" th:value="${charge.chargeParameter.step1Price}" th:field="*{chargeParameter.step1Price}" />
 					</div>
 					<div class="form-group  form-inline">
 						<label for="step1">二级阶梯(吨)：</label>
 						<input type="text" class="form-control" th:value="${charge.chargeParameter.step2Number}" th:field="*{chargeParameter.step2Number}" />
-						<label for="step1">价格：</label>
+						<label for="step1">起，价格：</label>
 						<input type="text" class="form-control" th:value="${charge.chargeParameter.step2Price}" th:field="*{chargeParameter.step2Price}" />
 					</div>
 					<div class="form-group form-inline ">
 						<label for="step1">三级阶梯(吨)：</label>
 						<input type="text" class="form-control" th:value="${charge.chargeParameter.step3Number}" th:field="*{chargeParameter.step3Number}" />
-						<label for="step1">价格：</label>
+						<label for="step1">起，价格：</label>
 						<input type="text" class="form-control" th:value="${charge.chargeParameter.step3Price}" th:field="*{chargeParameter.step3Price}" />
 					</div>
 					<label><font color="#ff0000">* 不够级别的保持空白</font></label>

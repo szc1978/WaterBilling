@@ -33,9 +33,6 @@ public class Customer {
 	@Column(name="water_number",length=1)
 	private float waterNumber = new Float(0.00);
 	
-	@Column(name="latest_water_number",length=1)
-	private float latestWaterNumber = new Float(0.00);
-	
 	@Column(name="balance")
 	private float balance = new Float(0.00);
 	
@@ -183,14 +180,6 @@ public class Customer {
 
 	public void setStatus(int status) {
 		this.status = status;
-	}
-
-	public float getLatestWaterNumber() {
-		return latestWaterNumber;
-	}
-
-	public void setLatestWaterNumber(float latestWaterNumber) {
-		this.latestWaterNumber = latestWaterNumber;
 	}
 	
 }

@@ -6,7 +6,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.biz.BillGenerater;
+import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Customer;
+import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.CustomerService;
 
 @Controller
@@ -14,6 +17,9 @@ public class WaterDataController {
 	
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired
+	BillService billService;
 	
 	@RequestMapping(value = "/biz/input_water_data",method=RequestMethod.GET)
 	public String inputData(@RequestParam(required=false) String code,
@@ -26,12 +32,17 @@ public class WaterDataController {
 	}
 	
 	@RequestMapping(value="/biz/input_water_data",method=RequestMethod.POST)
-	public String inputData(@RequestParam int id,@RequestParam Float waterNumber) {
+	public String inputData(@RequestParam int id,@RequestParam Float waterNumber) throws Exception {
 		Customer customer = customerService.findById(id);
+		if(waterNumber < customer.getWaterNumber()) {
+			throw new Exception("本期用水量不应该比前期低");
+		}
+		BillGenerater billGenerater = new BillGenerater(customer,waterNumber,"");
+		Bill bill = billGenerater.genBill();
+		billService.save(bill);
+		
 		customer.setWaterNumber(waterNumber);
-		Float lastWaterNumber = customer.getWaterNumber();
-		customer = customerService.save(customer);
-		Float currentWaterNumber = customer.getWaterNumber();
+		customerService.save(customer);
 
 		return "redirect:/biz/input_water_data?code=" + customer.getCustomerInfo().getCode();
 	}
