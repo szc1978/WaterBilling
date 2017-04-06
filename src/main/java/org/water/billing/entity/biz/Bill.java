@@ -26,16 +26,16 @@ public class Bill {
 	private int customerId;
 	
 	@Column(name="begin_water_word")
-	private Float beginWaterWord;
+	private Float beginWaterWord = new Float(0);
 	
 	@Column(name="end_water_word")
-	private Float endWaterWord;
+	private Float endWaterWord = new Float(0);
 	
 	@Column(name="inputer_name")
 	private String inputerName;
 	
 	@Column(name="total_postage")
-	private Float totalPostage;
+	private Float totalPostage = new Float(0);
 	
 	@Column(name="reduce_content",length=1024)
 	private String reduceContent;

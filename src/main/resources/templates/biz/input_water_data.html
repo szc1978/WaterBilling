@@ -40,7 +40,8 @@
 						 <input type="text" class="form-control" name="waterNumber" />
 					</div>
 					<div class="form-group">
-						<input type="submit" class="btn btn-default" value="保存" />
+						<input type="submit" class="btn btn-default" value="保存" th:if="${customer.id gt 0}" />
+						<input type="submit" class="btn btn-default" value="保存" th:if="${customer.id eq 0}" th:disabled="true" />
 					</div>
 					<input type="hidden" name="id" th:value="${customer.id}" th:field="*{id}"/>
 				</form>

@@ -64,8 +64,8 @@
 
     </style>
     <script>
-    	function logout() {
-    		
+    	function logoutsys() {
+    		document.logout.submit();
     	}
     </script>
 </head>
@@ -90,7 +90,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#biz" class="nav-header collapsed" data-toggle="collapse">
+                        <a href="#biz" class="nav-header collapsed" data-toggle="collapse" id="menu_customer">
                             <i class="glyphicon glyphicon-wrench"></i> 客户管理
                             <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
@@ -103,7 +103,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#admin" class="nav-header collapsed" data-toggle="collapse">
+                        <a href="#admin" class="nav-header collapsed" data-toggle="collapse" id="menu_admin">
                             <i class="glyphicon glyphicon-cog"></i> 系统管理<span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul id="admin" class="nav nav-list collapse secondmenu" style="height: 0px;">
@@ -118,13 +118,13 @@
                         <a href="#"><i class="glyphicon glyphicon-question-sign"></i> 说明书</a>
                     </li>
                     <li>
-                    	<form name="logout" th:action="@{/logout}" method="post">
-                        	<a href="javascript:;" onclick="logout.submit();"><i class="glyphicon glyphicon-log-out"></i> 退出系统</a>
-                        </form>
+                    	<a href="#" onclick="logoutsys();"><i class="glyphicon glyphicon-log-out"></i> 退出系统</a>
                     </li>
                 </ul>
             </div>
         </div>
     </div>
+    <form name="logout" th:action="@{/logout}" method="post">
+	</form>
 </body>
 </html>

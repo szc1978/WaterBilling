@@ -16,11 +16,11 @@
 	<div class="container">
 		<div class="formtitle"><span>客户缴费</span></div>
 		<div class="col-sm-8">
-			<form name="search_customer_by_code" th:action="@{/biz/pay}" method="get" th:object="${customer}">
+			<form name="search_customer_by_code" th:action="@{/biz/pay}" method="get" th:object="${bill}">
 				<div class="col-sm-12 form-group ">
 					<label for="name">用户编号:</label>
 				 	<div class="form-inline">
-						<input type="text" class="form-control" name="code" th:value="${customer.customerInfo.code}" />
+						<input type="text" class="form-control" name="code" th:value="${customer_code}" />
 						<a href="#" onclick="search_customer();"><span class="glyphicon glyphicon-search"></span></a>
 					</div>
 				</div>
@@ -28,57 +28,57 @@
 			<div class="col-sm-12">
 				<div class="col-sm-4 form-group ">
 					<label for="name">用户姓名：</label>
-					<input type="text" class="form-control" th:disabled="true" th:value="${customer.name}"/>
+					<input type="text" class="form-control" th:disabled="true" th:value="${customer_name}"/>
 				</div>
 				<div class="col-sm-8 form-group ">
 					<label for="name">用户地址：</label>
-					<input type="text" class="form-control" th:disabled="true" th:value="${customer.customerInfo.address}"/>
+					<input type="text" class="form-control" th:disabled="true" th:value="${customer_address}"/>
 				</div>
 			</div>
 			<div class="col-sm-12">
 				<div class="col-sm-4 form-group ">
 					<label for="name">本期读表数：</label>
-					<input type="text" class="form-control" th:disabled="true" th:value="${customer.waterNumber}"/>
+					<input type="text" class="form-control" th:disabled="true" th:value="${bill.beginWaterWord}"/>
 				</div>
 				<div class="col-sm-4 form-group ">
 					<label for="name">本期读表数：</label>
-					<input type="text" class="form-control" th:disabled="true" th:value="${customer.waterNumber}"/>
+					<input type="text" class="form-control" th:disabled="true" th:value="${bill.endWaterWord}"/>
 				</div>
 				<div class="col-sm-4 form-group ">
 					<label for="name">本期用水量：</label>
-					<input type="text" class="form-control" th:disabled="true" th:value="${customer.waterNumber - customer.latestWaterNumber}" />
+					<input type="text" class="form-control" th:disabled="true" th:value="${bill.endWaterWord - bill.beginWaterWord}" />
 				</div>
 			</div>
 			<div class="col-sm-12">
 				<div class="col-sm-4 form-group ">
 					<label for="name">本期合计:</label>
-					<input type="text" class="form-control" th:disabled="true" />
+					<input type="text" class="form-control" th:disabled="true" th:value="${bill.totalPostage}" />
 				</div>
 			</div>
 			<div class="col-sm-12">
 				<div class="col-sm-4 form-group ">
 					<label for="name">未缴费用：</label>
-					<input type="text" class="form-control" th:disabled="true" />
+					<input type="text" class="form-control" th:disabled="true" th:value="${un_paied}" />
 				</div>
 				<div class="col-sm-4 form-group ">
 					<label for="name">滞纳金：</label>
-					<input type="text" class="form-control" th:disabled="true" />
+					<input type="text" class="form-control" th:disabled="true" th:value="${late_payment}" />
 				</div>
 				</div>
 			<div class="col-sm-12">
 				<div class="col-sm-4 form-group">
 					<label for="name">上次结余:</label>
-					<input type="text" class="form-control" th:disabled="true"/>
+					<input type="text" class="form-control" th:disabled="true" th:value="${customer_balance}"/>
 				</div>
 				<div class="col-sm-4 form-group ">
 					<label for="name">应付:</label>
-					<input type="text" class="form-control" th:disabled="true"/>
+					<input type="text" class="form-control" th:disabled="true" th:value="${un_paied + late_payment + bill.totalPostage - customer_balance}"/>
 				</div>
 			</div>
 			<div class="col-sm-12">
 				<div class="col-sm-4 form-group">
 					<label for="name">缴费金额:</label>
-					<input type="text" class="form-control form-group" id="address"/>
+					<input type="text" class="form-control form-group" name="payment"/>
 					<input type="submit" class="btn btn-default" value="缴费" />
 				</div>
 			</div>

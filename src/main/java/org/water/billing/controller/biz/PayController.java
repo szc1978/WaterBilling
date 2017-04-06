@@ -1,5 +1,6 @@
 package org.water.billing.controller.biz;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,21 +29,43 @@ public class PayController {
 	
 	@RequestMapping(value = "/biz/pay",method=RequestMethod.GET)
 	public String payForm(@RequestParam(required=false) String code,
-						  ModelMap map) {
+						  ModelMap map) throws Exception {
 		Customer customer = customerService.findByCode(code);
-		if(customer == null)
+		if(customer == null && code != null)
+			throw new Exception("用户不存在");
+		if(customer == null && code == null)
 			customer = new Customer();
+		
 		List<Bill> bills = billService.findUnchargedBill(customer.getId());
+		if(bills.size() == 0 && code != null)
+			throw new Exception("用户不欠费");
+		
+		Float unpaied = new Float(0);
+		Float latePayment = new Float(0);
 		Bill latestBill = null;
-		if(bills.size() > 0) {
+		
+		if(code == null) {
+			latestBill = new Bill();
+		} else {
 			latestBill = bills.get(0);
-		}
-		if(bills.size() > 1) {
+			Date now = new Date();
 			for(int i=1;i<bills.size();i++) {
-				
+				unpaied += bills.get(i).getTotalPostage();
+				Date inputDate = bills.get(i).getInputDate();
+				Long days = (now.getTime() - inputDate.getTime())/(86400 * 1000);
+				if(days > 30) {
+					Float tmp =  (days - 30) * (bills.get(i).getTotalPostage() * new Float(0.005));
+					latePayment += tmp;
+				}
 			}
 		}
-		map.addAttribute("customer",customer);
+		map.addAttribute("customer_name", customer.getName());
+		map.addAttribute("customer_code", customer.getCustomerInfo().getCode());
+		map.addAttribute("customer_address", customer.getCustomerInfo().getAddress());
+		map.addAttribute("customer_balance", customer.getBalance());
+		map.addAttribute("bill",latestBill);
+		map.addAttribute("un_paied",unpaied);
+		map.addAttribute("late_payment",latePayment);
 		return "/biz/pay";
 	}
 	

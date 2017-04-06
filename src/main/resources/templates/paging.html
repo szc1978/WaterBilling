@@ -13,7 +13,7 @@
 					<a th:if="${pageNum gt 3}" th:href="@{${pageUrl}(page=1,size=${pageSize})}">1</a>
 				</li>
 				<li>
-					<a th:if="${pageNum-2 gt 1}" href="javascript:;">...</a>
+					<a th:if="${pageNum-2 gt 2}" href="javascript:;">...</a>
 				</li>
 				<li th:each="pageNo : ${#numbers.sequence(pageNum - 2, pageNum + 2)}" class="paginItem">
 					<a th:if="${pageNo gt 0 and pageNo lt totalPages+1 and pageNo ne pageNum}" th:href="@{${pageUrl}(page=${pageNo},size=${pageSize})}">
@@ -24,7 +24,7 @@
 					</a>
 				</li>
 				<li>
-					<a th:if="${pageNum+2 lt totalPages}" href="javascript:;">...</a>
+					<a th:if="${pageNum+3 lt totalPages}" href="javascript:;">...</a>
 				</li>
 				<li>
 					<a th:if="${pageNum+2 lt totalPages}" th:href="@{${pageUrl}(page=${totalPages},size=${pageSize})}" th:text="${totalPages}"></a>
