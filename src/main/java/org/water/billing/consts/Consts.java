@@ -20,4 +20,7 @@ public class Consts {
 		private static final long serialVersionUID = -4714883658755117677L;
 		{put("ACTIVE",1);put("INACTIVE",0);put("PENDING",-1);}
 	};
+	
+	public static final int CUSTOMER_STATUS_ACTIVE_BIT = 1;
+	public static final int CUSTOMER_STATUS_PENDING_BIT = 2;
 }

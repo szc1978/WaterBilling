@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.water.billing.consts.Consts;
+
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -26,9 +28,6 @@ public class Customer {
 	
 	@Column(name="name",nullable=false)
 	private String name;
-	
-	@Column(name="active",length=1)
-	private int active = 1;
 	
 	@Column(name="water_number",length=1)
 	private float waterNumber = new Float(0.00);
@@ -42,8 +41,17 @@ public class Customer {
 	@Column(name="billing_day")
 	private int billingDay;
 	
+	/*2 bit, pending|active
+	 * 0 : inactive
+	 * 1 : active
+	 * 2 : active -> inactive, pending for approve
+	 * 3 : inactive -> active, pending for approve
+	 */
 	@Column(name="staus",length=1)
-	private int status = 1;
+	private int status = Consts.CUSTOMER_STATUS_ACTIVE_BIT | Consts.CUSTOMER_STATUS_PENDING_BIT;
+	
+	@Column(name="pending_water_number")
+	private Float pendingWaterNumber = new Float(0);
 	
 	@ManyToOne()
 	@JoinColumn(name="water_provider_id")
@@ -56,10 +64,6 @@ public class Customer {
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "info_id")
 	private CustomerInfo customerInfo = new CustomerInfo();
-	
-/*	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name="customer_charge",joinColumns={@JoinColumn(name="customer_id")},inverseJoinColumns={@JoinColumn(name="charge_id")})
-	private Set<Charge> charges;*/
 	
 	@Column(name = "create_time",length=64,updatable = false)
 	@Temporal(TemporalType.TIMESTAMP) 
@@ -118,14 +122,6 @@ public class Customer {
 		this.name = name;
 	}
 
-	public int getActive() {
-		return active;
-	}
-
-	public void setActive(int active) {
-		this.active = active;
-	}
-
 	public float getWaterNumber() {
 		return waterNumber;
 	}
@@ -133,14 +129,6 @@ public class Customer {
 	public void setWaterNumber(float waterNumber) {
 		this.waterNumber = waterNumber;
 	}
-
-/*	public Set<Charge> getCharges() {
-		return charges;
-	}
-
-	public void setCharges(Set<Charge> charges) {
-		this.charges = charges;
-	}*/
 
 	public float getBalance() {
 		return balance;
@@ -180,6 +168,14 @@ public class Customer {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public Float getPendingWaterNumber() {
+		return pendingWaterNumber;
+	}
+
+	public void setPendingWaterNumber(Float pendingWaterNumber) {
+		this.pendingWaterNumber = pendingWaterNumber;
 	}
 	
 }
