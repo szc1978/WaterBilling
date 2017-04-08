@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.water.billing.consts.Consts;
 import org.water.billing.dao.biz.CustomerDao;
 import org.water.billing.dao.biz.CustomerInfoDao;
 import org.water.billing.entity.biz.Customer;
@@ -42,5 +43,13 @@ public class CustomerService {
 	
 	public Customer findByCode(String code) {
 		return customerDao.findByCode(code);
+	}
+	
+	public List<Customer> findAllPendingCustomer() {
+		return customerDao.findByStatusGreaterThan(Consts.CUSTOMER_STATUS_ACTIVE_BIT);
+	}
+	
+	public List<Customer> findAllCustomersWhichHaveNewBill() {
+		return customerDao.findByPendingWaterNumberGreaterThan(new Float(0));
 	}
 }

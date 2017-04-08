@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;  
 import org.springframework.security.core.authority.SimpleGrantedAuthority;  
 import org.springframework.security.core.userdetails.UserDetails;
+import org.water.billing.GlobalConfiguration;
 import org.water.billing.entity.admin.SysRole;
 import org.water.billing.entity.admin.SysUser;  
   
@@ -31,7 +32,7 @@ public class SecurityUser extends SysUser implements UserDetails {
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();  
           
         if("sys".equals(this.getName())) {
-        	List<SysRole> roles = RoleManagement.All_Roles;
+        	List<SysRole> roles = GlobalConfiguration.getInstance().getAllRoles();
         	for (SysRole role : roles) {  
                 SimpleGrantedAuthority authority = new SimpleGrantedAuthority(String.valueOf(role.getId()));  
                 authorities.add(authority);  

@@ -1,5 +1,7 @@
 package org.water.billing.dao.biz;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +15,10 @@ public interface CustomerDao extends JpaRepository<Customer, Integer>{
 	public Customer findById(int id);
 	
 	public Customer findByCustomerInfo(int id);
+	
+	public List<Customer> findByStatusGreaterThan(int status);
+	
+	public List<Customer> findByPendingWaterNumberGreaterThan(Float waterNumber);
 
 	@Query(value="select customer from Customer customer where customerInfo.code = :code")
 	public Customer findByCode(@Param("code") String code);

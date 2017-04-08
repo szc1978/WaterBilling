@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.GlobalConfigurationService;
 import org.water.billing.entity.admin.SysResource;
 import org.water.billing.entity.admin.SysRole;
-import org.water.billing.security.support.RoleManagement;
 import org.water.billing.service.admin.SysResourceService;
 import org.water.billing.service.admin.SysRoleService;
 
@@ -26,7 +26,7 @@ public class AdminResourceRoleController {
 	SysRoleService sysRoleService;
 	
 	@Autowired
-	RoleManagement roleMgr;
+	GlobalConfigurationService configService;
 
 	@RequestMapping(value="/admin/privilege",method=RequestMethod.GET)
 	public String resources(ModelMap map) {
@@ -55,7 +55,7 @@ public class AdminResourceRoleController {
 		if(tmp != null) {
 			tmp.setSysRoles(sysResource.getSysRoles());
 			resourceService.save(tmp);
-			roleMgr.refreshResourceRoleMap();
+			configService.refreshResourceRoleMap();
 		}
 		return "redirect:/admin/privilege";
 	}

@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>审核管理</title>
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>错误</span></div>
+		<div th:if="${exception != null}" th:text="${exception.message}"></div>
+		<div th:if="${exception == null}">未知内部错误</div>
+	</div>
+	
+</body>
+
+</html>

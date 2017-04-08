@@ -5,6 +5,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/js/jquery-3.2.0.min.js"></script>
+	<script type="text/javascript" src="/js/jq_validate.js"></script>
+	<script type="text/javascript" src="/js/water.js"></script>
 	<script>
 		function search_customer() {
 			document.search_customer_by_code.submit();
@@ -37,7 +40,7 @@
 				<form th:action="@{/biz/input_water_data}" method="post" th:object="${customer}" >
 					<div class=" form-group ">
 						 <label for="name">本期水表数:</label>
-						 <input type="text" class="form-control" name="waterNumber" />
+						 <input id="float_number_input" type="text" class="form-control" name="waterNumber" />
 					</div>
 					<div class="form-group">
 						<input type="submit" class="btn btn-default" value="保存" th:if="${customer.id gt 0}" />

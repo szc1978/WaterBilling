@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>审核管理</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<body>
+    	<div class="container">
+    		<div class="formtitle"><span>审核</span></div>
+			<div>
+			    <table class="table table-striped">
+			    	<caption>客户审核</caption>
+			    	<thead>
+			    		<tr>
+			        		<th>编号<i class="sort"></i></th>
+			        		<th>客户名</th>
+			        		<th>编码</th>
+			        		<th>变化内容</th>
+			        		<th>操作</th>
+			        	</tr>
+			        </thead>
+			        <tbody>
+			        <tr th:each="customer,customerStat : ${allPendingCustomers}"> 
+				        <td th:text="${customerStat.index} + 1">1</td> 
+				        <td th:text="${customer.name}"></td> 
+				        <td th:text="${customer.customerInfo.code}"></td>
+				        <td th:if="${customer.status eq 2}" th:text="销户"></td>
+				        <td th:if="${customer.status eq 3}" th:text="开户"></td>
+				        <td>
+				        	<a th:href="@{/biz/approver(id=${customer.id})}">同意</a>
+				        	<a th:href="@{/biz/approver(id=${customer.id})}">拒绝</a>
+				        </td>
+			        </tr>        
+			        </tbody>
+			    </table>
+		    </div>
+
+		    <div>
+			    <table class="table table-striped">
+			    	<caption>客户用水量审核</caption>
+			    	<thead>
+			    		<tr>
+			        		<th>编号<i class="sort"></i></th>
+			        		<th>客户名</th>
+			        		<th>编码</th>
+			        		<th>客户类型</th>
+			        		<th>上期水表数</th>
+			        		<th>本期水表数</th>
+			        		<th>操作</th>
+			        	</tr>
+			        </thead>
+			        <tbody>
+			        <tr th:each="customer,customerStat : ${allCustomersWhichHaveNewWaterNumber}"> 
+				        <td th:text="${customerStat.index} + 1">1</td> 
+				        <td th:text="${customer.name}"></td> 
+				        <td th:text="${customer.customerInfo.code}"></td>
+				        <td th:text="${customer.customerType.name}"></td>
+				        <td th:text="${customer.waterNumber}"></td>
+				        <td th:text="${customer.pendingWaterNumber}"></td>
+				        <td>
+				        	<a th:href="@{/biz/approver(id=${customer.id})}">同意</a>
+				        	<a th:href="@{/biz/approver(id=${customer.id})}">拒绝</a>
+				        </td>
+			        </tr>        
+			        </tbody>
+			    </table>
+		    </div>
+
+    	</div>
+    	
+	</body>
+
+</html>

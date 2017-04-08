@@ -1,4 +1,4 @@
-package org.water.billing.security.support;
+package org.water.billing;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,30 +11,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.stereotype.Service;
+import org.water.billing.entity.admin.SysConfigurationItem;
 import org.water.billing.entity.admin.SysResource;
 import org.water.billing.entity.admin.SysRole;
+import org.water.billing.service.admin.SysConfigurationItemService;
 import org.water.billing.service.admin.SysResourceService;
 import org.water.billing.service.admin.SysRoleService;
 
 @Service
-public class RoleManagement {
-	public static List<SysRole> All_Roles = null;
-	public static Map<String, Collection<ConfigAttribute>> Resource_Role_Map = null;
-	
+public class GlobalConfigurationService {
+
 	@Autowired
-	SysRoleService sysRoleService;
+	private SysRoleService sysRoleService;
 	
 	@Autowired  
     private SysResourceService sysResoureService; 
 	
-	public void initial() {
-		refreshResourceRoleMap();
-		refreshRoleList();
+	@Autowired
+	private SysConfigurationItemService sysConfigService;
+	
+	public GlobalConfigurationService() {
+		
 	}
 	
 	//When resource_role is changed, need refresh map
 	public void refreshResourceRoleMap() {
-		Resource_Role_Map = new HashMap<String, Collection<ConfigAttribute>>();
+		Map<String, Collection<ConfigAttribute>> resourceRoleMap = new HashMap<String, Collection<ConfigAttribute>>();
 		List<SysResource> resources = sysResoureService.findAll();
     	
     	if(resources == null)
@@ -45,20 +47,33 @@ public class RoleManagement {
     		if(roles == null)
     			continue;
     		String resourceString = resource.getResourceString();
-    		if(!Resource_Role_Map.containsKey(resourceString)) {
+    		if(!resourceRoleMap.containsKey(resourceString)) {
     			Collection<ConfigAttribute> atts = new ArrayList<ConfigAttribute>();
-    			Resource_Role_Map.put(resourceString, atts);
+    			resourceRoleMap.put(resourceString, atts);
     		}
     		for(SysRole role : roles) {
     			int rid = role.getId();
     			ConfigAttribute ca = new SecurityConfig(String.valueOf(rid));
-    			Resource_Role_Map.get(resourceString).add(ca);
+    			resourceRoleMap.get(resourceString).add(ca);
     		}
     	}
+    	GlobalConfiguration.getInstance().setResourceRoleMap(resourceRoleMap);
 	}
 	
 	//When add new role, need refresh role list for super user 'sys'
 	public void refreshRoleList() {
-		All_Roles = sysRoleService.findAll();
+		List<SysRole> allRoles = sysRoleService.findAll();
+		GlobalConfiguration.getInstance().setAllRoles(allRoles);
 	}
+	
+	//When update global configuration, need call this function
+	public void refreshConfiguration() {
+		List<SysConfigurationItem> configItems = sysConfigService.findAll();
+		Map<String,String> configurationMap = new HashMap<String,String>();
+		for(SysConfigurationItem item : configItems) {
+			configurationMap.put(item.getItem(), item.getValue());
+		}
+		GlobalConfiguration.getInstance().setConfigurationMap(configurationMap);
+	}
+	
 }

@@ -36,6 +36,9 @@ public class MainApplication{
 	@Autowired
 	SysResourceDao sysResourceDao;
 	
+	@Autowired
+	GlobalConfigurationService configService;
+	
 	public void initRole() {
 		SysRole role = null;
 		role = sysRoleDao.findByName("系统管理员");
@@ -71,7 +74,14 @@ public class MainApplication{
     	initRole();
     	initSuper();
     	initResource();
-    }  
+    } 
+    
+    @PostConstruct
+    public void initGlobalConfiguration() {
+    	configService.refreshConfiguration();
+    	configService.refreshRoleList();
+    	configService.refreshResourceRoleMap();
+    }
        
     public static void main(String[] args) {  
         SpringApplication app=new SpringApplication(MainApplication.class);       

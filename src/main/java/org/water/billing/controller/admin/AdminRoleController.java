@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.GlobalConfigurationService;
 import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.entity.admin.SysRole;
-import org.water.billing.security.support.RoleManagement;
 import org.water.billing.service.admin.SysRoleService;
 import org.water.billing.utils.Utils;
 
@@ -25,7 +25,7 @@ public class AdminRoleController {
 	SysRoleService sysRoleService;
 	
 	@Autowired
-	RoleManagement roleMgr;
+	GlobalConfigurationService configService;
 
 	@RequestMapping(value="/admin/role",method=RequestMethod.GET)
 	public String roleList(@RequestParam(defaultValue="1") int page,
@@ -44,7 +44,7 @@ public class AdminRoleController {
 	@RequestMapping(value="/admin/role",method=RequestMethod.POST)
 	public String roleUpdate(@ModelAttribute SysRole sysRole) {
 		SysRole role = sysRoleService.save(sysRole);
-		roleMgr.refreshRoleList();
+		configService.refreshRoleList();
 		return "redirect:/admin/role/" + String.valueOf(role.getId());
 	}
 	
