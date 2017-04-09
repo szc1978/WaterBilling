@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.access.ConfigAttribute;
+import org.water.billing.entity.admin.SysResource;
 import org.water.billing.entity.admin.SysRole;
 
 public class GlobalConfiguration {
@@ -13,6 +14,7 @@ public class GlobalConfiguration {
 	private Map<String,String> configurationMap = null;
 	private List<SysRole> allRoles = null;
 	private Map<String, Collection<ConfigAttribute>> resourceRoleMap = null;
+	private List<SysResource> allResources = null;
 	
 	private GlobalConfiguration() {
 		
@@ -46,5 +48,19 @@ public class GlobalConfiguration {
 
 	public Map<String, Collection<ConfigAttribute>> getResourceRoleMap() {
 		return resourceRoleMap;
+	}
+	
+	public List<SysResource> getAllResources() {
+		return allResources;
+	}
+	
+	public void setAllResources(List<SysResource> allResources) {
+		this.allResources = allResources;
+	}
+	
+	public String getConfigValueByItemName(String itemName) {
+		if(configurationMap == null || !configurationMap.containsKey(itemName))
+			return "";
+		return configurationMap.get(itemName);
 	}
 }

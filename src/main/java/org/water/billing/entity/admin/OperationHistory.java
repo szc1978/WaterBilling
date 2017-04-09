@@ -26,6 +26,9 @@ public class OperationHistory {
 	@Column(name = "op_name",length=64)
 	private String opName;
 	
+	@Column(name = "user_name")
+	private String userName;
+	
 	@Column(name = "user_chinese_name",length=64)
 	private String userChineseName;
 	
@@ -51,7 +54,8 @@ public class OperationHistory {
 		
 	}
 	
-	public OperationHistory(String userChineseName,String moduleName,String opName,String ip,String content,int type) {
+	public OperationHistory(String userName,String userChineseName,String moduleName,String opName,String ip,String content,int type) {
+		this.userName = userName;
 		this.userChineseName = userChineseName;
 		this.opName = opName;
 		this.moduleName = moduleName;
@@ -122,6 +126,14 @@ public class OperationHistory {
 
 	public void setOpTime(Date opTime) {
 		this.opTime = opTime;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 	

@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.water.billing.consts.Consts;
+
 @Entity
 @Table(name="sys_role")
 public class SysRole {
@@ -28,7 +30,7 @@ public class SysRole {
     private String memo;
     
     @Column(name="active",length=1)
-    private int active = 1;
+    private int active = Consts.STATUS_DEFINE_ACTIVE;
     
     public SysRole() {
     	

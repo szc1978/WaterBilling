@@ -29,8 +29,8 @@ public class Customer {
 	@Column(name="name",nullable=false)
 	private String name;
 	
-	@Column(name="water_number",length=1)
-	private float waterNumber = new Float(0.00);
+	/*@Column(name="water_number",length=1)
+	private float waterNumber = new Float(0.00);*/
 	
 	@Column(name="balance")
 	private float balance = new Float(0.00);
@@ -50,8 +50,8 @@ public class Customer {
 	@Column(name="staus",length=1)
 	private int status = Consts.CUSTOMER_STATUS_ACTIVE_BIT | Consts.CUSTOMER_STATUS_PENDING_BIT;
 	
-	@Column(name="pending_water_number")
-	private Float pendingWaterNumber = new Float(0);
+	/*@Column(name="pending_water_number")
+	private Float pendingWaterNumber = new Float(0);*/
 	
 	@ManyToOne()
 	@JoinColumn(name="water_provider_id")
@@ -64,6 +64,10 @@ public class Customer {
 	@OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "info_id")
 	private CustomerInfo customerInfo = new CustomerInfo();
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="water_id")
+	private CustomerWater customerWater = new CustomerWater();
 	
 	@Column(name = "create_time",length=64,updatable = false)
 	@Temporal(TemporalType.TIMESTAMP) 
@@ -122,13 +126,13 @@ public class Customer {
 		this.name = name;
 	}
 
-	public float getWaterNumber() {
+	/*public float getWaterNumber() {
 		return waterNumber;
 	}
 
 	public void setWaterNumber(float waterNumber) {
 		this.waterNumber = waterNumber;
-	}
+	}*/
 
 	public float getBalance() {
 		return balance;
@@ -170,12 +174,20 @@ public class Customer {
 		this.status = status;
 	}
 
-	public Float getPendingWaterNumber() {
+	/*public Float getPendingWaterNumber() {
 		return pendingWaterNumber;
 	}
 
 	public void setPendingWaterNumber(Float pendingWaterNumber) {
 		this.pendingWaterNumber = pendingWaterNumber;
+	}*/
+
+	public CustomerWater getCustomerWater() {
+		return customerWater;
+	}
+
+	public void setCustomerWater(CustomerWater customerWater) {
+		this.customerWater = customerWater;
 	}
 	
 }

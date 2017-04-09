@@ -33,13 +33,13 @@
 				        <td th:text="${customer.customerInfo.code}"></td> 
 				        <td th:text="${customer.name}"></td>
 				        <td th:text="${customer.customerInfo.mobile}"></td>
-				        <td th:text="${customer.waterNumber}"></td>
+				        <td th:text="${customer.customerWater.orgNumber}"></td>
 				        <td th:text="${customer.balance}"></td>
 				        <td th:text="${customer.status}"></td>
 				        <td>
 				        	<a th:href="@{/biz/customer/edit/form(id=${customer.id})}">编辑</a>
-				        	<a th:href="@{/biz/customer/activate(id=${customer.id})}">恢复</a>
-				        	<a th:href="@{/biz/customer/deactivate(id=${customer.id})}">删除</a>
+				        	<a th:if="${customer.status eq 0}" th:href="@{/biz/customer/activate(id=${customer.id})}">重新开户</a>
+				        	<a th:if="${customer.status eq 1}" th:href="@{/biz/customer/deactivate(id=${customer.id})}">销户</a>
 				        </td>
 			        </tr>        
 			        </tbody>

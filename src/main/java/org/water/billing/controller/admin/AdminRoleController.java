@@ -40,11 +40,12 @@ public class AdminRoleController {
 		return "/admin/role_list";
 	}
 	
-	@OpAnnotation(moduleName="角色管理",option="修改角色")
+	@OpAnnotation(moduleName="角色管理",option="增加或修改角色")
 	@RequestMapping(value="/admin/role",method=RequestMethod.POST)
 	public String roleUpdate(@ModelAttribute SysRole sysRole) {
 		SysRole role = sysRoleService.save(sysRole);
 		configService.refreshRoleList();
+		configService.refreshResourceRoleMap();
 		return "redirect:/admin/role/" + String.valueOf(role.getId());
 	}
 	
@@ -66,6 +67,7 @@ public class AdminRoleController {
 			return "redirect:/admin/role";
 		role.setActive(1);
 		sysRoleService.save(role);
+		configService.refreshResourceRoleMap();
 		return "redirect:/admin/role/" + String.valueOf(id);
 	}
 	
@@ -77,6 +79,7 @@ public class AdminRoleController {
 			return "redirect:/admin/role";
 		role.setActive(0);
 		sysRoleService.save(role);
+		configService.refreshResourceRoleMap();
 		return "redirect:/admin/role/" + String.valueOf(id);
 	}
 	

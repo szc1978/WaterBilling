@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.water.billing.GlobalConfigurationService;
+import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.entity.admin.SysResource;
 import org.water.billing.entity.admin.SysRole;
 import org.water.billing.service.admin.SysResourceService;
@@ -49,6 +50,7 @@ public class AdminResourceRoleController {
 		return "/admin/resourcerole_form";
 	}
 	
+	@OpAnnotation(moduleName="页面功能",option="修改角色属性")
 	@RequestMapping(value="/admin/privilege",method=RequestMethod.POST)
 	public String modifyResource(@ModelAttribute SysResource sysResource) {
 		SysResource tmp = resourceService.findById(sysResource.getId());

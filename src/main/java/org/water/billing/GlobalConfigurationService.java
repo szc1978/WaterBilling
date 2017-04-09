@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.stereotype.Service;
+import org.water.billing.consts.Consts;
 import org.water.billing.entity.admin.SysConfigurationItem;
 import org.water.billing.entity.admin.SysResource;
 import org.water.billing.entity.admin.SysRole;
@@ -52,12 +53,15 @@ public class GlobalConfigurationService {
     			resourceRoleMap.put(resourceString, atts);
     		}
     		for(SysRole role : roles) {
-    			int rid = role.getId();
-    			ConfigAttribute ca = new SecurityConfig(String.valueOf(rid));
-    			resourceRoleMap.get(resourceString).add(ca);
+    			if(role.getActive() == Consts.STATUS_DEFINE_ACTIVE) {
+	    			int rid = role.getId();
+	    			ConfigAttribute ca = new SecurityConfig(String.valueOf(rid));
+	    			resourceRoleMap.get(resourceString).add(ca);
+    			}
     		}
     	}
     	GlobalConfiguration.getInstance().setResourceRoleMap(resourceRoleMap);
+    	GlobalConfiguration.getInstance().setAllResources(resources);
 	}
 	
 	//When add new role, need refresh role list for super user 'sys'

@@ -50,6 +50,12 @@ public class CustomerService {
 	}
 	
 	public List<Customer> findAllCustomersWhichHaveNewBill() {
-		return customerDao.findByPendingWaterNumberGreaterThan(new Float(0));
+		return customerDao.queryHasPendingWaterNumberCustomer();
+	}
+	
+	public int findPenging4ApproveMsg() {
+		int countCustomerStatus = customerDao.countByStatusGreaterThan(Consts.CUSTOMER_STATUS_ACTIVE_BIT);
+		int countNewWaterNumber = customerDao.countPendingWaterNumber();
+		return countCustomerStatus + countNewWaterNumber;
 	}
 }

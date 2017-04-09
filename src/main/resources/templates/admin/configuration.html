@@ -5,7 +5,8 @@
 	<title>无标题文档</title>
 	<link href="/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-
+	<script type="text/javascript" src="/js/jquery-3.2.0.min.js"></script>
+	<script type="text/javascript" src="/js/water.js"></script>
 </head>
 
 <body>
@@ -17,20 +18,21 @@
 						<h3 class="panel-title">公司名称</h3>
 					</div>
 					<div class="panel-body">
-						<input class="form-control" type="text" name="company_name"/>
+						<input class="form-control" type="text" th:value="${company_name}" name="gloabl_config_company_name"/>
 					</div>
 				</div>
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title">滞纳金设置</h3>
+						<h3 class="panel-title">业务设置</h3>
 					</div>
 					<div class="panel-body form-inline">
-						<label>滞纳金天数：</label>
-						<input class="form-control" type="text" name="late_pay_day"/>
+						<label>收取滞纳金天数：</label>
+						<input class="form-control" type="text" name="gloabl_config_late_pay_day" th:value="${late_pay_day}" onkeyup="int_input_validate(this)"/>
 						<label>滞纳金比例(%)：</label>
-						<input class="form-control" type="text" name="late_pay_day"/>
+						<input class="form-control" type="text" name="gloabl_config_late_pay_ratio" th:value="${late_pay_ratio}" onkeyup="float_input_validate(this)"/>
 					</div>
 				</div>
+				<input type="submit" value="保存" class="btn btn-default"/>
 			</form>
     </div>
 </body>

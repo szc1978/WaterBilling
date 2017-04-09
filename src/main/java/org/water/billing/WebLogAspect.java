@@ -36,7 +36,7 @@ public class WebLogAspect {
 		String ip = request.getRemoteAddr();
 		
 		String content = user.getChineseName() + "访问模块[" + annotation.moduleName() + "->" + annotation.option() + "]";
-		OperationHistory op = new OperationHistory(user.getChineseName(),annotation.moduleName(),annotation.option(),ip,content,OpTypeEnum.OPERATION.getId());
+		OperationHistory op = new OperationHistory(user.getName(),user.getChineseName(),annotation.moduleName(),annotation.option(),ip,content,OpTypeEnum.OPERATION.getId());
 		opHistoryService.save(op);
 	}
 	 
@@ -49,7 +49,7 @@ public class WebLogAspect {
 		String ip = request.getRemoteAddr();
 		
 		String content = user.getChineseName() + "访问模块[" + annotation.moduleName() + "->" + annotation.option() + "]";
-		OperationHistory op = new OperationHistory(user.getChineseName(),annotation.moduleName(),annotation.option(),ip,content,OpTypeEnum.EXCEPTION.getId());
+		OperationHistory op = new OperationHistory(user.getName(),user.getChineseName(),annotation.moduleName(),annotation.option(),ip,content,OpTypeEnum.EXCEPTION.getId());
 		opHistoryService.save(op);
 	}
 	 

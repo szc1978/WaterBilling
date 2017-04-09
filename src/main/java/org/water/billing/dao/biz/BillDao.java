@@ -13,5 +13,9 @@ public interface BillDao extends JpaRepository<Bill, Integer>{
 	
 	public Bill findById(int id);
 	
-	public List<Bill> findByCustomerIdAndIsCharged(int customerId,int isCharged,Sort sort);
+	public List<Bill> findByCustomerCodeAndIsCharged(String customerCode,int isCharged,Sort sort);
+	
+	public int countByAutoChargeFlag(int flag);
+	
+	public List<Bill> findByAutoChargeFlag(int flag);
 }

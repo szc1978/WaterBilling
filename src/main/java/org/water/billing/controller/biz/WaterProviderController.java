@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.entity.biz.WaterProvider;
 import org.water.billing.service.biz.WaterProviderService;
 
@@ -30,6 +31,7 @@ public class WaterProviderController {
 		return "/biz/water_provider";
 	}
 	
+	@OpAnnotation(moduleName="供水片区管理",option="增加或修改供水片区")
 	@RequestMapping(value="/biz/waterprovider",method=RequestMethod.POST)
 	public String waterProvider(@ModelAttribute WaterProvider provider) throws Exception {
 		waterProviderService.save(provider);

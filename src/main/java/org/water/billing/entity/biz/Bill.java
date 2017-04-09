@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.water.billing.consts.Consts;
+
 @Entity
 @Table(name = "bill")
 public class Bill {
@@ -22,8 +24,8 @@ public class Bill {
 	@Column(name="name")
 	private String name;
 	
-	@Column(name="customer_id")
-	private int customerId;
+	@Column(name="customer_code")
+	private String customerCode;
 	
 	@Column(name="begin_water_word")
 	private Float beginWaterWord = new Float(0);
@@ -31,8 +33,8 @@ public class Bill {
 	@Column(name="end_water_word")
 	private Float endWaterWord = new Float(0);
 	
-	@Column(name="inputer_name")
-	private String inputerName;
+	@Column(name="inputer_id")
+	private int inputerId;
 	
 	@Column(name="total_postage")
 	private Float totalPostage = new Float(0);
@@ -48,6 +50,9 @@ public class Bill {
 	
 	@Column(name="is_charged",length=1)
 	private int isCharged = 0;
+	
+	@Column(name="auto_charge_flag")
+	private int autoChargeFlag = Consts.NON_BILL_AUTO_CHARGE_FLAG;
 		
 	@Column(name="input_date",length=64)
 	@Temporal(TemporalType.TIMESTAMP) 
@@ -93,12 +98,12 @@ public class Bill {
 		this.endWaterWord = endWaterWord;
 	}
 
-	public String getInputerName() {
-		return inputerName;
+	public int getInputerId() {
+		return inputerId;
 	}
 
-	public void setInputerName(String inputerName) {
-		this.inputerName = inputerName;
+	public void setInputerId(int inputerId) {
+		this.inputerId = inputerId;
 	}
 
 	public Float getTotalPostage() {
@@ -157,12 +162,20 @@ public class Bill {
 		this.isCharged = isCharged;
 	}
 
-	public int getCustomerId() {
-		return customerId;
+	public int getAutoChargeFlag() {
+		return autoChargeFlag;
 	}
 
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
+	public void setAutoChargeFlag(int autoChargeFlag) {
+		this.autoChargeFlag = autoChargeFlag;
+	}
+
+	public String getCustomerCode() {
+		return customerCode;
+	}
+
+	public void setCustomerCode(String customerCode) {
+		this.customerCode = customerCode;
 	}
 	
 	

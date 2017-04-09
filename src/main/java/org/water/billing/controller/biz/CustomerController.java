@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.consts.Consts;
 import org.water.billing.consts.ReadMeterCycleEnum;
 import org.water.billing.entity.biz.Customer;
@@ -50,9 +51,40 @@ public class CustomerController {
 		return "/biz/customer_list";
 	}
 	
+	@OpAnnotation(moduleName="客户管理",option="增加修改客户")
 	@RequestMapping(value="/biz/customer",method=RequestMethod.POST)
 	public String customer(@ModelAttribute Customer customer) {
 		
+		customerService.save(customer);
+		return "redirect:/biz/customer/";
+	}
+	
+	@OpAnnotation(moduleName="客户管理",option="客户销户")
+	@RequestMapping(value="/biz/customer/deactivate",method=RequestMethod.GET)
+	public String activate(@RequestParam int id) throws Exception {
+		Customer customer = customerService.findById(id);
+		if(customer == null)
+			throw new Exception("客户不存在");
+		if((customer.getStatus() & Consts.CUSTOMER_STATUS_PENDING_BIT) == 2)
+			throw new Exception("客户正处于等待审核状态");
+		if((customer.getStatus() & Consts.CUSTOMER_STATUS_ACTIVE_BIT) == 0)
+			throw new Exception("客户已经处于销户状态");
+		customer.setStatus(Consts.CUSTOMER_STATUS_PENDING_BIT);
+		customerService.save(customer);
+		return "redirect:/biz/customer/";
+	}
+	
+	@OpAnnotation(moduleName="客户管理",option="客户开户")
+	@RequestMapping(value="/biz/customer/activate",method=RequestMethod.GET)
+	public String customer(@RequestParam int id) throws Exception {
+		Customer customer = customerService.findById(id);
+		if(customer == null)
+			throw new Exception("客户不存在");
+		if((customer.getStatus() & Consts.CUSTOMER_STATUS_PENDING_BIT) == 2)
+			throw new Exception("客户正处于等待审核状态");
+		if((customer.getStatus() & Consts.CUSTOMER_STATUS_ACTIVE_BIT) == 1)
+			throw new Exception("客户已经处于开户状态");
+		customer.setStatus(Consts.CUSTOMER_STATUS_ACTIVE_BIT | Consts.CUSTOMER_STATUS_PENDING_BIT);
 		customerService.save(customer);
 		return "redirect:/biz/customer/";
 	}

@@ -15,7 +15,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;  
 import javax.persistence.Temporal;  
-import javax.persistence.TemporalType;  
+import javax.persistence.TemporalType;
+
+import org.water.billing.consts.Consts;  
     
 @Entity  
 @Table(name = "sys_user")
@@ -38,7 +40,7 @@ public class SysUser {
 	private String password; 
 	
 	@Column(name = "active",length = 1)
-	private int active = 1;
+	private int active = Consts.STATUS_DEFINE_ACTIVE;
     
 	@Temporal(TemporalType.TIMESTAMP) 
 	@Column(name = "createDate", length = 32)  

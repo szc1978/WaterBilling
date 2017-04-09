@@ -3,6 +3,7 @@ package org.water.billing.biz;
 import java.util.Date;
 
 import org.water.billing.consts.ChargeTypeEnum;
+import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Charge;
 import org.water.billing.entity.biz.Customer;
@@ -13,14 +14,10 @@ public class BillGenerater {
 	private Float totalPostage = new Float(0);
 	private String detailedBill = "";
 	private Float totalWaterNumber;
-	private Float newWaterWord;
-	private String inputerName;
 	
-	public BillGenerater(Customer customer,Float newWaterWord,String inputerName) {
+	public BillGenerater(Customer customer) {
 		this.customer = customer;
-		this.newWaterWord = newWaterWord;
-		this.inputerName = inputerName;
-		this.totalWaterNumber = newWaterWord - customer.getWaterNumber();
+		totalWaterNumber = customer.getCustomerWater().getNewNumber() - customer.getCustomerWater().getOrgNumber();
 	}
 	
 	public Bill genBill() {
@@ -29,14 +26,16 @@ public class BillGenerater {
 		calPostage4PriceByStep();
 		calPostage4PriceByDedicated();
 		Bill bill = new Bill();
-		bill.setBeginWaterWord(customer.getWaterNumber());
-		bill.setEndWaterWord(newWaterWord);
+		bill.setBeginWaterWord(customer.getCustomerWater().getOrgNumber());
+		bill.setEndWaterWord(customer.getCustomerWater().getNewNumber());
 		bill.setTotalPostage(totalPostage);
 		bill.setDetailContent(detailedBill);
 		bill.setName(customer.getName() + "账单");
 		bill.setInputDate(new Date());
-		bill.setInputerName(inputerName);
-		bill.setCustomerId(customer.getId());
+		bill.setInputerId(customer.getCustomerWater().getInputerId());
+		bill.setCustomerCode(customer.getCustomerInfo().getCode());
+		if(customer.getBalance() >= totalPostage)
+			bill.setAutoChargeFlag(Consts.BILL_AUTO_CHARGE_FLAG);
 		return bill;
 	}
 	

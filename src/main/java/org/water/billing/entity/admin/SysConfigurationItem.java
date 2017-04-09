@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="login_log")
+@Table(name="global_config")
 public class SysConfigurationItem {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
@@ -23,6 +23,10 @@ public class SysConfigurationItem {
 	
 	public SysConfigurationItem() {
 		
+	}
+	
+	public SysConfigurationItem(String item) {
+		this.item = item;
 	}
 	
 	public SysConfigurationItem(String item,String value) {

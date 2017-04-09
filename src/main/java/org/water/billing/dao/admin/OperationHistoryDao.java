@@ -7,4 +7,6 @@ import org.water.billing.entity.admin.OperationHistory;
 
 public interface OperationHistoryDao extends JpaRepository<OperationHistory, Integer>{
 	public Page<OperationHistory> findAll(Pageable page);
+	
+	public Page<OperationHistory> findByUserName(String userName,Pageable page);
 }

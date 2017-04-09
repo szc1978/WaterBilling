@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.entity.biz.Charge;
 import org.water.billing.entity.biz.CustomerType;
 import org.water.billing.service.biz.ChargeService;
@@ -41,6 +42,7 @@ public class CustomerTypeController {
 		return "/biz/customer_type_list";
 	}
 	
+	@OpAnnotation(moduleName="客户类型管理",option="增加或修改用户类型")
 	@RequestMapping(value="/biz/customer_type",method=RequestMethod.POST)
 	public String customer(@ModelAttribute CustomerType customerType) {
 		customerTypeService.save(customerType);
