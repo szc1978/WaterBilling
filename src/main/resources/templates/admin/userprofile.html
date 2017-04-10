@@ -15,7 +15,6 @@
 		    <b th:text="${sysuser.chineseName}+'(' + ${sysuser.name} +')'"></b>，欢迎使用信息管理系统<p></p>
 		    <i>您上次登录的时间：<b th:if="${loginHistory != null}" th:text="${loginHistory.loginTime}"></b></i> <p></p>
 		    <i>您上次登录的机器IP：<b th:if="${loginHistory != null}" th:text="${loginHistory.ip}"></b></i><p></p>
-		   	<b>您有<span class="badge" th:text="${msgNumber}"></span>条业务需要处理!!</b><br></br>
 
 		    <span></span><p></p><p></p>
 		    

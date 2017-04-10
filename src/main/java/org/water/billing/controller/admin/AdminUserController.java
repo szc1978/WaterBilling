@@ -54,11 +54,12 @@ public class AdminUserController {
 	public String addUser(@ModelAttribute SysUser sysUser,
 							@RequestParam(defaultValue="0") int resetpwd,
 							ModelMap map) throws Exception {
-		SysUser dbUser = sysUserService.findById(sysUser.getId());
-		if(Consts.SuperAdminName.equals(dbUser.getName()))
-			throw new Exception("默认超级用户无法在此处修改密码，请使用 sys登录并在首页修改密码");
-		
-		sysUser.setName(dbUser.getName());
+		if(sysUser.getId() != 0) {
+			SysUser dbUser = sysUserService.findById(sysUser.getId());
+			if(Consts.SuperAdminName.equals(dbUser.getName()))
+				throw new Exception("默认超级用户无法在此处修改密码，请使用 sys登录并在首页修改密码");
+			sysUser.setName(dbUser.getName());
+		}
 		if(resetpwd == 1 || sysUser.getId() == 0) {
 			BCryptPasswordEncoder bc=new BCryptPasswordEncoder(4);
 			if(sysUser.getPassword().length() < Consts.MIN_ADMIN_USER_PWD_LENGTH)
