@@ -1,21 +1,22 @@
 package org.water.billing.consts;
 
 public enum ResourceEnum {
-	BIZ_USER("客户管理","/biz/customer"),
-	BIZ_USER_TYPE("客户类别管理","/biz/customer_type"),
-	BIZ_USER_KEY("客户字段管理","/biz/customer_field"),
-	BIZ_FEE("资费管理","/biz/charge"),
-	BIZ_CUSTOMER_PAY("客户缴费","/biz/pay"),
-	BIZ_CUSTOMER_WATER_INPUT("客户用水录入","/biz/input_water_data"),
-	BIZ_CUSTOMER_WATER_IMPORT("客户用水导入","/biz/import_water_data"),
-	BIZ_CUSTOMER_APPROVER("客户业务审核","/biz/approver"),
-	BIZ_WATER_PROVIDER("供水片区管理","/biz/waterprovider"),
+	PAY("缴费管理","/pay"),
+	WATER_NUMBER("录入用水量","/waterdata"),
+	CUSTOMER_MANAGE("客户管理","/customer/manage"),
+	CUSTOMER_TYPE("客户类别管理","/customer/ctype"),
+	CUSTOMER_FIELD("客户字段管理","/customer/field"),
+	WATER_PROVIDER("供水片区管理","/customer/waterprovider"),
+	CHARGE_TYPE("资费类型","/charge/type"),
+	APPROVE_CUSTOMER("客户销户开户审核","/approve/customer"),
+	APPROVE_CUSTOMER_WATER("客户用水量审核","/approve/customerwater"),
+	APPROVE_CUSTOMER_BILL("客户销账审核","/approve/customerbill"),
 	ADMIN_USER("系统用户管理","/admin/user"),
 	ADMIN_ROLE("系统用户权限管理","/admin/role"),
 	ADMIN_PRIVILEGE("页面功能管理","/admin/privilege"),
 	ADMIN_GOLBAL_CONFIG("系统全局配置","/admin/configuration"),
-	OP_LOG("操作日志","/admin/oplog"),
-	LOGIN_LOG("登录日志","/admin/loginhistory")
+	OP_LOG("操作日志","/log/operation"),
+	LOGIN_LOG("登录日志","/log/login")
 	;
 	
 	

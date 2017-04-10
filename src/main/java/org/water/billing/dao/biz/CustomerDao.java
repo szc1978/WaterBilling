@@ -20,8 +20,8 @@ public interface CustomerDao extends JpaRepository<Customer, Integer>{
 	
 	public int countByStatusGreaterThan(int status);
 
-	@Query(value="select customer from Customer customer where customerInfo.code = :code")
-	public Customer findByCode(@Param("code") String code);
+	@Query(value="select customer from Customer customer where status = :status and customerInfo.code = :code")
+	public Customer findByStatusAndCode(@Param("status") int status,@Param("code") String code);
 	
 	@Query(value = "select count(*) from Customer customer where customerWater.newNumber > 0")
 	public int countPendingWaterNumber();

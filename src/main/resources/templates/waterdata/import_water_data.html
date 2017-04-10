@@ -5,26 +5,20 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<script>
-		function search_customer() {
-			document.search_customer_by_code.submit();
-		}
-	</script>
 </head>
 
 <body>
 	<div class="container">
 		<div class="formtitle"><span>导入客户用水量</span></div>
-		<form name="search_customer_by_code" th:action="@{/biz/imput_water_data}" method="post" >
+		<form name="import_customer_water" th:action="@{/biz/import_water_data}" method="post" enctype="multipart/form-data">
 			<div class="col-sm-4">
 				<div class=" form-group ">
-					<label for="name">名称:</label>
-					<input type="text" class="form-control" name="name" />
-				</div>
-				<div class=" form-group ">
 					<label for="name">导入文件:</label>
-					<input type="file" id="inputfile" />
-					<p class="help-block">下载模板文件</p>
+					<input type="file" name="inputfile" />
+					<p class="help-block"><a href="/files/water.xls">下载模板文件</a></p>
+					<p>*1.只可以使用Excel文件的第一页</p>
+					<p>*2.请不要改变文件格式，使用Excel软件编辑后直接保存</p>
+					<p>*3.保持第一页排版格式，并保留第一行和最后一行内容</p>
 				</div>
 				<div class="form-group">
 					<input type="submit" class="btn btn-default" value="导入" />

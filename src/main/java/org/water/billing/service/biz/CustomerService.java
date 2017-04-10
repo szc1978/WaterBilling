@@ -42,7 +42,7 @@ public class CustomerService {
 	}
 	
 	public Customer findByCode(String code) {
-		return customerDao.findByCode(code);
+		return customerDao.findByStatusAndCode(Consts.CUSTOMER_STATUS_ACTIVE_BIT,code);
 	}
 	
 	public List<Customer> findAllPendingCustomer() {

@@ -66,6 +66,20 @@
     	function logoutsys() {
     		document.logout.submit();
     	}
+    	function query_msg() {
+    		$(function(){
+				$.get('/api/getpendingmsg',function(data){
+					if(data == "0") {
+						$("#pending_msg_1").html(""); 
+						$("#pending_msg_2").html(""); 
+					} else {
+						$("#pending_msg_1").html(data); 
+						$("#pending_msg_2").html(data); 
+					}
+    			})
+			})
+    	}
+    	var t1 = window.setInterval(query_msg,60000); 
     </script>
 </head>
 
@@ -77,49 +91,89 @@
                     <li class="active">
                         <a href="/userprofile" target="rightFrame"> <i class="glyphicon glyphicon-home"></i> 首页 </a>
                     </li>
-                    <li>
-                        <a href="#bizop" class="nav-header collapsed" data-toggle="collapse">
-                            <i class="glyphicon glyphicon-tint"></i> 业务操作 <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                    <li th:if="${#strings.contains(userResources,'/pay')}">
+                        <a href="#pay" class="nav-header collapsed" data-toggle="collapse">
+                            <i class="glyphicon glyphicon-usd"></i> 缴费管理 <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
-                        <ul id="bizop" class="nav nav-list collapse secondmenu" style="height: 0px;">
-                            <li th:if="${#strings.contains(userResources,'/biz/pay')}"><a href="/biz/pay" target="rightFrame"><i class="glyphicon glyphicon-usd"></i> 客户缴费</a></li>
-                            <li th:if="${#strings.contains(userResources,'/biz/input_water_data')}"><a href="/biz/input_water_data" target="rightFrame"><i class="glyphicon glyphicon-pencil"></i> 数据录入</a></li>
-                            <li th:if="${#strings.contains(userResources,'/biz/import_water_data')}"><a href="/biz/import_water_data" target="rightFrame"><i class="glyphicon glyphicon-import"></i> 数据导入</a></li>
+                        <ul id="pay" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                            <li ><a href="/pay/water" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 缴纳水费</a></li>
+                            <li ><a href="/pay/biz" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 业务缴费</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="#biz" class="nav-header collapsed" data-toggle="collapse" id="menu_customer">
-                            <i class="glyphicon glyphicon-wrench"></i> 客户管理 
-                            <span th:if="${msgNumber gt 0}" class="badge" th:text="${msgNumber}">0</span>
+                    <li th:if="${#strings.contains(userResources,'/waterdata')}">
+                        <a href="#water" class="nav-header collapsed" data-toggle="collapse">
+                            <i class="glyphicon glyphicon-tint"></i> 用水操作 <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                        </a>
+                        <ul id="water" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                            <li><a href="/waterdata/input_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 数据录入</a></li>
+                            <li><a href="/waterdata/import_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 数据导入</a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${#strings.contains(userResources,'/customer')}">
+                        <a href="#customer" class="nav-header collapsed" data-toggle="collapse" id="menu_customer">
+                            <i class="glyphicon glyphicon-user"></i> 客户管理 
                             <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
-                        <ul id="biz" class="nav nav-list collapse secondmenu" style="height: 0px;">
-                            <li th:if="${#strings.contains(userResources,'/biz/customer')}"><a href="/biz/customer" target="rightFrame"><i class="glyphicon glyphicon-user"></i> 客户管理</a></li>
-							<li th:if="${#strings.contains(userResources,'/biz/customer_field')}"><a href="/biz/customer_field" target="rightFrame"><i class="glyphicon glyphicon-screenshot"></i> 客户字段管理</a></li>
-                            <li th:if="${#strings.contains(userResources,'/biz/customer_type')}"><a href="/biz/customer_type" target="rightFrame"><i class="glyphicon glyphicon-th-list"></i> 客户类型管理</a></li>
-                            <li th:if="${#strings.contains(userResources,'/biz/charge')}"><a href="/biz/charge" target="rightFrame"><i class="glyphicon glyphicon-gbp"></i> 资费管理</a></li>
-                            <li th:if="${#strings.contains(userResources,'/biz/waterprovider')}"><a href="/biz/waterprovider" target="rightFrame"><i class="glyphicon glyphicon-map-marker"></i> 供水片区管理</a></li>
-                            <li th:if="${#strings.contains(userResources,'/biz/approver')}"><a href="/biz/approver" target="rightFrame"><i class="glyphicon glyphicon-warning-sign"></i> 审核管理
-                            <span th:if="${msgNumber gt 0}" class="badge" th:text="${msgNumber}">0</span>
-                            </a></li>
+                        <ul id="customer" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                            <li th:if="${#strings.contains(userResources,'/customer/manage')}"><a href="/customer/manage" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户管理</a></li>
+							<li th:if="${#strings.contains(userResources,'/customer/field')}"><a href="/customer/field" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户字段管理</a></li>
+                            <li th:if="${#strings.contains(userResources,'/customer/type')}"><a href="/customer/type" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户类型管理</a></li>
+                            <li th:if="${#strings.contains(userResources,'/customer/waterprovider')}"><a href="/customer/waterprovider" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 供水片区管理</a></li>
                         </ul>
                     </li>
-                    <li>
+                    <li th:if="${#strings.contains(userResources,'/charge')}">
+                        <a href="#charge" class="nav-header collapsed" data-toggle="collapse" id="menu_customer">
+                            <i class="glyphicon glyphicon-user"></i> 资费管理 
+                            <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                        </a>
+                        <ul id="charge" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                            <li th:if="${#strings.contains(userResources,'/charge/type')}"><a href="/charge/type" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 资费类型管理</a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${#strings.contains(userResources,'/approve')}">
+                        <a href="#approve" class="nav-header collapsed" data-toggle="collapse" id="menu_customer">
+                            <i class="glyphicon glyphicon-bell"></i> 批准审核 
+                            <span id="pending_msg_1" class="badge"></span>
+                            <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                        </a>
+                        <ul id="approve" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                            <li th:if="${#strings.contains(userResources,'/approve/customer')}">
+                            	<a href="/approve/customer" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户销户开户审核
+                            		<span id="pending_msg_2" class="badge"></span>
+                            	</a>
+                            </li>
+                            <li th:if="${#strings.contains(userResources,'/approve/customerwater')}">
+                            	<a href="/approve/customerwater" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户用水量审核
+                            		<span id="pending_msg_3" class="badge"></span>
+                            	</a>
+                            </li>
+                            <li th:if="${#strings.contains(userResources,'/approve/customerbill')}">
+                            	<a href="/approve/customerbill" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户销账审核
+                            		<span id="pending_msg_4" class="badge"></span>
+                            	</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li th:if="${#strings.contains(userResources,'/admin')}">
                         <a href="#admin" class="nav-header collapsed" data-toggle="collapse" id="menu_admin">
                             <i class="glyphicon glyphicon-cog"></i> 系统管理<span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul id="admin" class="nav nav-list collapse secondmenu" style="height: 0px;">
-                            <li th:if="${#strings.contains(userResources,'/admin/user')}"><a href="/admin/user" target="rightFrame"><i class="glyphicon glyphicon-user"></i> 系统用户管理</a></li>
-                            <li th:if="${#strings.contains(userResources,'/admin/role')}"><a href="/admin/role" target="rightFrame"><i class="glyphicon glyphicon-usd"></i> 系统用户权限管理</a></li>
-                            <li th:if="${#strings.contains(userResources,'/admin/privilege')}"><a href="/admin/privilege" target="rightFrame"><i class="glyphicon glyphicon-th-large"></i> 页面功能管理</a></li>
-                            <li th:if="${#strings.contains(userResources,'/admin/configuration')}"><a href="/admin/configuration" target="rightFrame"><i class="glyphicon glyphicon-globe"></i> 系统全局配置</a></li>
-                            <li th:if="${#strings.contains(userResources,'/admin/oplog')}"><a href="/admin/oplog" target="rightFrame"><i class="	glyphicon glyphicon-list-alt"></i> 操作日志</a></li>
-                            <li th:if="${#strings.contains(userResources,'/admin/loginhistory')}"><a href="/admin/loginhistory" target="rightFrame"><i class="glyphicon glyphicon-eye-open"></i> 登录日志</a></li>
+                            <li th:if="${#strings.contains(userResources,'/admin/user')}"><a href="/admin/user" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 系统用户管理</a></li>
+                            <li th:if="${#strings.contains(userResources,'/admin/role')}"><a href="/admin/role" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 系统用户权限管理</a></li>
+                            <li th:if="${#strings.contains(userResources,'/admin/privilege')}"><a href="/admin/privilege" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 页面功能管理</a></li>
+                            <li th:if="${#strings.contains(userResources,'/admin/configuration')}"><a href="/admin/configuration" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 系统全局配置</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="#"><i class="glyphicon glyphicon-question-sign"></i> 说明书</a>
-                    </li>
+                    <li th:if="${#strings.contains(userResources,'/log')}">
+                    	<a href="#log" class="nav-header collapsed" data-toggle="collapse" id="menu_admin">
+                            <i class="glyphicon glyphicon-list-alt"></i> 日志管理<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                        </a>
+                        <ul id="log" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                        	<li th:if="${#strings.contains(userResources,'/log/operation')}"><a href="/log/operation" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 操作日志</a></li>
+                            <li th:if="${#strings.contains(userResources,'/log/login')}"><a href="/log/login" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 登录日志</a></li>
+                        </ul>
+                       </li>
                     <li>
                     	<a href="#" onclick="logoutsys();"><i class="glyphicon glyphicon-log-out"></i> 退出系统</a>
                     </li>
