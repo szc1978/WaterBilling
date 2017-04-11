@@ -32,7 +32,7 @@ public class BillGenerater {
 		bill.setDetailContent(detailedBill);
 		bill.setName(customer.getName() + "账单");
 		bill.setInputDate(new Date());
-		bill.setInputerId(customer.getCustomerWater().getInputerId());
+		bill.setInputerName(customer.getCustomerWater().getInputerName());
 		bill.setCustomerCode(customer.getCustomerInfo().getCode());
 		if(customer.getBalance() >= totalPostage)
 			bill.setAutoChargeFlag(Consts.BILL_AUTO_CHARGE_FLAG);

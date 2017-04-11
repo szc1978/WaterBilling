@@ -31,7 +31,7 @@ public class ApproveController {
 	@Autowired
 	CustomerWaterService customerWaterService;
 	
-	@RequestMapping(value = "/approve/customer",method=RequestMethod.GET)
+	@RequestMapping(value = "/approve/customer/list",method=RequestMethod.GET)
 	public String listPendingMsg(ModelMap model) {
 		List<Customer> allPendingCustomers = customerService.findAllPendingCustomer();
 		List<Customer> allCustomersWhichHaveNewWaterNumber = customerService.findAllCustomersWhichHaveNewBill();
@@ -42,12 +42,12 @@ public class ApproveController {
 		return "/approve/customer";
 	}
 	
-	@RequestMapping(value = "/approve/customerwater",method=RequestMethod.GET)
+	@RequestMapping(value = "/approve/customerwater/list",method=RequestMethod.GET)
 	public String approveCustomerWater(ModelMap model) {
 		return "/approve/customerwater";
 	}
 	
-	@RequestMapping(value = "/approve/customerbill",method=RequestMethod.GET)
+	@RequestMapping(value = "/approve/customerbill/list",method=RequestMethod.GET)
 	public String approveCustomerBill(ModelMap model) {
 		return "/approve/customerbill";
 	}

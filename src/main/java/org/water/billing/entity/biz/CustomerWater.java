@@ -28,8 +28,8 @@ public class CustomerWater {
 	@Column(name="new_number")
 	private Float newNumber = new Float(0);
 	
-	@Column(name="inputer_id")
-	private int inputerId;
+	@Column(name="inputer_name")
+	private String inputerName;
 	
 	@Column(name="first_month")
 	private int firstMonth;
@@ -39,6 +39,12 @@ public class CustomerWater {
 	
 	@Column(name="year_count")
 	private Float yearCount;
+	
+	@Column(name="meter_name")
+	private String meterName;
+	
+	@Column(name="meter_type")
+	private String meterType;
 	
 	@OneToOne(mappedBy = "customerWater")
 	private Customer customer;
@@ -87,12 +93,12 @@ public class CustomerWater {
 		this.newNumber = newNumber;
 	}
 
-	public int getInputerId() {
-		return inputerId;
+	public String getInputerName() {
+		return inputerName;
 	}
 
-	public void setInputerId(int inputerId) {
-		this.inputerId = inputerId;
+	public void setInputerName(String inputerName) {
+		this.inputerName = inputerName;
 	}
 
 	public Date getInputDate() {
@@ -101,5 +107,45 @@ public class CustomerWater {
 
 	public void setInputDate(Date inputDate) {
 		this.inputDate = inputDate;
+	}
+
+	public int getFirstMonth() {
+		return firstMonth;
+	}
+
+	public void setFirstMonth(int firstMonth) {
+		this.firstMonth = firstMonth;
+	}
+
+	public int getPayMonth() {
+		return payMonth;
+	}
+
+	public void setPayMonth(int payMonth) {
+		this.payMonth = payMonth;
+	}
+
+	public Float getYearCount() {
+		return yearCount;
+	}
+
+	public void setYearCount(Float yearCount) {
+		this.yearCount = yearCount;
+	}
+
+	public String getMeterName() {
+		return meterName;
+	}
+
+	public void setMeterName(String meterName) {
+		this.meterName = meterName;
+	}
+
+	public String getMeterType() {
+		return meterType;
+	}
+
+	public void setMeterType(String meterType) {
+		this.meterType = meterType;
 	}
 }

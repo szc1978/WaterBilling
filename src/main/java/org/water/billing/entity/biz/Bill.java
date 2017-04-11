@@ -33,8 +33,8 @@ public class Bill {
 	@Column(name="end_water_word")
 	private Float endWaterWord = new Float(0);
 	
-	@Column(name="inputer_id")
-	private int inputerId;
+	@Column(name="inputer_name")
+	private String inputerName;
 	
 	@Column(name="total_postage")
 	private Float totalPostage = new Float(0);
@@ -98,12 +98,12 @@ public class Bill {
 		this.endWaterWord = endWaterWord;
 	}
 
-	public int getInputerId() {
-		return inputerId;
+	public String getInputerName() {
+		return inputerName;
 	}
 
-	public void setInputerId(int inputerId) {
-		this.inputerId = inputerId;
+	public void setInputerName(String inputerName) {
+		this.inputerName = inputerName;
 	}
 
 	public Float getTotalPostage() {

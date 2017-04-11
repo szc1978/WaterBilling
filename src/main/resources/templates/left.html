@@ -115,7 +115,7 @@
                             <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul id="customer" class="nav nav-list collapse secondmenu" style="height: 0px;">
-                            <li th:if="${#strings.contains(userResources,'/customer/manage/list')}"><a href="/customer/manage/list" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户管理</a></li>
+                            <li th:if="${#strings.contains(userResources,'/customer/manage')}"><a href="/customer/manage/list" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户管理</a></li>
 							<li th:if="${#strings.contains(userResources,'/customer/field')}"><a href="/customer/field" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户字段管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/customer/type')}"><a href="/customer/type" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户类型管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/customer/waterprovider')}"><a href="/customer/waterprovider" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 供水片区管理</a></li>
@@ -138,17 +138,17 @@
                         </a>
                         <ul id="approve" class="nav nav-list collapse secondmenu" style="height: 0px;">
                             <li th:if="${#strings.contains(userResources,'/approve/customer')}">
-                            	<a href="/approve/customer" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户销户开户审核
+                            	<a href="/approve/customer/list" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户销户开户审核
                             		<span id="pending_msg_2" class="badge"></span>
                             	</a>
                             </li>
                             <li th:if="${#strings.contains(userResources,'/approve/customerwater')}">
-                            	<a href="/approve/customerwater" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户用水量审核
+                            	<a href="/approve/customerwater/list" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户用水量审核
                             		<span id="pending_msg_3" class="badge"></span>
                             	</a>
                             </li>
                             <li th:if="${#strings.contains(userResources,'/approve/customerbill')}">
-                            	<a href="/approve/customerbill" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户销账审核
+                            	<a href="/approve/customerbill/list" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户销账审核
                             		<span id="pending_msg_4" class="badge"></span>
                             	</a>
                             </li>

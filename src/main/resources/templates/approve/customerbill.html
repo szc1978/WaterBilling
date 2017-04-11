@@ -9,66 +9,8 @@
 
 	<body>
     	<div class="container">
-    		<div class="formtitle"><span>审核</span></div>
-			<div>
-			    <table class="table table-striped">
-			    	<caption>客户审核</caption>
-			    	<thead>
-			    		<tr>
-			        		<th>编号<i class="sort"></i></th>
-			        		<th>客户名</th>
-			        		<th>编码</th>
-			        		<th>变化内容</th>
-			        		<th>操作</th>
-			        	</tr>
-			        </thead>
-			        <tbody>
-			        <tr th:each="customer,customerStat : ${allPendingCustomers}"> 
-				        <td th:text="${customerStat.index} + 1">1</td> 
-				        <td th:text="${customer.name}"></td> 
-				        <td th:text="${customer.customerInfo.code}"></td>
-				        <td th:if="${customer.status eq 2}" th:text="销户"></td>
-				        <td th:if="${customer.status eq 3}" th:text="开户"></td>
-				        <td>
-				        	<a th:href="@{/biz/approver/customer(id=${customer.id},action=1)}">同意</a>
-				        	<a th:href="@{/biz/approver/customer(id=${customer.id},action=2)}">拒绝</a>
-				        </td>
-			        </tr>        
-			        </tbody>
-			    </table>
-		    </div>
-
-		    <div>
-			    <table class="table table-striped">
-			    	<caption>客户用水量审核</caption>
-			    	<thead>
-			    		<tr>
-			        		<th>编号<i class="sort"></i></th>
-			        		<th>客户名</th>
-			        		<th>编码</th>
-			        		<th>客户类型</th>
-			        		<th>上期水表数</th>
-			        		<th>本期水表数</th>
-			        		<th>操作</th>
-			        	</tr>
-			        </thead>
-			        <tbody>
-			        <tr th:each="customer,customerStat : ${allCustomersWhichHaveNewWaterNumber}"> 
-				        <td th:text="${customerStat.index} + 1">1</td> 
-				        <td th:text="${customer.name}"></td> 
-				        <td th:text="${customer.customerInfo.code}"></td>
-				        <td th:text="${customer.customerType.name}"></td>
-				        <td th:text="${customer.customerWater.orgNumber}"></td>
-				        <td th:text="${customer.customerWater.newNumber}"></td>
-				        <td>
-				        	<a th:href="@{/biz/approver/customer_water(id=${customer.id},action=1)}">同意</a>
-				        	<a th:href="@{/biz/approver/customer_water(id=${customer.id},action=2)}">拒绝</a>
-				        </td>
-			        </tr>        
-			        </tbody>
-			    </table>
-		    </div>
-
+    		<div class="formtitle"><span>客户自动销账审核</span></div>
+			
 			<div>
 			    <table class="table table-striped">
 			    	<caption>以下客户余额大于本次费用，请确认自动缴费</caption>

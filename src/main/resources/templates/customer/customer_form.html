@@ -25,7 +25,6 @@
 					 <label for="name">客户地址:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.address}" th:field="*{customerInfo.address}" />
 				</div>
-				
 				<div class="col-sm-6 form-group ">
 					 <label for="name">客户电话:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.telephony}" th:field="*{customerInfo.telephony}" />
@@ -51,11 +50,13 @@
 					 </select>
 				</div>
 				<div class="col-sm-6 form-group ">
-					 <label for="name">应缴费日:</label>
-					 <select class="form-control" th:field="*{billingDay}">
-					 	<option th:each="i : ${#numbers.sequence( 1, 28)}" th:value="${i}" th:text="${i}" th:if="${i eq customer.billingDay}" th:selected="true"></option>
-					 	<option th:each="i : ${#numbers.sequence( 1, 28)}" th:value="${i}" th:text="${i}" th:if="${i ne customer.billingDay}"></option>
-					 </select>
+					<label for="name">缴费周期首月*:</label>
+					<select class="form-control" th:field="*{customerWater.firstMonth}" th:with="curmonth=${#calendars.format(#calendars.createNow(), 'M')}">
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${customer.customerWater.firstMonth eq 0 and i+'' == curmonth}" th:value="${i}" th:text="${i}" th:selected="true"></option>
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${customer.customerWater.firstMonth ne 0 and i eq customer.customerWater.firstMonth}" th:value="${i}" th:text="${i}" th:selected="true"></option>
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${customer.customerWater.firstMonth eq 0 and i+'' != curmonth}" th:value="${i}" th:text="${i}"></option>
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${customer.customerWater.firstMonth ne 0 and i ne customer.customerWater.firstMonth}" th:value="${i}" th:text="${i}"></option>
+					</select>
 				</div>
 				<div class="col-sm-6 form-group ">
 					 <label for="name">供水片区:</label>
@@ -87,6 +88,7 @@
 				<input type="hidden" th:value="${customer.customerWater.id}" th:field="*{customerWater.id}"/>
 				<input type="hidden" th:value="${customer.status}" th:field="*{status}" />
 			</div>
+			<div class="col-sm-12">* 从每年的该月到下一年该月为一个缴费周期，阶梯计费从该月计算</div>
 		</form>
 	</div>
 </body>

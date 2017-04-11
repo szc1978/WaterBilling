@@ -38,9 +38,6 @@ public class Customer {
 	@Column(name="read_meter_cycle")
 	private String readMeterCycle;
 	
-	@Column(name="billing_day")
-	private int billingDay;
-	
 	/*2 bit, pending|active
 	 * 0 : inactive
 	 * 1 : active
@@ -156,14 +153,6 @@ public class Customer {
 
 	public void setReadMeterCycle(String readMeterCycle) {
 		this.readMeterCycle = readMeterCycle;
-	}
-
-	public int getBillingDay() {
-		return billingDay;
-	}
-
-	public void setBillingDay(int billingDay) {
-		this.billingDay = billingDay;
 	}
 
 	public int getStatus() {

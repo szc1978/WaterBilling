@@ -11,7 +11,7 @@
 	<div class="container">
 		<div class="formtitle"><span>客户列表</span></div>
     	<div class="col-sm-13" align="right">
-    		<a th:href="@{/biz/customer/edit/form}"><button type="button" class="btn btn-default">新增客户</button></a>
+    		<a th:href="@{/customer/manage/form}"><button type="button" class="btn btn-default">新增客户</button></a>
     	</div>
 		<div>
 			<table class="table table-striped">
@@ -37,9 +37,9 @@
 				        <td th:text="${customer.balance}"></td>
 				        <td th:text="${customer.status}"></td>
 				        <td>
-				        	<a th:href="@{/biz/customer/edit/form(id=${customer.id})}">编辑</a>
-				        	<a th:if="${customer.status eq 0}" th:href="@{/biz/customer/activate(id=${customer.id})}">重新开户</a>
-				        	<a th:if="${customer.status eq 1}" th:href="@{/biz/customer/deactivate(id=${customer.id})}">销户</a>
+				        	<a th:href="@{/customer/manage/form(id=${customer.id})}">编辑</a>
+				        	<a th:if="${customer.status eq 0}" th:href="@{/customer/manage/activate(id=${customer.id})}">重新开户</a>
+				        	<a th:if="${customer.status eq 1}" th:href="@{/customer/manage/deactivate(id=${customer.id})}">销户</a>
 				        </td>
 			        </tr>        
 			        </tbody>

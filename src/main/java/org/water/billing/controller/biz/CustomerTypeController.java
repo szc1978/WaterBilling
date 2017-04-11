@@ -46,7 +46,7 @@ public class CustomerTypeController {
 	@RequestMapping(value="/customer/type",method=RequestMethod.POST)
 	public String customer(@ModelAttribute CustomerType customerType) {
 		customerTypeService.save(customerType);
-		return "redirect:/customer/customer_type";
+		return "redirect:/customer/type";
 	}
 	
 	@RequestMapping(value="/customer/type/form",method=RequestMethod.GET)

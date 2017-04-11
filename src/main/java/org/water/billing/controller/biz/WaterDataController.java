@@ -66,7 +66,7 @@ public class WaterDataController {
 		SysUser user = (SysUser) securityContext.getAuthentication().getPrincipal();
 		
 		customerWater.setNewNumber(waterNumber);
-		customerWater.setInputerId(user.getId());
+		customerWater.setInputerName(user.getName());
 		
 		customerWaterService.save(customerWater);
 
@@ -89,17 +89,17 @@ public class WaterDataController {
         verifyExcelData(excelDatas);
         
         SysUser user = (SysUser) securityContext.getAuthentication().getPrincipal();
-        saveData(excelDatas,user.getId());
+        saveData(excelDatas,user.getName());
         model.addAttribute("msg", "导入用户用水量成功！！");
 		return "/msg";
 	}
 	
-	private void saveData(List<ExcelData> excelDatas,int inputerId) {
+	private void saveData(List<ExcelData> excelDatas,String inputerName) {
 		for(ExcelData excelData : excelDatas) {
 			Customer customer = customerService.findByCode(excelData.getCustomerCode());
 			CustomerWater customerWater = customer.getCustomerWater();
 			customerWater.setNewNumber(excelData.getWaterNumber());
-			customerWater.setInputerId(inputerId);
+			customerWater.setInputerName(inputerName);
 			customerWaterService.save(customerWater);
 		}
 	}

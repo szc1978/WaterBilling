@@ -27,14 +27,14 @@
 							<td th:text="${provider.name}"></td>
 							<td th:text="${provider.description}"></td>
 							<td>
-						    	<a th:href="@{/biz/waterprovider(id=${provider.id})}">编辑</a>
+						    	<a th:href="@{/customer/waterprovider(id=${provider.id})}">编辑</a>
 							</td>
 						</tr>        
 					</tbody>
 				</table>
 			</div>
 			<div class="col-sm-4">
-				<form th:action="@{/biz/waterprovider}" method="post" th:object="${provider}">
+				<form th:action="@{/customer/waterprovider}" method="post" th:object="${provider}">
 					<div class="form-group">
 						 <label for="name">片区名称:</label>
 						 <input type="text" class="form-control" th:value="${provider.name}" th:field="*{name}" />

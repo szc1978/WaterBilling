@@ -20,7 +20,7 @@
 	<div class="container">
 		<div class="formtitle"><span>客户类别管理</span></div>
     	<div class="col-sm-12" align="right">
-    		<a th:href="@{/biz/customer_type/edit/form}"><button type="button" class="btn btn-default">新增</button></a>
+    		<a th:href="@{/customer/type/form}"><button type="button" class="btn btn-default">新增</button></a>
     	</div>
 		<div>
 			<div class="col-sm-8" id="type_list">
@@ -37,11 +37,11 @@
 						<tr th:each="customerType,customerTypeStat : ${customerTypes}"> 
 							<td th:text="${customerTypeStat.index} + 1">1</td> 
 							<td >
-								<a th:href="@{/biz/customer_type(id=${customerType.id})}" th:text="${customerType.name}"></a>
+								<a th:href="@{/customer/type(id=${customerType.id})}" th:text="${customerType.name}"></a>
 							</td> 
 							<td th:text="${customerType.description}"></td>
 							<td>
-						    	<a th:href="@{/biz/customer_type/edit/form(id=${customerType.id})}">编辑</a>
+						    	<a th:href="@{/customer/type/form(id=${customerType.id})}">编辑</a>
 							</td>
 						</tr>        
 					</tbody>
