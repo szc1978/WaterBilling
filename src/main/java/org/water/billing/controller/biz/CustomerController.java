@@ -34,7 +34,7 @@ public class CustomerController {
 	@Autowired
 	WaterProviderService waterProviderService;
 
-	@RequestMapping(value="/biz/customer",method=RequestMethod.GET)
+	@RequestMapping(value="/customer/manage/list",method=RequestMethod.GET)
 	public String customer(@RequestParam(defaultValue="1") int page,
 							@RequestParam(defaultValue="10")  int size,
 							@RequestParam(required=false) String n,
@@ -48,19 +48,19 @@ public class CustomerController {
 		} 
 		map.addAttribute("customers",pageInfo.getContent());
 		Utils.setPageInfo4ModelMap(pageInfo, map);
-		return "/biz/customer_list";
+		return "/customer/customer_list";
 	}
 	
 	@OpAnnotation(moduleName="客户管理",option="增加修改客户")
-	@RequestMapping(value="/biz/customer",method=RequestMethod.POST)
+	@RequestMapping(value="/customer/manage",method=RequestMethod.POST)
 	public String customer(@ModelAttribute Customer customer) {
 		
 		customerService.save(customer);
-		return "redirect:/biz/customer/";
+		return "redirect:/customer/manage/list";
 	}
 	
 	@OpAnnotation(moduleName="客户管理",option="客户销户")
-	@RequestMapping(value="/biz/customer/deactivate",method=RequestMethod.GET)
+	@RequestMapping(value="/customer/manage/deactivate",method=RequestMethod.GET)
 	public String activate(@RequestParam int id) throws Exception {
 		Customer customer = customerService.findById(id);
 		if(customer == null)
@@ -71,11 +71,11 @@ public class CustomerController {
 			throw new Exception("客户已经处于销户状态");
 		customer.setStatus(Consts.CUSTOMER_STATUS_PENDING_BIT);
 		customerService.save(customer);
-		return "redirect:/biz/customer/";
+		return "redirect:/customer/manage/list";
 	}
 	
 	@OpAnnotation(moduleName="客户管理",option="客户开户")
-	@RequestMapping(value="/biz/customer/activate",method=RequestMethod.GET)
+	@RequestMapping(value="/customer/manage/activate",method=RequestMethod.GET)
 	public String customer(@RequestParam int id) throws Exception {
 		Customer customer = customerService.findById(id);
 		if(customer == null)
@@ -86,10 +86,10 @@ public class CustomerController {
 			throw new Exception("客户已经处于开户状态");
 		customer.setStatus(Consts.CUSTOMER_STATUS_ACTIVE_BIT | Consts.CUSTOMER_STATUS_PENDING_BIT);
 		customerService.save(customer);
-		return "redirect:/biz/customer/";
+		return "redirect:/customer/manage/list";
 	}
 	
-	@RequestMapping(value="/biz/customer/edit/form",method=RequestMethod.GET)
+	@RequestMapping(value="/customer/manage/form",method=RequestMethod.GET)
 	public String customerForm(@RequestParam(defaultValue="0") int id,ModelMap map) {
 		Customer customer = customerService.findById(id);
 		if(customer == null)
@@ -101,13 +101,13 @@ public class CustomerController {
 		List<WaterProvider> waterProviders = waterProviderService.findAll();
 		map.addAttribute("waterProviders",waterProviders);
 		map.addAttribute("readMeterCycles",getReadMeterCycleList());
-		return "/biz/customer_form";
+		return "/customer/customer_form";
 	}
 
-	@RequestMapping(value="/biz/customer/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/customer/manage/list/{id}",method=RequestMethod.GET)
 	public String showCustomer(@PathVariable int id,ModelMap model) {
 		
-		return "/biz/customer_list";
+		return "/customer/customer_list";
 	}
 	
 	private List<String> getReadMeterCycleList() {

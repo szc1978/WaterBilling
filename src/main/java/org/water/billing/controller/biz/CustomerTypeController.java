@@ -25,7 +25,7 @@ public class CustomerTypeController {
 	@Autowired
 	ChargeService chargeService;
 
-	@RequestMapping(value="/biz/customer_type",method=RequestMethod.GET)
+	@RequestMapping(value="/customer/type",method=RequestMethod.GET)
 	public String customer(@RequestParam(defaultValue="0") int id,ModelMap map) {
 		List<CustomerType> customerTypes = customerTypeService.findAll();
 		map.addAttribute("customerTypes",customerTypes);
@@ -39,17 +39,17 @@ public class CustomerTypeController {
 		if(customerType == null)
 			customerType = new CustomerType();
 		map.addAttribute("type",customerType);
-		return "/biz/customer_type_list";
+		return "/customer/customer_type_list";
 	}
 	
 	@OpAnnotation(moduleName="客户类型管理",option="增加或修改用户类型")
-	@RequestMapping(value="/biz/customer_type",method=RequestMethod.POST)
+	@RequestMapping(value="/customer/type",method=RequestMethod.POST)
 	public String customer(@ModelAttribute CustomerType customerType) {
 		customerTypeService.save(customerType);
-		return "redirect:/biz/customer_type";
+		return "redirect:/customer/customer_type";
 	}
 	
-	@RequestMapping(value="/biz/customer_type/edit/form",method=RequestMethod.GET)
+	@RequestMapping(value="/customer/type/form",method=RequestMethod.GET)
 	public String customerForm(@RequestParam(defaultValue="0") int id,ModelMap map) {
 		List<Charge> charges = chargeService.findAll();
 		map.addAttribute("all_charges", charges);
@@ -59,7 +59,7 @@ public class CustomerTypeController {
 			customerType = new CustomerType();
 		Collections.addAll(charges);
 		map.addAttribute("customerType", customerType);
-		return "/biz/customer_type_form";
+		return "/customer/customer_type_form";
 	}
 
 }

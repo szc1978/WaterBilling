@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class CustomerFieldController {
 
-	@RequestMapping(value="/biz/customer_field",method=RequestMethod.GET)
+	@RequestMapping(value="/customer/field",method=RequestMethod.GET)
 	public String customerField() {
 		
-		return "/biz/customer_field";
+		return "/customer/customer_field";
 	}
 }

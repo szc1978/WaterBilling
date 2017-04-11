@@ -31,6 +31,15 @@ public class CustomerWater {
 	@Column(name="inputer_id")
 	private int inputerId;
 	
+	@Column(name="first_month")
+	private int firstMonth;
+	
+	@Column(name="pay_month")
+	private int payMonth;
+	
+	@Column(name="year_count")
+	private Float yearCount;
+	
 	@OneToOne(mappedBy = "customerWater")
 	private Customer customer;
 	

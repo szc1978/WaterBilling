@@ -29,7 +29,7 @@ public class ChargeController {
 	@Autowired
 	ChargeService chargeService;
 	
-	@RequestMapping(value = "/biz/charge",method=RequestMethod.GET)
+	@RequestMapping(value = "/charge/type",method=RequestMethod.GET)
 	public String charge(@RequestParam(defaultValue="1") int page,
 						@RequestParam(defaultValue="10")  int size,
 						ModelMap map) {
@@ -37,18 +37,18 @@ public class ChargeController {
 		Page<Charge> pageInfo = chargeService.findAll(page-1, size);
 		map.addAttribute("charges",pageInfo.getContent());
 		Utils.setPageInfo4ModelMap(pageInfo, map);
-		return "/biz/charge_list";
+		return "/charge/charge_list";
 	}
 	
 	@OpAnnotation(moduleName="资费管理",option="资费修改")
-	@RequestMapping(value="/biz/charge",method=RequestMethod.POST)
+	@RequestMapping(value="/charge/type",method=RequestMethod.POST)
 	public String charge(@ModelAttribute Charge charge,HttpServletRequest request) {
 		Charge tmp = chargeService.save(charge);
-		return "redirect:/biz/charge/" + tmp.getId();
+		return "redirect:/charge/type?" + tmp.getId();
 	}
 	
 	
-	@RequestMapping(value = "/biz/charge/form",method=RequestMethod.GET)
+	@RequestMapping(value = "/charge/type/form",method=RequestMethod.GET)
 	public String chargeForm(@RequestParam(defaultValue="0") int id,ModelMap map) {
 		Charge charge = chargeService.findById(id);
 		if(charge == null)
@@ -60,10 +60,10 @@ public class ChargeController {
 		map.addAttribute("chargeTypes", chargeTypes);
 		map.addAttribute("chargeFroms",Consts.CHARGE_FROM_TYPE);
 		
-		return "/biz/charge_form";
+		return "/charge/charge_form";
 	}
 	
-	@RequestMapping(value="/biz/charge/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/charge/type/{id}",method=RequestMethod.GET)
 	public String showCharge(@PathVariable int id,ModelMap map) {
 		Charge charge = chargeService.findById(id);
 		List<Charge> charges = new ArrayList<Charge>();
@@ -71,7 +71,7 @@ public class ChargeController {
 			charges.add(charge);
 		map.addAttribute("charges", charges);
 		Utils.setPageInfo4ModelMap(null, map);
-		return "/biz/charge_list";
+		return "/charge/charge_list";
 	}
 	
 	private List<Map<String,String>> genChargeType4Thymeleaf() {

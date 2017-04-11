@@ -31,7 +31,7 @@ public class ApproveController {
 	@Autowired
 	CustomerWaterService customerWaterService;
 	
-	@RequestMapping(value = "/biz/approver",method=RequestMethod.GET)
+	@RequestMapping(value = "/approve/customer",method=RequestMethod.GET)
 	public String listPendingMsg(ModelMap model) {
 		List<Customer> allPendingCustomers = customerService.findAllPendingCustomer();
 		List<Customer> allCustomersWhichHaveNewWaterNumber = customerService.findAllCustomersWhichHaveNewBill();
@@ -39,11 +39,21 @@ public class ApproveController {
 		model.addAttribute("allPendingCustomers", allPendingCustomers);
 		model.addAttribute("allCustomersWhichHaveNewWaterNumber", allCustomersWhichHaveNewWaterNumber);
 		model.addAttribute("allPendingBill",allPendingBill);
-		return "/biz/approver";
+		return "/approve/customer";
+	}
+	
+	@RequestMapping(value = "/approve/customerwater",method=RequestMethod.GET)
+	public String approveCustomerWater(ModelMap model) {
+		return "/approve/customerwater";
+	}
+	
+	@RequestMapping(value = "/approve/customerbill",method=RequestMethod.GET)
+	public String approveCustomerBill(ModelMap model) {
+		return "/approve/customerbill";
 	}
 	
 	@OpAnnotation(moduleName="业务审核",option="客户销户或开户")
-	@RequestMapping(value = "/biz/approver/customer",method=RequestMethod.GET)
+	@RequestMapping(value = "/approve/customer",method=RequestMethod.GET)
 	public String approveCustomer(@RequestParam int id,@RequestParam int action) throws MyException {
 		Customer customer = customerService.findById(id);
 		if(customer == null)
@@ -55,11 +65,11 @@ public class ApproveController {
 		status &= Consts.CUSTOMER_STATUS_ACTIVE_BIT; //set pending bit to 0
 		customer.setStatus(status);
 		customerService.save(customer);
-		return "/biz/approver";
+		return "/approve/customer";
 	}
 	
 	@OpAnnotation(moduleName="业务审核",option="客户用水量")
-	@RequestMapping(value = "/biz/approver/customer_water",method=RequestMethod.GET)
+	@RequestMapping(value = "/approve/customerwater",method=RequestMethod.GET)
 	public String approveCustomerBill(@RequestParam int id,@RequestParam int action) throws MyException {
 		Customer customer = customerService.findById(id);
 		if(customer == null)
@@ -78,6 +88,6 @@ public class ApproveController {
 		}
 		customerWater.setNewNumber(new Float(0));
 		customerWaterService.save(customerWater);
-		return "/biz/approver";
+		return "/approve/customerwater";
 	}
 }

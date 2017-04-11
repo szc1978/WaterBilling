@@ -19,7 +19,7 @@ public class WaterProviderController {
 	@Autowired
 	WaterProviderService waterProviderService;
 	
-	@RequestMapping(value = "/biz/waterprovider",method=RequestMethod.GET)
+	@RequestMapping(value = "/customer/waterprovider",method=RequestMethod.GET)
 	public String waterProvider(@RequestParam(defaultValue="0") int id,
 								ModelMap map) {
 		List<WaterProvider> providers = waterProviderService.findAll();
@@ -28,15 +28,15 @@ public class WaterProviderController {
 		if(provider == null) 
 			provider = new WaterProvider();
 		map.addAttribute("provider",provider);
-		return "/biz/water_provider";
+		return "/customer/water_provider";
 	}
 	
 	@OpAnnotation(moduleName="供水片区管理",option="增加或修改供水片区")
-	@RequestMapping(value="/biz/waterprovider",method=RequestMethod.POST)
+	@RequestMapping(value="/customer/waterprovider",method=RequestMethod.POST)
 	public String waterProvider(@ModelAttribute WaterProvider provider) throws Exception {
 		waterProviderService.save(provider);
 
-		return "redirect:/biz/waterprovider";
+		return "redirect:/customer/waterprovider";
 	}
 
 }

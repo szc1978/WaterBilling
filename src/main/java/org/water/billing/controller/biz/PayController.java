@@ -33,7 +33,7 @@ public class PayController {
 	@Autowired
 	BillService billService;
 	
-	@RequestMapping(value = "/biz/pay",method=RequestMethod.GET)
+	@RequestMapping(value = "/pay/water",method=RequestMethod.GET)
 	public String payForm(@RequestParam(required=false) String code,
 							@RequestParam(required=false) String fromApprove,
 							ModelMap map) throws Exception {
@@ -58,10 +58,15 @@ public class PayController {
 		map.addAttribute("un_paied",unpaied);
 		map.addAttribute("late_payment",latePayment);
 		map.addAttribute("fromApprove",fromApprove == null?"pay":fromApprove);
-		return "/biz/pay";
+		return "/pay/water";
 	}
 	
-	@RequestMapping(value = "/biz/pay",method=RequestMethod.POST)
+	@RequestMapping(value="/pay/biz",method=RequestMethod.GET) 
+	public String payBiz(){
+		return "/pay/biz";
+	}
+	
+	@RequestMapping(value = "/pay/water",method=RequestMethod.POST)
 	public String pay(HttpServletRequest request) throws Exception {
 		String customerCode = request.getParameter("customerCode");
 		String fromApprove = request.getParameter("fromApprove");
@@ -91,9 +96,9 @@ public class PayController {
 		customer.setBalance(newBalance);
 		customerService.save(customer);
 		if("pay".equals(fromApprove))
-			return "redirect:/biz/pay?code=" + customerCode;
+			return "redirect:/pay/water?code=" + customerCode;
 		else
-			return "redirect:/biz/approver";
+			return "redirect:/pay/approver";
 	}
 	
 	private Map<String,Object> getPayInformation(String customerCode) {

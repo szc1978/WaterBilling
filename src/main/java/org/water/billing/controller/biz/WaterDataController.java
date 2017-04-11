@@ -41,18 +41,18 @@ public class WaterDataController {
 	@Autowired
 	BillService billService;
 	
-	@RequestMapping(value = "/biz/waterdata/input_water_data",method=RequestMethod.GET)
+	@RequestMapping(value = "/waterdata/input_water_data",method=RequestMethod.GET)
 	public String inputData(@RequestParam(required=false) String code,
 						ModelMap map) {
 		Customer customer = customerService.findByCode(code);
 		if(customer == null)
 			customer = new Customer();
 		map.addAttribute("customer",customer);
-		return "/biz/input_water_data";
+		return "/waterdata/input_water_data";
 	}
 	
 	@OpAnnotation(moduleName="数据录入",option = "录入用水量")
-	@RequestMapping(value="/biz/waterdata/input_water_data",method=RequestMethod.POST)
+	@RequestMapping(value="/waterdata/input_water_data",method=RequestMethod.POST)
 	public String inputData(@RequestParam int id,
 							@RequestParam Float waterNumber,
 							HttpServletRequest request) throws Exception {
@@ -70,16 +70,16 @@ public class WaterDataController {
 		
 		customerWaterService.save(customerWater);
 
-		return "redirect:/biz/waterdata/input_water_data";
+		return "redirect:/waterdata/input_water_data";
 	}
 	
-	@RequestMapping(value = "/biz/waterdata/import_water_data",method=RequestMethod.GET)
+	@RequestMapping(value = "/waterdata/import_water_data",method=RequestMethod.GET)
 	public String importData() {
-		return "/biz/import_water_data";
+		return "/waterdata/import_water_data";
 	}
 	
 	@OpAnnotation(moduleName="数据录入",option = "导入用水量")
-	@RequestMapping(value = "/biz/waterdata/import_water_data",method=RequestMethod.POST) 
+	@RequestMapping(value = "/waterdata/import_water_data",method=RequestMethod.POST) 
 	public String importData(MultipartFile inputfile,HttpServletRequest request,ModelMap model) throws MyException, IOException{
 		MultipartHttpServletRequest multipartRequest  =  (MultipartHttpServletRequest) request;  
         MultipartFile uploadFile = multipartRequest.getFile("inputfile");

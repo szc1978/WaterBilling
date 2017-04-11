@@ -1,4 +1,4 @@
-package org.water.billing.controller.admin;
+package org.water.billing.controller.rest;
 
 import javax.servlet.http.HttpServletRequest;
 
