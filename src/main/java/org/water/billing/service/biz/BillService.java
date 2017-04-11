@@ -1,5 +1,6 @@
 package org.water.billing.service.biz;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class BillService {
 	@Autowired
 	BillDao billDao;
 	
+	public List<Bill> findCustomerBill(String customerCode,Date fromDate,Date toDate) {
+		return billDao.findByCustomerCodeAndChargeDateBetween(customerCode, fromDate, toDate);
+	}
+	
 	public List<Bill> findUnchargedBill(String customerCode) {
 		Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC,"id"));
 		return billDao.findByCustomerCodeAndIsCharged(customerCode, 0,sort);
@@ -28,7 +33,7 @@ public class BillService {
 		return billDao.findByAutoChargeFlag(Consts.BILL_AUTO_CHARGE_FLAG);
 	}
 	
-	public int findPendingBillNumber() {
+	public int countPendingBill() {
 		return billDao.countByAutoChargeFlag(Consts.BILL_AUTO_CHARGE_FLAG);
 	}
 

@@ -20,6 +20,8 @@
 			        		<th>客户类型</th>
 			        		<th>上期水表数</th>
 			        		<th>本期水表数</th>
+			        		<th>用水月份</th>
+			        		<th>年度用水量</th>
 			        		<th>操作</th>
 			        	</tr>
 			        </thead>
@@ -31,9 +33,11 @@
 				        <td th:text="${customer.customerType.name}"></td>
 				        <td th:text="${customer.customerWater.orgNumber}"></td>
 				        <td th:text="${customer.customerWater.newNumber}"></td>
+				        <td th:text="${customer.customerWater.payMonth}"></td>
+				         <td th:text="${customer.customerWater.yearCount}"></td>
 				        <td>
-				        	<a th:href="@{/biz/approver/customer_water(id=${customer.id},action=1)}">同意</a>
-				        	<a th:href="@{/biz/approver/customer_water(id=${customer.id},action=2)}">拒绝</a>
+				        	<a th:href="@{/approve/customerwater(id=${customer.id},action=1)}">同意</a>
+				        	<a th:href="@{/approve/customerwater(id=${customer.id},action=2)}">拒绝</a>
 				        </td>
 			        </tr>        
 			        </tbody>

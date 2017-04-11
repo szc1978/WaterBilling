@@ -38,7 +38,7 @@ public class CustomerWater {
 	private int payMonth;
 	
 	@Column(name="year_count")
-	private Float yearCount;
+	private Float yearCount = new Float(0);
 	
 	@Column(name="meter_name")
 	private String meterName;

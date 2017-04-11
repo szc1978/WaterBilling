@@ -21,8 +21,9 @@ public class GlobalConfiguration {
 	}
 	
 	public static GlobalConfiguration getInstance() {
-		if(instance == null)
+		if(instance == null) {
 			instance = new GlobalConfiguration();
+		}
 		return instance;
 	}
 
@@ -59,8 +60,6 @@ public class GlobalConfiguration {
 	}
 	
 	public String getConfigValueByItemName(String itemName) {
-		if(configurationMap == null || !configurationMap.containsKey(itemName))
-			return "";
 		return configurationMap.get(itemName);
 	}
 }

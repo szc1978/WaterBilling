@@ -34,22 +34,15 @@ public class ApproveController {
 	@RequestMapping(value = "/approve/customer/list",method=RequestMethod.GET)
 	public String listPendingMsg(ModelMap model) {
 		List<Customer> allPendingCustomers = customerService.findAllPendingCustomer();
-		List<Customer> allCustomersWhichHaveNewWaterNumber = customerService.findAllCustomersWhichHaveNewBill();
-		List<Bill> allPendingBill = billService.findAllPendingBill();
 		model.addAttribute("allPendingCustomers", allPendingCustomers);
-		model.addAttribute("allCustomersWhichHaveNewWaterNumber", allCustomersWhichHaveNewWaterNumber);
-		model.addAttribute("allPendingBill",allPendingBill);
 		return "/approve/customer";
 	}
 	
 	@RequestMapping(value = "/approve/customerwater/list",method=RequestMethod.GET)
 	public String approveCustomerWater(ModelMap model) {
+		List<Customer> allCustomersWhichHaveNewWaterNumber = customerService.findAllCustomersWhichHaveNewBill();
+		model.addAttribute("allCustomersWhichHaveNewWaterNumber", allCustomersWhichHaveNewWaterNumber);
 		return "/approve/customerwater";
-	}
-	
-	@RequestMapping(value = "/approve/customerbill/list",method=RequestMethod.GET)
-	public String approveCustomerBill(ModelMap model) {
-		return "/approve/customerbill";
 	}
 	
 	@OpAnnotation(moduleName="业务审核",option="客户销户或开户")
@@ -85,8 +78,12 @@ public class ApproveController {
 			billService.save(bill);
 			
 			customerWater.setOrgNumber(customerWater.getNewNumber());
+			Float yearCount = customerWater.getYearCount() + customerWater.getNewNumber();
+			customerWater.setYearCount(yearCount);
 		}
+		
 		customerWater.setNewNumber(new Float(0));
+		
 		customerWaterService.save(customerWater);
 		return "/approve/customerwater";
 	}

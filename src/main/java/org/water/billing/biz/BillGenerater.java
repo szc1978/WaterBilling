@@ -30,7 +30,7 @@ public class BillGenerater {
 		bill.setEndWaterWord(customer.getCustomerWater().getNewNumber());
 		bill.setTotalPostage(totalPostage);
 		bill.setDetailContent(detailedBill);
-		bill.setName(customer.getName() + "账单");
+		bill.setName(customer.getName() + customer.getCustomerWater().getPayMonth() + "月账单");
 		bill.setInputDate(new Date());
 		bill.setInputerName(customer.getCustomerWater().getInputerName());
 		bill.setCustomerCode(customer.getCustomerInfo().getCode());

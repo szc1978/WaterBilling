@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>用户列表</title>
+		<link href="/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<body>
+    	<div class="container">
+    		<div class="formtitle"><span>客户缴费记录</span></div>
+    		<div class="col-sm-13" align="right">
+    			<form class="form-inline" role="form" method="get" th:action="@{/pay/history}">
+    				<div class="form-group">
+   						 <input type="text" class="form-control" name="customerCode" placeholder="客户编号" />
+   						 <input type="text" class="form-control" name="fromDate" placeholder="起始日期" />
+   						 <input type="text" class="form-control" name="toDate" placeholder="结束日期" />
+  					</div>
+  					<input type="submit" value="搜索" class="btn btn-default"/>
+  				</form>
+    		</div>
+			<div>
+			    <table class="table table-striped">
+			    	<thead>
+			    		<tr>
+			        		<th>编号<i class="sort"></i></th>
+			        		<th>账单名称</th>
+			        		<th>缴费日期</th>
+			        		<th>起始水表数</th>
+			        		<th>结束水表数</th>
+			        		<th>缴费金额</th>
+			        		<th>缴费明细</th>
+			        	</tr>
+			        </thead>
+			        <tbody>
+			        <tr th:each="bill,billStat : ${bills}"> 
+				        <td th:text="${billStat.index} + 1">1</td> 
+				        <td th:text="${bill.name}"></td> 
+				        <td th:text="${bill.chargeDate}"></td>
+				        <td th:text="${bill.beginWaterWord}"></td>
+						<td th:text="${bill.endWaterWord}"></td>
+						<td th:text="${bill.totalPostage}"></td>
+						<td th:text="明细"></td>
+			        </tr>        
+			        </tbody>
+			    </table>
+		    </div>
+    	</div>
+    	
+	</body>
+
+</html>

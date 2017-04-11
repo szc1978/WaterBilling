@@ -24,9 +24,11 @@ public class SysConfigurationController {
 	
 	@RequestMapping(value = "/admin/configuration",method=RequestMethod.GET)
 	public String payForm(ModelMap map) throws Exception {
-		map.addAttribute("company_name",GlobalConfiguration.getInstance().getConfigValueByItemName("company_name"));
 		map.addAttribute("late_pay_day",GlobalConfiguration.getInstance().getConfigValueByItemName("late_pay_day"));
 		map.addAttribute("late_pay_ratio",GlobalConfiguration.getInstance().getConfigValueByItemName("late_pay_ratio"));
+		map.addAttribute("disable_approve_customer",GlobalConfiguration.getInstance().getConfigValueByItemName("disable_approve_customer"));
+		map.addAttribute("disable_approve_customer_water",GlobalConfiguration.getInstance().getConfigValueByItemName("disable_approve_customer_water"));
+		map.addAttribute("disable_approve_customer_bill",GlobalConfiguration.getInstance().getConfigValueByItemName("disable_approve_customer_bill"));
 		return "/admin/configuration";
 	}
 	

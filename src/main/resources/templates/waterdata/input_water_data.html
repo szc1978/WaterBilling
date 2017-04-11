@@ -19,7 +19,7 @@
 		<div class="formtitle"><span>输入客户用水量</span></div>
 		
 			<div class="col-sm-4">
-				<form name="search_customer_by_code" th:action="@{/biz/waterdata/input_water_data}" method="get" th:object="${customer}" >
+				<form name="search_customer_by_code" th:action="@{/waterdata/input_water_data}" method="get" th:object="${customer}" >
 					<div class=" form-group ">
 						 <label for="name">客户编号:</label>
 						 <div class="form-inline">
@@ -36,7 +36,11 @@
 						 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:disabled="true" />
 					</div>
 				</form>
-				<form th:action="@{/biz/waterdata/input_water_data}" method="post" th:object="${customer}" >
+				<form th:action="@{/waterdata/input_water_data}" method="post" th:object="${customer}" >
+					<div class="form-group ">
+						<label for="name">月份(默认为当前月份):</label>
+						<input type="text" class="form-control" name="month" onkeyup="int_input_validate(this)" th:with="curmonth=${#calendars.format(#calendars.createNow(), 'M')}" th:value="${curmonth}" />
+					</div>
 					<div class=" form-group ">
 						 <label for="name">本期水表数:</label>
 						 <input type="text" class="form-control" name="waterNumber" onkeyup="float_input_validate(this)" />

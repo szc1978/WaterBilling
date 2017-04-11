@@ -29,8 +29,8 @@
 				        <td th:if="${customer.status eq 2}" th:text="销户"></td>
 				        <td th:if="${customer.status eq 3}" th:text="开户"></td>
 				        <td>
-				        	<a th:href="@{/biz/approver/customer(id=${customer.id},action=1)}">同意</a>
-				        	<a th:href="@{/biz/approver/customer(id=${customer.id},action=2)}">拒绝</a>
+				        	<a th:href="@{/approve/customer(id=${customer.id},action=1)}">同意</a>
+				        	<a th:href="@{/approve/customer(id=${customer.id},action=2)}">拒绝</a>
 				        </td>
 			        </tr>        
 			        </tbody>

@@ -54,18 +54,22 @@ public class WaterDataController {
 	@OpAnnotation(moduleName="数据录入",option = "录入用水量")
 	@RequestMapping(value="/waterdata/input_water_data",method=RequestMethod.POST)
 	public String inputData(@RequestParam int id,
+							@RequestParam int month,
 							@RequestParam Float waterNumber,
 							HttpServletRequest request) throws Exception {
 		Customer customer = customerService.findById(id);
 		CustomerWater customerWater = customer.getCustomerWater();
-		if(waterNumber < customerWater.getOrgNumber()) {
+		if(waterNumber < customerWater.getOrgNumber()) 
 			throw new Exception("本期用水量不应该比前期低");
-		}
+		
+		if(month == customerWater.getPayMonth())
+			throw new MyException(month + "月用水已经输入而且审核通过");
 		
 		SecurityContext securityContext = (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
 		SysUser user = (SysUser) securityContext.getAuthentication().getPrincipal();
 		
 		customerWater.setNewNumber(waterNumber);
+		customerWater.setPayMonth(month);
 		customerWater.setInputerName(user.getName());
 		
 		customerWaterService.save(customerWater);

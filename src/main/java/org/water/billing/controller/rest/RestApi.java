@@ -39,24 +39,28 @@ public class RestApi {
 	}
 	
 	@RequestMapping(value="/api/getpendingmsg",method=RequestMethod.GET)
-	public int getPendingMsgNum(HttpServletRequest request) {
+	public String getPendingMsgNum(HttpServletRequest request) {
 		SecurityContext securityContext = (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
 		SysUser user = (SysUser) securityContext.getAuthentication().getPrincipal();
-		
-		int pendingMsgNumber = 0;
-		if(sysUserHasCustomerApproverPri(user) || Consts.SuperAdminName.equals(user.getName())) {
-			pendingMsgNumber = customerService.findPenging4ApproveMsg();
-			pendingMsgNumber += billService.findPendingBillNumber();
-		}
-		return pendingMsgNumber;
+		int countPendingCustomer = 0;
+		if(sysUserHasCustomerApproverPri(user,ResourceEnum.APPROVE_CUSTOMER))
+			countPendingCustomer = customerService.countPendingCustomerMsg();
+		int countPendingCustomerWater = 0;
+		if(sysUserHasCustomerApproverPri(user,ResourceEnum.APPROVE_CUSTOMER_WATER))
+			countPendingCustomerWater = customerService.countPendingCustomerWaterNumberMsg();
+		int countPendingBill = 0;
+		if(sysUserHasCustomerApproverPri(user,ResourceEnum.APPROVE_CUSTOMER_BILL))
+			countPendingBill = billService.countPendingBill();
+		int total = countPendingCustomer + countPendingCustomerWater + countPendingBill;
+		String msg = total + ":" + countPendingCustomer + ":" + countPendingCustomerWater + ":" + countPendingBill;
+		return msg;
 	}
 	
-	private boolean sysUserHasCustomerApproverPri(SysUser user) {
+	private boolean sysUserHasCustomerApproverPri(SysUser user,ResourceEnum resourceType) {
+		if(Consts.SuperAdminName.equals(user.getName()))
+			return true;
 		for(SysResource resource : GlobalConfiguration.getInstance().getAllResources()) {
-			if(! resource.getName().equals(ResourceEnum.APPROVE_CUSTOMER.getResourceString())
-					&& !resource.getName().equals(ResourceEnum.APPROVE_CUSTOMER_WATER.getResourceString())
-					&& !resource.getName().equals(ResourceEnum.APPROVE_CUSTOMER_BILL.getResourceString())
-					)
+			if(! resource.getName().equals(resourceType.getResourceString()))
 				continue;
 			for(SysRole resourceRole : resource.getSysRoles()) {
 				if(sysUserHasRole(user,resourceRole)) 

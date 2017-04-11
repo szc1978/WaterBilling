@@ -1,5 +1,7 @@
 package org.water.billing.controller.biz;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.water.billing.MyException;
+import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Customer;
@@ -35,7 +38,6 @@ public class PayController {
 	
 	@RequestMapping(value = "/pay/water",method=RequestMethod.GET)
 	public String payForm(@RequestParam(required=false) String code,
-							@RequestParam(required=false) String fromApprove,
 							ModelMap map) throws Exception {
 		Customer customer = customerService.findByCode(code);
 		if(customer == null && code != null)
@@ -57,7 +59,6 @@ public class PayController {
 		map.addAttribute("bill",latestBill);
 		map.addAttribute("un_paied",unpaied);
 		map.addAttribute("late_payment",latePayment);
-		map.addAttribute("fromApprove",fromApprove == null?"pay":fromApprove);
 		return "/pay/water";
 	}
 	
@@ -66,20 +67,57 @@ public class PayController {
 		return "/pay/biz";
 	}
 	
+	@OpAnnotation(moduleName="客户缴费",option="客户缴费")
 	@RequestMapping(value = "/pay/water",method=RequestMethod.POST)
 	public String pay(HttpServletRequest request) throws Exception {
 		String customerCode = request.getParameter("customerCode");
-		String fromApprove = request.getParameter("fromApprove");
 		String payment = request.getParameter("payment");
+		Float thisPay = Float.valueOf(payment);
 		
+		doPay(customerCode,thisPay);
+
+		return "redirect:/pay/water?code=" + customerCode;
+	}
+	
+	@RequestMapping(value="/pay/history",method=RequestMethod.GET)
+	public String payHistory(HttpServletRequest request,ModelMap model) {
+		String customerCode = request.getParameter("customerCode");
+		String strFromDate = request.getParameter("fromDate");
+		String strToDate = request.getParameter("toDate");
+		if(customerCode != null && strFromDate != null && strToDate != null) {
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+			try {
+				Date fromDate = sdf.parse(strFromDate);
+				Date toDate = sdf.parse(strToDate);
+				List<Bill> bills = billService.findCustomerBill(customerCode,fromDate,toDate);
+				model.addAttribute("bills", bills);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return "/pay/history";
+	}
+	
+	@RequestMapping(value = "/approve/customerbill/list",method=RequestMethod.GET)
+	public String approveCustomerBill(ModelMap model) {
+		List<Bill> allPendingBill = billService.findAllPendingBill();
+		model.addAttribute("allPendingBill",allPendingBill);
+		return "/approve/customerbill";
+	}
+	
+	@OpAnnotation(moduleName="客户缴费",option="自动销账")
+	@RequestMapping(value = "/approve/customerbill",method=RequestMethod.GET)
+	public String autoPay(@RequestParam String customerCode) throws Exception {
+		doPay(customerCode,new Float(0));
+		return "/approve/customerbill";
+	}
+	
+	private void doPay(String customerCode,Float thisPay) throws MyException {
 		Map<String,Object> payInformation = getPayInformation(customerCode);
-		if(payInformation.get("latestBill") == null)
-			throw new MyException("用户水费已经缴清");
-		
 		Float unpaied = payInformation.get("unpaied") == null ? new Float(0) : (Float) payInformation.get("unpaied");
 		Float latePayment = payInformation.get("latePayment") == null ? new Float(0) : (Float) payInformation.get("latePayment");
 		Bill latestBill = payInformation.get("latestBill") == null ? new Bill() : (Bill) payInformation.get("latestBill");
-		Float thisPay = Float.valueOf(payment);
+		
 		
 		Customer customer = customerService.findByCode(customerCode);
 		if((customer.getBalance() + thisPay) < (unpaied + latePayment + latestBill.getTotalPostage()))
@@ -95,10 +133,6 @@ public class PayController {
 		Float newBalance = customer.getBalance() + thisPay - (unpaied + latePayment + latestBill.getTotalPostage());
 		customer.setBalance(newBalance);
 		customerService.save(customer);
-		if("pay".equals(fromApprove))
-			return "redirect:/pay/water?code=" + customerCode;
-		else
-			return "redirect:/pay/approver";
 	}
 	
 	private Map<String,Object> getPayInformation(String customerCode) {

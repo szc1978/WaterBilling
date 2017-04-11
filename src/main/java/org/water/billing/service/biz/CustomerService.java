@@ -53,9 +53,11 @@ public class CustomerService {
 		return customerDao.queryHasPendingWaterNumberCustomer();
 	}
 	
-	public int findPenging4ApproveMsg() {
-		int countCustomerStatus = customerDao.countByStatusGreaterThan(Consts.CUSTOMER_STATUS_ACTIVE_BIT);
-		int countNewWaterNumber = customerDao.countPendingWaterNumber();
-		return countCustomerStatus + countNewWaterNumber;
+	public int countPendingCustomerMsg() {
+		return customerDao.countByStatusGreaterThan(Consts.CUSTOMER_STATUS_ACTIVE_BIT);
+	}
+	
+	public int countPendingCustomerWaterNumberMsg() {
+		return customerDao.countPendingWaterNumber();
 	}
 }
