@@ -22,14 +22,14 @@
 					 <input type="text" class="form-control" th:value="${customerType.description}" th:field="*{description}" />
 				</div>
 				<div class="form-group ">
-					 <label for="name">请选择资费：</label>
+					 <label for="name">请选择资费<font color="#ff0000">(保底费和阶梯费不能同时出现在同一个客户类型中)</font>：</label>
 					 <div class="row">
 			    		<div class="col-sm-8" th:each="charge,chargeStat : ${all_charges}">
 					   		<input th:id="${charge.name}" type="checkbox" th:value="${charge.id}" th:text="${charge.name}" th:field="*{charges}" > </input>
 			    		</div>
 			    	</div>
 				</div>
-				
+				<div></div>
 				<div class="form-group" >
 					<input type="submit" class="btn btn-default" value="保存" />
 				</div>

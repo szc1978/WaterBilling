@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
+import org.water.billing.consts.ChargeTypeEnum;
 import org.water.billing.entity.biz.Charge;
 import org.water.billing.entity.biz.CustomerType;
 import org.water.billing.service.biz.ChargeService;
@@ -44,7 +46,16 @@ public class CustomerTypeController {
 	
 	@OpAnnotation(moduleName="客户类型管理",option="增加或修改用户类型")
 	@RequestMapping(value="/customer/type",method=RequestMethod.POST)
-	public String customer(@ModelAttribute CustomerType customerType) {
+	public String customer(@ModelAttribute CustomerType customerType) throws MyException {
+		boolean conflictFlag = false;
+		for(Charge charge : customerType.getCharges()) {
+			if(charge.getChargeType() == ChargeTypeEnum.CHARGE_STEP_BY_STEP.getId() 
+					|| charge.getChargeType() == ChargeTypeEnum.CHARGE_BY_BOTTOM.getId()) {
+				if(conflictFlag)
+					throw new MyException("保底费率和阶梯费率只能出现一次");
+				conflictFlag = true;
+			}
+		}
 		customerTypeService.save(customerType);
 		return "redirect:/customer/type";
 	}

@@ -45,6 +45,10 @@ public class CustomerService {
 		return customerDao.findByStatusAndCode(Consts.CUSTOMER_STATUS_ACTIVE_BIT,code);
 	}
 	
+	public List<Customer> findByStatusAndAddress(String addressKeyword) {
+		return customerDao.findByStatusAndAddress(Consts.CUSTOMER_STATUS_ACTIVE_BIT, addressKeyword);
+	}
+	
 	public List<Customer> findAllPendingCustomer() {
 		return customerDao.findByStatusGreaterThan(Consts.CUSTOMER_STATUS_ACTIVE_BIT);
 	}

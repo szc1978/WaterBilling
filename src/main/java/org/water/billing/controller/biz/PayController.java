@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.GlobalConfiguration;
 import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.consts.Consts;
@@ -109,7 +110,7 @@ public class PayController {
 	@RequestMapping(value = "/approve/customerbill",method=RequestMethod.GET)
 	public String autoPay(@RequestParam String customerCode) throws Exception {
 		doPay(customerCode,new Float(0));
-		return "/approve/customerbill";
+		return "redirect:/approve/customerbill/list";
 	}
 	
 	private void doPay(String customerCode,Float thisPay) throws MyException {
@@ -144,12 +145,15 @@ public class PayController {
 		Float latePayment = new Float(0);
 		Bill latestBill = bills.get(0);
 		Date now = new Date();
+		int latePayDay = Integer.valueOf(GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_DAY));
+		Float latePayRatio = Float.valueOf(GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_RATIO));
 		for(int i=1;i<bills.size();i++) {
-			unpaied += bills.get(i).getTotalPostage();
+			Float billPostage = bills.get(i).getTotalPostage();
+			unpaied += billPostage;
 			Date inputDate = bills.get(i).getInputDate();
 			Long days = (now.getTime() - inputDate.getTime())/(86400 * 1000);
-			if(days > 30) {
-				Float tmp =  (days - 30) * (bills.get(i).getTotalPostage() * new Float(0.005));
+			if(days > latePayDay) {
+				Float tmp =  (days - latePayDay) * (billPostage * (latePayRatio/100));
 				latePayment += tmp;
 			}
 		}

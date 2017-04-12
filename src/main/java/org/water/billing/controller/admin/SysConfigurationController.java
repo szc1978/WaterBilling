@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.water.billing.GlobalConfiguration;
 import org.water.billing.GlobalConfigurationService;
 import org.water.billing.annotation.OpAnnotation;
+import org.water.billing.consts.Consts;
 import org.water.billing.entity.admin.SysConfigurationItem;
 import org.water.billing.service.admin.SysConfigurationItemService;
 
@@ -24,11 +25,16 @@ public class SysConfigurationController {
 	
 	@RequestMapping(value = "/admin/configuration",method=RequestMethod.GET)
 	public String payForm(ModelMap map) throws Exception {
-		map.addAttribute("late_pay_day",GlobalConfiguration.getInstance().getConfigValueByItemName("late_pay_day"));
-		map.addAttribute("late_pay_ratio",GlobalConfiguration.getInstance().getConfigValueByItemName("late_pay_ratio"));
-		map.addAttribute("disable_approve_customer",GlobalConfiguration.getInstance().getConfigValueByItemName("disable_approve_customer"));
-		map.addAttribute("disable_approve_customer_water",GlobalConfiguration.getInstance().getConfigValueByItemName("disable_approve_customer_water"));
-		map.addAttribute("disable_approve_customer_bill",GlobalConfiguration.getInstance().getConfigValueByItemName("disable_approve_customer_bill"));
+		map.addAttribute("late_pay_day",
+							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_DAY));
+		map.addAttribute("late_pay_ratio",
+							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_RATIO));
+		map.addAttribute("disable_approve_customer",
+							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_DISABLE_APPROVE_CUSTOMER));
+		map.addAttribute("disable_approve_customer_water",
+							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_DISABLE_APPROVE_CUSTOMER_WATER));
+		map.addAttribute("disable_approve_customer_bill",
+							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_DISABLE_APPROVE_CUSTOMER_BILL));
 		return "/admin/configuration";
 	}
 	

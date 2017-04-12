@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="/js/water.js"></script>
 	<script>
 		function search_customer() {
-			document.search_customer_by_code.submit();
+			document.search_customer_form.submit();
 		}
 	</script>
 </head>
@@ -17,40 +17,43 @@
 <body>
 	<div class="container">
 		<div class="formtitle"><span>输入客户用水量</span></div>
-		
-			<div class="col-sm-4">
-				<form name="search_customer_by_code" th:action="@{/waterdata/input_water_data}" method="get" th:object="${customer}" >
+			<div class="col-sm-12">
+				<form class="form-inline" name="search_customer_form" th:action="@{/waterdata/input_water_data}" method="get" >
 					<div class=" form-group ">
-						 <label for="name">客户编号:</label>
-						 <div class="form-inline">
-						 	<input type="text" class="form-control" name="code" th:value="${customer.customerInfo.code}" />
-						 	<a href="#" onclick="search_customer();"><span class="glyphicon glyphicon-search"></span></a>
-						 </div>
-					</div>
-					<div class=" form-group ">
-						 <label for="name">客户姓名:</label>
-						 <input type="text" class="form-control" th:value="${customer.name}" th:disabled="true" />
-					</div>
-					<div class=" form-group ">
-						 <label for="name">上期水表数:</label>
-						 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:disabled="true" />
+						<select name="search_key" class="form-control">
+							<option value="code">客户编号</option>
+							<option value="address">客户地址</option>
+						</select>
+						&nbsp;&nbsp;
+						 <input type="text" class="form-control" name="search_value" />
+						 <a href="#" onclick="search_customer();"><span class="glyphicon glyphicon-search"></span></a>
 					</div>
 				</form>
-				<form th:action="@{/waterdata/input_water_data}" method="post" th:object="${customer}" >
-					<div class="form-group ">
-						<label for="name">月份(默认为当前月份):</label>
-						<input type="text" class="form-control" name="month" onkeyup="int_input_validate(this)" th:with="curmonth=${#calendars.format(#calendars.createNow(), 'M')}" th:value="${curmonth}" />
+			</div>
+			<br></br><br></br><br></br>
+			<div class="col-sm-12" th:if="${not #lists.isEmpty(customers)}">
+				<form th:action="@{/waterdata/input_water_data}" method="post" th:with="curmonth=${#calendars.format(#calendars.createNow(), 'M')}" >
+					<div class="col-sm-12 form-inline">
+						<label for="name">本期水表数月份:</label>
+						<input type="text" class="form-control" name="month" onkeyup="int_input_validate(this)" th:value="${curmonth}" />
 					</div>
-					<div class=" form-group ">
-						 <label for="name">本期水表数:</label>
-						 <input type="text" class="form-control" name="waterNumber" onkeyup="float_input_validate(this)" />
+					<br></br><br></br>
+					<div class="col-sm-12 form-inline" th:each="customer,customerStat : ${customers}">
+							<label for="name">客户姓名:</label>
+						 	<input type="text" class="form-control" th:value="${customer.name}" th:disabled="true" />
+						 	<label for="name">&nbsp;&nbsp;上期水表数:</label>
+						 	<input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:disabled="true" />
+							<label for="name">&nbsp;&nbsp;本期水表数:</label>
+						 	<input type="text" class="form-control" name="waterNumber" onkeyup="float_input_validate(this)" />
 					</div>
-					<div class="form-group">
-						<input type="submit" class="btn btn-default" value="保存" th:if="${customer.id gt 0}" />
-						<input type="submit" class="btn btn-default" value="保存" th:if="${customer.id eq 0}" th:disabled="true" />
+					<div class="col-sm-12 form-inline">
+						<input type="submit" value="保存" class="btn btn-default"/>
 					</div>
-					<input type="hidden" name="id" th:value="${customer.id}" th:field="*{id}"/>
+					
 				</form>
+			</div>
+			<div th:if="${#lists.isEmpty(customers)}">
+				没有匹配的客户信息！！
 			</div>
 		
 	</div>

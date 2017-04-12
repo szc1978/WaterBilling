@@ -14,6 +14,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;  
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.water.billing.consts.Consts;
 import org.water.billing.consts.ResourceEnum;
 import org.water.billing.dao.admin.SysResourceDao;
 import org.water.billing.dao.admin.SysRoleDao;
@@ -78,11 +79,11 @@ public class MainApplication{
 	
 	private void initDefaultGlobalConfig() {
 		Map<String,String> defaultGlobalConfig = new HashMap<String,String>();
-		defaultGlobalConfig.put("late_pay_day", "50");
-		defaultGlobalConfig.put("late_pay_ratio","0.05");
-		defaultGlobalConfig.put("disable_approve_customer", "0");
-		defaultGlobalConfig.put("disable_approve_customer_water", "0");
-		defaultGlobalConfig.put("disable_approve_customer_bill", "0");
+		defaultGlobalConfig.put(Consts.GCK_LATE_PAY_DAY, "50");
+		defaultGlobalConfig.put(Consts.GCK_LATE_PAY_RATIO,"0.05");
+		defaultGlobalConfig.put(Consts.GCK_DISABLE_APPROVE_CUSTOMER, "0");
+		defaultGlobalConfig.put(Consts.GCK_DISABLE_APPROVE_CUSTOMER_WATER, "0");
+		defaultGlobalConfig.put(Consts.GCK_DISABLE_APPROVE_CUSTOMER_BILL, "0");
 		for(String key : defaultGlobalConfig.keySet()) {
 			SysConfigurationItem item = sysConfigService.findItem(key);
 			if(item != null)

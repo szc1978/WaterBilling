@@ -6,6 +6,7 @@ import org.water.billing.consts.ChargeTypeEnum;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Charge;
+import org.water.billing.entity.biz.ChargeParameter;
 import org.water.billing.entity.biz.Customer;
 import org.water.billing.entity.biz.CustomerType;
 
@@ -79,23 +80,30 @@ public class BillGenerater {
 	
 	private void calPostage4PriceByStep() {
 		CustomerType customerType = customer.getCustomerType();
-		Float postage = new Float(0);
 		for(Charge charge : customerType.getCharges()) {
 			if(charge.getChargeType() != ChargeTypeEnum.CHARGE_STEP_BY_STEP.getId())
 				continue;
 			
-			if(totalWaterNumber > charge.getChargeParameter().getStep3Number()) {
-				postage += (totalWaterNumber -  charge.getChargeParameter().getStep3Number()) *  charge.getChargeParameter().getStep3Price();
-				totalWaterNumber =  charge.getChargeParameter().getStep3Number();
-			}
-			if(totalWaterNumber > charge.getChargeParameter().getStep2Number()) {
-				postage += (totalWaterNumber -  charge.getChargeParameter().getStep2Number()) *  charge.getChargeParameter().getStep2Price();
-				totalWaterNumber =  charge.getChargeParameter().getStep2Number();
-			}
-			postage += totalWaterNumber *  charge.getChargeParameter().getStep1Price();
+			Float p1 = calPostage4Step(charge,customer.getCustomerWater().getYearCount() + totalWaterNumber);
+			Float p2 = calPostage4Step(charge,customer.getCustomerWater().getYearCount());
 			
-			totalPostage += postage;
-			detailedBill += ";" + charge.getName() + ":" + postage;
+			totalPostage += (p1 - p2);
+			detailedBill += ";" + charge.getName() + ":" + (p1-p2);
+			break;
 		}
+	}
+	
+	private Float calPostage4Step(Charge charge,Float waterNumber) {
+		ChargeParameter cp = charge.getChargeParameter();
+		Float postage = new Float(0);
+		if(waterNumber < cp.getStep2Number())
+			postage += waterNumber * cp.getStep1Price();
+		if(waterNumber > cp.getStep2Number() && waterNumber < cp.getStep3Number())
+			postage += (waterNumber - cp.getStep2Number()) * cp.getStep2Price();
+		if(waterNumber > cp.getStep3Number() ) {
+			postage += (cp.getStep3Number() - cp.getStep2Number()) * cp.getStep2Price();
+			postage += (waterNumber - cp.getStep3Number()) * cp.getStep3Price();
+		}
+		return postage;
 	}
 }

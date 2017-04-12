@@ -23,6 +23,9 @@ public interface CustomerDao extends JpaRepository<Customer, Integer>{
 	@Query(value="select customer from Customer customer where status = :status and customerInfo.code = :code")
 	public Customer findByStatusAndCode(@Param("status") int status,@Param("code") String code);
 	
+	@Query(value="select customer from Customer customer where status = :status and customerInfo.address like %:address%")
+	public List<Customer> findByStatusAndAddress(@Param("status") int status,@Param("address") String address);
+	
 	@Query(value = "select count(*) from Customer customer where customerWater.newNumber > 0")
 	public int countPendingWaterNumber();
 

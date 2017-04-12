@@ -17,7 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
+import org.water.billing.biz.BillGenerater;
+import org.water.billing.consts.Consts;
 import org.water.billing.entity.admin.SysUser;
+import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Customer;
 import org.water.billing.entity.biz.CustomerWater;
 import org.water.billing.service.biz.BillService;
@@ -42,12 +45,26 @@ public class WaterDataController {
 	BillService billService;
 	
 	@RequestMapping(value = "/waterdata/input_water_data",method=RequestMethod.GET)
-	public String inputData(@RequestParam(required=false) String code,
-						ModelMap map) {
-		Customer customer = customerService.findByCode(code);
-		if(customer == null)
-			customer = new Customer();
-		map.addAttribute("customer",customer);
+	public String inputData(HttpServletRequest request,ModelMap map) {
+		String searchField = request.getParameter("search_key");
+		String searchValue = request.getParameter("search_value");
+		List<Customer> customers = new ArrayList<Customer>();
+		if(searchField != null && searchValue != null) {
+			switch(searchField) {
+			case "code":
+				Customer customer = customerService.findByCode(searchValue);
+				if(customer != null)
+					customers.add(customer);
+				break;
+			case "address":
+				customers = customerService.findByStatusAndAddress(searchValue);
+				break;
+			default:
+				break;
+			}
+		}
+
+		map.addAttribute("customers",customers);
 		return "/waterdata/input_water_data";
 	}
 	
@@ -60,7 +77,7 @@ public class WaterDataController {
 		Customer customer = customerService.findById(id);
 		CustomerWater customerWater = customer.getCustomerWater();
 		if(waterNumber < customerWater.getOrgNumber()) 
-			throw new Exception("本期用水量不应该比前期低");
+			throw new MyException("本期用水量不应该比前期低");
 		
 		if(month == customerWater.getPayMonth())
 			throw new MyException(month + "月用水已经输入而且审核通过");
@@ -69,6 +86,7 @@ public class WaterDataController {
 		SysUser user = (SysUser) securityContext.getAuthentication().getPrincipal();
 		
 		customerWater.setNewNumber(waterNumber);
+		
 		customerWater.setPayMonth(month);
 		customerWater.setInputerName(user.getName());
 		
@@ -96,6 +114,40 @@ public class WaterDataController {
         saveData(excelDatas,user.getName());
         model.addAttribute("msg", "导入用户用水量成功！！");
 		return "/msg";
+	}
+	
+	@RequestMapping(value = "/approve/customerwater/list",method=RequestMethod.GET)
+	public String approveCustomerWater(ModelMap model) {
+		List<Customer> allCustomersWhichHaveNewWaterNumber = customerService.findAllCustomersWhichHaveNewBill();
+		model.addAttribute("allCustomersWhichHaveNewWaterNumber", allCustomersWhichHaveNewWaterNumber);
+		return "/approve/customerwater";
+	}
+	
+	@OpAnnotation(moduleName="业务审核",option="客户用水量")
+	@RequestMapping(value = "/approve/customerwater",method=RequestMethod.GET)
+	public String approveCustomerBill(@RequestParam int id,@RequestParam int action) throws MyException {
+		Customer customer = customerService.findById(id);
+		if(customer == null)
+			throw new MyException("客户不存在");
+		
+		CustomerWater customerWater = customer.getCustomerWater();
+		if(customerWater.getNewNumber() == new Float(0))
+			throw new MyException("该业务已经处理");
+		
+		if(action == Consts.ACCEPT_PENGDING_MSG) {
+			BillGenerater billGenerater = new BillGenerater(customer);
+			Bill bill = billGenerater.genBill();
+			billService.save(bill);
+			
+			customerWater.setOrgNumber(customerWater.getNewNumber());
+			Float yearCount = customerWater.getYearCount() + customerWater.getNewNumber();
+			customerWater.setYearCount(yearCount);
+		}
+		
+		customerWater.setNewNumber(new Float(0));
+		
+		customerWaterService.save(customerWater);
+		return "redirect:/approve/customerwater/list";
 	}
 	
 	private void saveData(List<ExcelData> excelDatas,String inputerName) {
