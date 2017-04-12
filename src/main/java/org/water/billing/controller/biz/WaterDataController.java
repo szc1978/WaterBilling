@@ -3,7 +3,6 @@ package org.water.billing.controller.biz;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,29 +69,26 @@ public class WaterDataController {
 	
 	@OpAnnotation(moduleName="数据录入",option = "录入用水量")
 	@RequestMapping(value="/waterdata/input_water_data",method=RequestMethod.POST)
-	public String inputData(@RequestParam int id,
-							@RequestParam int month,
-							@RequestParam Float waterNumber,
-							HttpServletRequest request) throws Exception {
-		Customer customer = customerService.findById(id);
-		CustomerWater customerWater = customer.getCustomerWater();
-		if(waterNumber < customerWater.getOrgNumber()) 
-			throw new MyException("本期用水量不应该比前期低");
-		
-		if(month == customerWater.getPayMonth())
-			throw new MyException(month + "月用水已经输入而且审核通过");
-		
+	public String inputWaterData(HttpServletRequest request,ModelMap model) throws Exception {
+
 		SecurityContext securityContext = (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
 		SysUser user = (SysUser) securityContext.getAuthentication().getPrincipal();
 		
-		customerWater.setNewNumber(waterNumber);
+		String month = request.getParameter("month");
+		List<InputData> inputDatas = new ArrayList<InputData>();
+		for(String key : request.getParameterMap().keySet()) {
+			if(!key.startsWith("WaterNumber_"))
+				continue;
+			String code = key.replace("WaterNumber_", "");
+			String number = request.getParameter(key);
+			InputData inputData = new InputData(code,month,number);
+			inputDatas.add(inputData);
+		}
 		
-		customerWater.setPayMonth(month);
-		customerWater.setInputerName(user.getName());
-		
-		customerWaterService.save(customerWater);
-
-		return "redirect:/waterdata/input_water_data";
+		verifyExcelData(inputDatas);
+		saveData(inputDatas,user.getName());
+        model.addAttribute("msg", "输入用户用水量成功！！");
+		return "/msg";
 	}
 	
 	@RequestMapping(value = "/waterdata/import_water_data",method=RequestMethod.GET)
@@ -105,7 +101,7 @@ public class WaterDataController {
 	public String importData(MultipartFile inputfile,HttpServletRequest request,ModelMap model) throws MyException, IOException{
 		MultipartHttpServletRequest multipartRequest  =  (MultipartHttpServletRequest) request;  
         MultipartFile uploadFile = multipartRequest.getFile("inputfile");
-        List<ExcelData> excelDatas = readExcelFile(uploadFile);
+        List<InputData> excelDatas = readExcelFile(uploadFile);
         SecurityContext securityContext = (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
 		
         verifyExcelData(excelDatas);
@@ -150,8 +146,8 @@ public class WaterDataController {
 		return "redirect:/approve/customerwater/list";
 	}
 	
-	private void saveData(List<ExcelData> excelDatas,String inputerName) {
-		for(ExcelData excelData : excelDatas) {
+	private void saveData(List<InputData> excelDatas,String inputerName) {
+		for(InputData excelData : excelDatas) {
 			Customer customer = customerService.findByCode(excelData.getCustomerCode());
 			CustomerWater customerWater = customer.getCustomerWater();
 			customerWater.setNewNumber(excelData.getWaterNumber());
@@ -160,8 +156,8 @@ public class WaterDataController {
 		}
 	}
 	
-	private void verifyExcelData(List<ExcelData> excelDatas) throws MyException {
-		for(ExcelData excelData : excelDatas) {
+	private void verifyExcelData(List<InputData> excelDatas) throws MyException {
+		for(InputData excelData : excelDatas) {
 			Customer customer = customerService.findByCode(excelData.getCustomerCode());
 			if(customer == null)
 				throw new MyException("用户编号" + excelData.getCustomerCode() + "不存在,或者等待审核中");
@@ -172,8 +168,8 @@ public class WaterDataController {
 		}
 	}
 
-	private List<ExcelData> readExcelFile(MultipartFile uploadFile) throws MyException {
-		List<ExcelData> excelDatas = new ArrayList<ExcelData>();
+	private List<InputData> readExcelFile(MultipartFile uploadFile) throws MyException {
+		List<InputData> excelDatas = new ArrayList<InputData>();
 		Sheet sheet;
         Workbook book;
         Cell customerCode,month,waterNumber;
@@ -191,7 +187,7 @@ public class WaterDataController {
             month = sheet.getCell(2, i);
             waterNumber = sheet.getCell(3, i);
             try {
-            	ExcelData excelData = new ExcelData(customerCode.getContents(),month.getContents(),waterNumber.getContents());
+            	InputData excelData = new InputData(customerCode.getContents(),month.getContents(),waterNumber.getContents());
             	excelDatas.add(excelData);
             } catch (NumberFormatException e) {
             	throw new MyException("Excel文件第" + i + "行数据格式不对，请检查后再导入");
@@ -203,12 +199,12 @@ public class WaterDataController {
 	
 }
 
-class ExcelData {
+class InputData {
 	private String customerCode;
 	private int month;
 	private Float waterNumber;
 	
-	public ExcelData(String customerCode,String strMonth,String strWaterNumber) throws NumberFormatException {
+	public InputData(String customerCode,String strMonth,String strWaterNumber) throws NumberFormatException {
 		this.customerCode = customerCode;
 		this.month = Integer.valueOf(strMonth);
 		this.waterNumber = Float.valueOf(strWaterNumber);

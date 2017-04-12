@@ -1,5 +1,6 @@
 package org.water.billing.biz;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,9 @@ public class AutoApproveSchedule {
 
 	@Scheduled(fixedDelay = 10 * 1000)
 	public void autoApprove() {
-		
-		
+		autoApproveCustomer();
+		autoApproveCustomerWater();
+		autoApproveCustomerBill();
 	}
 	
 	private void autoApproveCustomer() {
@@ -62,6 +64,25 @@ public class AutoApproveSchedule {
 			customerWater.setNewNumber(new Float(0));
 			
 			customerWaterService.save(customerWater);
+		}
+	}
+	
+	private void autoApproveCustomerBill() {
+		String disableFlag = GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_DISABLE_APPROVE_CUSTOMER_BILL);
+		if(disableFlag.equals("0"))
+			return;
+		List<Bill> allPendingBill = billService.findAllPendingBill();
+		for(Bill bill : allPendingBill){
+			String customerCode = bill.getCustomerCode();
+			Customer customer = customerService.findByCode(customerCode);
+			if(customer.getBalance() > bill.getTotalPostage()) {
+				customer.setBalance(customer.getBalance() - bill.getTotalPostage());
+				bill.setIsCharged(1);
+				bill.setChargeDate(new Date());
+				billService.save(bill);
+			}
+			bill.setAutoChargeFlag(Consts.NON_BILL_AUTO_CHARGE_FLAG);
+			billService.save(bill);
 		}
 	}
 }

@@ -83,9 +83,11 @@ public class PayController {
 	@RequestMapping(value="/pay/history",method=RequestMethod.GET)
 	public String payHistory(HttpServletRequest request,ModelMap model) {
 		String customerCode = request.getParameter("customerCode");
-		String strFromDate = request.getParameter("fromDate");
-		String strToDate = request.getParameter("toDate");
-		if(customerCode != null && strFromDate != null && strToDate != null) {
+		String fromToDate = request.getParameter("from_to_date");
+		if(customerCode != null && fromToDate != null) {
+			String[] tmp = fromToDate.split(" - ");
+			String strFromDate = tmp[0];
+			String strToDate = tmp[1];
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 			try {
 				Date fromDate = sdf.parse(strFromDate);
@@ -96,6 +98,7 @@ public class PayController {
 				e.printStackTrace();
 			}
 		}
+		model.addAttribute("code", customerCode==null?"" : customerCode);
 		return "/pay/history";
 	}
 	

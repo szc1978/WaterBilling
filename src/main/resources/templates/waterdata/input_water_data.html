@@ -33,18 +33,17 @@
 			<br></br><br></br><br></br>
 			<div class="col-sm-12" th:if="${not #lists.isEmpty(customers)}">
 				<form th:action="@{/waterdata/input_water_data}" method="post" th:with="curmonth=${#calendars.format(#calendars.createNow(), 'M')}" >
-					<div class="col-sm-12 form-inline">
+					<div class="col-sm-12 form-inline form-group">
 						<label for="name">本期水表数月份:</label>
 						<input type="text" class="form-control" name="month" onkeyup="int_input_validate(this)" th:value="${curmonth}" />
 					</div>
-					<br></br><br></br>
-					<div class="col-sm-12 form-inline" th:each="customer,customerStat : ${customers}">
-							<label for="name">客户姓名:</label>
-						 	<input type="text" class="form-control" th:value="${customer.name}" th:disabled="true" />
-						 	<label for="name">&nbsp;&nbsp;上期水表数:</label>
-						 	<input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:disabled="true" />
-							<label for="name">&nbsp;&nbsp;本期水表数:</label>
-						 	<input type="text" class="form-control" name="waterNumber" onkeyup="float_input_validate(this)" />
+					<div class="col-sm-12 form-inline form-group" th:each="customer,customerStat : ${customers}">
+						<label for="name">客户姓名:</label>
+						 <input type="text" class="form-control" th:value="${customer.name}" th:disabled="true" />
+						 <label for="name">&nbsp;&nbsp;上期水表数:</label>
+						 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:disabled="true" />
+						<label for="name">&nbsp;&nbsp;本期水表数:</label>
+						 <input type="text" class="form-control" th:name="'WaterNumber_' + ${customer.customerInfo.code}" onkeyup="float_input_validate(this)" />
 					</div>
 					<div class="col-sm-12 form-inline">
 						<input type="submit" value="保存" class="btn btn-default"/>

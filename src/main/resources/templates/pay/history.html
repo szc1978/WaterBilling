@@ -5,17 +5,29 @@
 		<title>用户列表</title>
 		<link href="/css/style.css" rel="stylesheet" type="text/css" />
 		<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="/css/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="/js/jquery-3.2.0.min.js"></script>
+		<script type="text/javascript" src="/js/moment.js"></script>
+		<script type="text/javascript" src="/js/daterangepicker.js"></script>
+		
+		<script type="text/javascript">
+               $(document).ready(function() {
+                  $('#reservation').daterangepicker(null, function(start, end, label) {
+                    console.log(start.toISOString(), end.toISOString(), label);
+                  });
+               });
+               </script>
 	</head>
 
 	<body>
     	<div class="container">
     		<div class="formtitle"><span>客户缴费记录</span></div>
     		<div class="col-sm-13" align="right">
-    			<form class="form-inline" role="form" method="get" th:action="@{/pay/history}">
+    			<form class="form-inline" method="get" th:action="@{/pay/history}">
     				<div class="form-group">
-   						 <input type="text" class="form-control" name="customerCode" placeholder="客户编号" />
-   						 <input type="text" class="form-control" name="fromDate" placeholder="起始日期" />
-   						 <input type="text" class="form-control" name="toDate" placeholder="结束日期" />
+   						<input type="text" th:if="${code == ''}" class="form-control" name="customerCode" th:placeholder="输入客户编号" />
+   						<input type="text" th:if="${code != ''}" class="form-control" name="customerCode" th:value="${code}" />
+						<input type="text" th:readonly="true" style="width: 200px" name="from_to_date" id="reservation" class="form-control" th:placeholder="选择起止日期" /> 
   					</div>
   					<input type="submit" value="搜索" class="btn btn-default"/>
   				</form>
