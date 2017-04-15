@@ -64,8 +64,10 @@ public class PayController {
 	}
 	
 	@RequestMapping(value="/pay/biz",method=RequestMethod.GET) 
-	public String payBiz(){
-		return "/pay/biz";
+	public String payBiz(ModelMap model){
+		Customer customer = new Customer();
+		model.addAttribute("customer", customer);
+		return "/pay/business";
 	}
 	
 	@OpAnnotation(moduleName="客户缴费",option="客户缴费")

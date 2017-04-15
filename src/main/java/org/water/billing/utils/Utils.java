@@ -1,8 +1,12 @@
 package org.water.billing.utils;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.ui.ModelMap;
 import org.water.billing.consts.ChargeTypeEnum;
+import org.water.billing.entity.admin.SysUser;
 
 public class Utils {
 	
@@ -31,5 +35,10 @@ public class Utils {
 				return type;
 		}
 		return null;
+	}
+	
+	public static SysUser getLoginUserInSession(HttpServletRequest request) {
+		SecurityContext securityContext = (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
+		return (SysUser) securityContext.getAuthentication().getPrincipal();
 	}
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +24,7 @@ import org.water.billing.entity.biz.CustomerWater;
 import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.CustomerService;
 import org.water.billing.service.biz.CustomerWaterService;
+import org.water.billing.utils.Utils;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -47,16 +47,17 @@ public class WaterDataController {
 	public String inputData(HttpServletRequest request,ModelMap map) {
 		String searchField = request.getParameter("search_key");
 		String searchValue = request.getParameter("search_value");
+		SysUser user = Utils.getLoginUserInSession(request);
 		List<Customer> customers = new ArrayList<Customer>();
 		if(searchField != null && searchValue != null) {
 			switch(searchField) {
 			case "code":
-				Customer customer = customerService.findByCode(searchValue);
+				Customer customer = customerService.findByCodeAndWaterProvider(searchValue,user.getWaterProvider().getId());
 				if(customer != null)
 					customers.add(customer);
 				break;
 			case "address":
-				customers = customerService.findByStatusAndAddress(searchValue);
+				customers = customerService.findByStatusAndAddressAndWaterProvider(searchValue,user.getWaterProvider().getId());
 				break;
 			default:
 				break;
@@ -70,9 +71,7 @@ public class WaterDataController {
 	@OpAnnotation(moduleName="数据录入",option = "录入用水量")
 	@RequestMapping(value="/waterdata/input_water_data",method=RequestMethod.POST)
 	public String inputWaterData(HttpServletRequest request,ModelMap model) throws Exception {
-
-		SecurityContext securityContext = (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
-		SysUser user = (SysUser) securityContext.getAuthentication().getPrincipal();
+		SysUser user = Utils.getLoginUserInSession(request);
 		
 		String month = request.getParameter("month");
 		List<InputData> inputDatas = new ArrayList<InputData>();
@@ -85,7 +84,7 @@ public class WaterDataController {
 			inputDatas.add(inputData);
 		}
 		
-		verifyExcelData(inputDatas);
+		verifyExcelData(inputDatas,user);
 		saveData(inputDatas,user.getName());
         model.addAttribute("msg", "输入用户用水量成功！！");
 		return "/msg";
@@ -102,11 +101,10 @@ public class WaterDataController {
 		MultipartHttpServletRequest multipartRequest  =  (MultipartHttpServletRequest) request;  
         MultipartFile uploadFile = multipartRequest.getFile("inputfile");
         List<InputData> excelDatas = readExcelFile(uploadFile);
-        SecurityContext securityContext = (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
+        SysUser user = Utils.getLoginUserInSession(request);
 		
-        verifyExcelData(excelDatas);
-        
-        SysUser user = (SysUser) securityContext.getAuthentication().getPrincipal();
+        verifyExcelData(excelDatas,user);
+
         saveData(excelDatas,user.getName());
         model.addAttribute("msg", "导入用户用水量成功！！");
 		return "/msg";
@@ -121,7 +119,7 @@ public class WaterDataController {
 	
 	@OpAnnotation(moduleName="业务审核",option="客户用水量")
 	@RequestMapping(value = "/approve/customerwater",method=RequestMethod.GET)
-	public String approveCustomerBill(@RequestParam int id,@RequestParam int action) throws MyException {
+	public String approveCustomerWater(@RequestParam int id,@RequestParam int action) throws MyException {
 		Customer customer = customerService.findById(id);
 		if(customer == null)
 			throw new MyException("客户不存在");
@@ -152,17 +150,22 @@ public class WaterDataController {
 			CustomerWater customerWater = customer.getCustomerWater();
 			customerWater.setNewNumber(excelData.getWaterNumber());
 			customerWater.setInputerName(inputerName);
+			customerWater.setPayMonth(excelData.getMonth());
 			customerWaterService.save(customerWater);
 		}
 	}
 	
-	private void verifyExcelData(List<InputData> excelDatas) throws MyException {
+	private void verifyExcelData(List<InputData> excelDatas,SysUser user) throws MyException {
 		for(InputData excelData : excelDatas) {
 			Customer customer = customerService.findByCode(excelData.getCustomerCode());
 			if(customer == null)
 				throw new MyException("用户编号" + excelData.getCustomerCode() + "不存在,或者等待审核中");
+			if(user.getWaterProvider().getId() != customer.getWaterProvider().getId())
+				throw new MyException("用户编号" + excelData.getCustomerCode() + "不在您的供水片区");
 			if(excelData.getMonth() < 1 || excelData.getMonth() > 12)
 				throw new MyException("用户编号" + excelData.getCustomerCode() + "对应的月份不是合理的值！！");
+			if(excelData.getMonth() == customer.getCustomerWater().getPayMonth())
+				throw new MyException("用户编号" + excelData.getCustomerCode() + "该月水费已缴，不能重新录入！！");
 			if(excelData.getWaterNumber() < customer.getCustomerWater().getOrgNumber())
 				throw new MyException("用户编号" + excelData.getCustomerCode() + "的用水量低于当前用水量");
 		}

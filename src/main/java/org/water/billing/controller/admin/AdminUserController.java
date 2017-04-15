@@ -17,8 +17,10 @@ import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.admin.SysRole;
 import org.water.billing.entity.admin.SysUser;
+import org.water.billing.entity.biz.WaterProvider;
 import org.water.billing.service.admin.SysRoleService;
 import org.water.billing.service.admin.SysUserService;
+import org.water.billing.service.biz.WaterProviderService;
 import org.water.billing.utils.Utils;
 
 @Controller
@@ -29,6 +31,9 @@ public class AdminUserController {
 	
 	@Autowired
 	SysRoleService sysRoleService;
+	
+	@Autowired
+	WaterProviderService waterProviderService;
 
 	@RequestMapping(value="/admin/user",method=RequestMethod.GET)
 	public String user(@RequestParam(defaultValue="1") int page,
@@ -81,6 +86,8 @@ public class AdminUserController {
 		
 		Collections.addAll(sysRoles);
 		map.addAttribute("sysUser",sysUser);
+		List<WaterProvider> waterProviders = waterProviderService.findAll();
+		map.addAttribute("waterProviders",waterProviders);
 		return "/admin/user_form";
 	}
 

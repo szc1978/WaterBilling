@@ -41,12 +41,16 @@ public class CustomerService {
 		return customerDao.findById(id);
 	}
 	
+	public Customer findByCodeAndWaterProvider(String code,int waterProviderId) {
+		return customerDao.findByCodeAndWaterProvider(Consts.CUSTOMER_STATUS_ACTIVE_BIT,code,waterProviderId);
+	}
+	
 	public Customer findByCode(String code) {
 		return customerDao.findByStatusAndCode(Consts.CUSTOMER_STATUS_ACTIVE_BIT,code);
 	}
 	
-	public List<Customer> findByStatusAndAddress(String addressKeyword) {
-		return customerDao.findByStatusAndAddress(Consts.CUSTOMER_STATUS_ACTIVE_BIT, addressKeyword);
+	public List<Customer> findByStatusAndAddressAndWaterProvider(String addressKeyword,int waterProviderId) {
+		return customerDao.findByStatusAndAddressAndWaterProvider(Consts.CUSTOMER_STATUS_ACTIVE_BIT, addressKeyword,waterProviderId);
 	}
 	
 	public List<Customer> findAllPendingCustomer() {

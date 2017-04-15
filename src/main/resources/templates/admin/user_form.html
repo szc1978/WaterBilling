@@ -71,6 +71,17 @@
 			    				</div>
 			    			</div>
 			    		</div>
+			    		<div class="form-group ">
+					 		<label for="name">供水片区(该选项仅对抄表员角色有效):</label>
+					 		<div class="row">
+			    				<div class="col-sm-8">
+								 	<select class="form-control" th:field="*{waterProvider.id}">
+								 		<option th:each="waterProvider : ${waterProviders}" th:value="${waterProvider.id}" th:text="${waterProvider.name}" th:if="${sysUser.waterProvider.id eq waterProvider.id}" th:selected="true"></option>
+								 		<option th:each="waterProvider : ${waterProviders}" th:value="${waterProvider.id}" th:text="${waterProvider.name}" th:if="${sysUser.waterProvider.id ne waterProvider.id}"></option>
+								 	</select>
+								</div>
+			    			</div>
+						</div>
 			    		<div class="form-group">
 			    			<label>角色组:</label>
 			    			<div class="row">

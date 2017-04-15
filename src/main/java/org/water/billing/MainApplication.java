@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;  
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;  
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.water.billing.consts.Consts;
 import org.water.billing.consts.ResourceEnum;
@@ -26,6 +27,7 @@ import org.water.billing.entity.admin.SysUser;
 import org.water.billing.security.support.MyFilterSecurityInterceptor;
 import org.water.billing.service.admin.SysConfigurationItemService;  
  
+@EnableScheduling
 @SpringBootApplication  
 @EnableAutoConfiguration(exclude = MyFilterSecurityInterceptor.class)
 public class MainApplication{

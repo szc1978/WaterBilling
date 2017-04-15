@@ -13,11 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;  
 import javax.persistence.Temporal;  
 import javax.persistence.TemporalType;
 
-import org.water.billing.consts.Consts;  
+import org.water.billing.consts.Consts;
+import org.water.billing.entity.biz.WaterProvider;  
     
 @Entity  
 @Table(name = "sys_user")
@@ -45,6 +47,10 @@ public class SysUser {
 	@Temporal(TemporalType.TIMESTAMP) 
 	@Column(name = "createDate", length = 32)  
 	private Date createDate; 
+	
+	@ManyToOne()
+	@JoinColumn(name="water_provider_id")
+	private WaterProvider waterProvider = new WaterProvider();
            
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch=FetchType.EAGER)
     @JoinTable(name="user_role",joinColumns={@JoinColumn(name="u_id")},inverseJoinColumns={@JoinColumn(name="r_id")})
@@ -127,5 +133,12 @@ public class SysUser {
 		this.sysRoles = sysRoles;
 	}
 
+	public WaterProvider getWaterProvider() {
+		return waterProvider;
+	}
+	
+	public void setWaterProvider(WaterProvider waterProvider) {
+		this.waterProvider = waterProvider;
+	}
 
 }

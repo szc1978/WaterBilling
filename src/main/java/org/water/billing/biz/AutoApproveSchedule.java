@@ -27,7 +27,7 @@ public class AutoApproveSchedule {
 	@Autowired
 	BillService billService;
 
-	@Scheduled(fixedDelay = 10 * 1000)
+	@Scheduled(fixedDelay = 300 * 1000)
 	public void autoApprove() {
 		autoApproveCustomer();
 		autoApproveCustomerWater();

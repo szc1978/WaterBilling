@@ -29,9 +29,6 @@ public class Customer {
 	@Column(name="name",nullable=false)
 	private String name;
 	
-	/*@Column(name="water_number",length=1)
-	private float waterNumber = new Float(0.00);*/
-	
 	@Column(name="balance")
 	private float balance = new Float(0.00);
 	
@@ -46,9 +43,6 @@ public class Customer {
 	 */
 	@Column(name="staus",length=1)
 	private int status = Consts.CUSTOMER_STATUS_ACTIVE_BIT | Consts.CUSTOMER_STATUS_PENDING_BIT;
-	
-	/*@Column(name="pending_water_number")
-	private Float pendingWaterNumber = new Float(0);*/
 	
 	@ManyToOne()
 	@JoinColumn(name="water_provider_id")

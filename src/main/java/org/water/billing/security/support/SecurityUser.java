@@ -25,6 +25,7 @@ public class SecurityUser extends SysUser implements UserDetails {
             this.setChineseName(suser.getChineseName());
             this.setCreateDate(suser.getCreateDate());
             this.setActive(suser.getActive());
+            this.setWaterProvider(suser.getWaterProvider());
         }         
     }  
       
