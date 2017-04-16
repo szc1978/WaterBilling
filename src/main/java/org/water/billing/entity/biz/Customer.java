@@ -60,6 +60,10 @@ public class Customer {
 	@JoinColumn(name="water_id")
 	private CustomerWater customerWater = new CustomerWater();
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="water_meter_id")
+	private WaterMeter waterMeter = new WaterMeter();
+	
 	@Column(name = "create_time",length=64,updatable = false)
 	@Temporal(TemporalType.TIMESTAMP) 
 	private Date createTime; 
@@ -171,6 +175,14 @@ public class Customer {
 
 	public void setCustomerWater(CustomerWater customerWater) {
 		this.customerWater = customerWater;
+	}
+
+	public WaterMeter getWaterMeter() {
+		return waterMeter;
+	}
+
+	public void setWaterMeter(WaterMeter waterMeter) {
+		this.waterMeter = waterMeter;
 	}
 	
 }

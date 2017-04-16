@@ -78,6 +78,16 @@
 	12.是否结算
 	13.等待审核自动缴费标志
 	
+水表：
+水表厂家 （Dropdown list）
+水表型号（Dropdown list）
+水表口径 （Dropdown list）
+表位号
+表身号
+水表用途（Dropdown list）
+水表状态（Dropdown list）
+状态日期
+水表起度
 	
 	1. 一次性收费项目
 	2. 片区管理需要(Y)

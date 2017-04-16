@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="/js/jquery-3.2.0.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>客户水表信息管理</span></div>
+		<ul id="myTab" class="nav nav-tabs">
+			<li class="active"><a href="#vendor" data-toggle="tab">水表厂家</a></li>
+			<li><a href="#model" data-toggle="tab">水表型号</a></li>
+			<li><a href="#size" data-toggle="tab">水表口径</a></li>
+			<li><a href="#usage" data-toggle="tab">水表用途</a></li>
+			<li><a href="#status" data-toggle="tab">水表状态</a></li>
+		</ul>
+		<div id="myTabContent" class="tab-content">
+			<div class="tab-pane fade in active" id="vendor">
+				<p>菜鸟教程是一个提供最新的web技术站点，本站免费提供了建站相关的技术文档，帮助广大web技术爱好者快速入门并建立自己的网站。菜鸟先飞早入行——学的不仅是技术，更是梦想。</p>
+			</div>
+			<div class="tab-pane fade" id="model">
+				<p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple 
+						TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。</p>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	$(function(){
+		$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+			// 获取已激活的标签页的名称
+			var activeTab = $(e.target).text(); 
+			// 获取前一个激活的标签页的名称
+			var previousTab = $(e.relatedTarget).text(); 
+			$(".active-tab span").html(activeTab);
+			$(".previous-tab span").html(previousTab);
+		});
+	});
+</script>
+</body>
+</html>

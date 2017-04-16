@@ -12,44 +12,44 @@
 	<div class="container">
 		<div class="formtitle"><span>客户管理</span></div>
 		<form th:action="@{/customer/manage}" method="post" th:object="${customer}" >
-			<div class="col-sm-8">
-				<div class="col-sm-6 form-group ">
+			<div class="col-sm-12">
+				<div class="col-sm-4 form-group ">
 					 <label for="name">客户姓名:</label>
 					 <input type="text" class="form-control" th:value="${customer.name}" th:field="*{name}" />
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-4 form-group ">
 					 <label for="name">客户编号:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.code}" th:field="*{customerInfo.code}" />
 				</div>
-				<div class="col-sm-12 form-group ">
+				<div class="col-sm-4 form-group ">
 					 <label for="name">客户地址:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.address}" th:field="*{customerInfo.address}" />
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-3 form-group ">
 					 <label for="name">客户电话:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.telephony}" th:field="*{customerInfo.telephony}" />
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-3 form-group ">
 					 <label for="name">客户手机:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.mobile}" th:field="*{customerInfo.mobile}" />
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-3 form-group ">
 					 <label for="name">客户证件:</label>
 					 <select class="form-control" th:value="${customer.customerInfo.certificateName}" th:field="*{customerInfo.certificateName}" >
 					 	<option th:each="certificateName : ${certificateNames}" th:value="${certificateName}" th:text="${certificateName}"></option>
 					 </select>
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-3 form-group ">
 					 <label for="name">证件号码:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateId}" th:field="*{customerInfo.certificateId}" />
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-3 form-group ">
 					 <label for="name">抄表周期:</label>
 					 <select class="form-control" th:value="${customer.readMeterCycle}" th:field="*{readMeterCycle}" >
 					 	<option th:each="cycle : ${readMeterCycles}" th:value="${cycle}" th:text="${cycle}"></option>
 					 </select>
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-3 form-group ">
 					<label for="name">缴费周期首月*:</label>
 					<select class="form-control" th:field="*{customerWater.firstMonth}" th:with="curmonth=${#calendars.format(#calendars.createNow(), 'M')}">
 						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${customer.customerWater.firstMonth eq 0 and i+'' == curmonth}" th:value="${i}" th:text="${i}" th:selected="true"></option>
@@ -58,25 +58,64 @@
 						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${customer.customerWater.firstMonth ne 0 and i ne customer.customerWater.firstMonth}" th:value="${i}" th:text="${i}"></option>
 					</select>
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-3 form-group ">
 					 <label for="name">供水片区:</label>
 					 <select class="form-control" th:field="*{waterProvider.id}">
 					 	<option th:each="waterProvider : ${waterProviders}" th:value="${waterProvider.id}" th:text="${waterProvider.name}" th:if="${customer.waterProvider.id eq waterProvider.id}" th:selected="true"></option>
 					 	<option th:each="waterProvider : ${waterProviders}" th:value="${waterProvider.id}" th:text="${waterProvider.name}" th:if="${customer.waterProvider.id ne waterProvider.id}"></option>
 					 </select>
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-3 form-group ">
 					 <label for="name">客户类型:</label>
 					 <select class="form-control" th:field="*{customerType.id}">
 					 	<option th:each="customerType : ${customerTypes}" th:value="${customerType.id}" th:text="${customerType.name}" th:if="${customer.customerType.id eq customerType.id}" th:selected="true"></option>
 					 	<option th:each="customerType : ${customerTypes}" th:value="${customerType.id}" th:text="${customerType.name}" th:if="${customer.customerType.id ne customerType.id}"></option>
 					 </select>
 				</div>
-				<div class="col-sm-6 form-group ">
+				
+				
+				<div class="col-sm-3 form-group ">
+					 <label for="name">水表厂家:</label>
+					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				<div class="col-sm-3 form-group ">
+					 <label for="name">水表型号:</label>
+					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				<div class="col-sm-3 form-group ">
+					 <label for="name">水表口径:</label>
+					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				<div class="col-sm-3 form-group ">
+					 <label for="name">水表用途:</label>
+					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				<div class="col-sm-3 form-group ">
+					 <label for="name">水表状态:</label>
+					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				<div class="col-sm-3 form-group ">
+					 <label for="name">状态日期:</label>
+					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				<div class="col-sm-3 form-group ">
+					 <label for="name">表位号:</label>
+					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				<div class="col-sm-3 form-group ">
+					 <label for="name">表身号:</label>
+					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				<div class="col-sm-4 form-group ">
+					 <label for="name">水表起度:</label>
+					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				
+				<div class="col-sm-4 form-group ">
 					 <label for="name">客户水表数:</label>
 					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
 				</div>
-				<div class="col-sm-6 form-group ">
+				<div class="col-sm-4 form-group ">
 					 <label for="name">客户余额:</label>
 					 <input type="text" class="form-control" th:value="${customer.balance}" th:field="*{balance}" onkeyup="float_input_validate(this)" />
 				</div>

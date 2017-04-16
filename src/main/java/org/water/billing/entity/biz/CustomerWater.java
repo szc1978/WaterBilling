@@ -40,12 +40,6 @@ public class CustomerWater {
 	@Column(name="year_count")
 	private Float yearCount = new Float(0);
 	
-	@Column(name="meter_name")
-	private String meterName;
-	
-	@Column(name="meter_type")
-	private String meterType;
-	
 	@OneToOne(mappedBy = "customerWater")
 	private Customer customer;
 	
@@ -131,21 +125,5 @@ public class CustomerWater {
 
 	public void setYearCount(Float yearCount) {
 		this.yearCount = yearCount;
-	}
-
-	public String getMeterName() {
-		return meterName;
-	}
-
-	public void setMeterName(String meterName) {
-		this.meterName = meterName;
-	}
-
-	public String getMeterType() {
-		return meterType;
-	}
-
-	public void setMeterType(String meterType) {
-		this.meterType = meterType;
 	}
 }
