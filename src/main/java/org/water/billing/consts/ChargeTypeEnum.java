@@ -1,5 +1,8 @@
 package org.water.billing.consts;
 
+/*
+ * Can change name, don't change id
+ */
 public enum ChargeTypeEnum {
 	CHARGE_BY_PER_PRICE(1,"水量单价方式收费"),
 	CHARGE_BY_DEDICATE_PRICE(2,"周期固定价格收费"),

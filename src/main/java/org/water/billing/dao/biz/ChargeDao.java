@@ -8,4 +8,6 @@ import org.water.billing.entity.biz.Charge;
 public interface ChargeDao extends JpaRepository<Charge, Integer>{
 	public Page<Charge> findAll(Pageable page);
 	public Charge findById(int id);
+	
+	public Charge findByName(String name);
 }

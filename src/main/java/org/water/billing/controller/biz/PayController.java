@@ -2,6 +2,7 @@ package org.water.billing.controller.biz;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.water.billing.GlobalConfiguration;
 import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
+import org.water.billing.biz.BillGenerater;
+import org.water.billing.biz.PayItem;
+import org.water.billing.consts.ChargeTypeEnum;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
+import org.water.billing.entity.biz.Charge;
 import org.water.billing.entity.biz.Customer;
 import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.ChargeService;
@@ -64,13 +69,27 @@ public class PayController {
 	}
 	
 	@RequestMapping(value="/pay/biz",method=RequestMethod.GET) 
-	public String payBiz(ModelMap model){
-		Customer customer = new Customer();
+	public String payBiz(@RequestParam(required=false) String code,ModelMap model) throws MyException{
+		Customer customer = customerService.findByCode(code);
+		if(customer == null && code != null)
+			throw new MyException("用户不存在");
+		
+		if(customer == null && code == null)
+			customer = new Customer();
+		
 		model.addAttribute("customer", customer);
+		
+		List<Charge> charges = new ArrayList<Charge>();
+		for(Charge charge : chargeService.findAll()) {
+			if(charge.getChargeType() == ChargeTypeEnum.CHARGE_BY_DEDICATE_PRICE.getId()) {
+				charges.add(charge);
+			}
+		}
+		model.addAttribute("charges", charges);
 		return "/pay/business";
 	}
 	
-	@OpAnnotation(moduleName="客户缴费",option="客户缴费")
+	@OpAnnotation(moduleName="客户缴费",option="缴纳水费")
 	@RequestMapping(value = "/pay/water",method=RequestMethod.POST)
 	public String pay(HttpServletRequest request) throws Exception {
 		String customerCode = request.getParameter("customerCode");
@@ -80,6 +99,56 @@ public class PayController {
 		doPay(customerCode,thisPay);
 
 		return "redirect:/pay/water?code=" + customerCode;
+	}
+
+	
+	@OpAnnotation(moduleName="客户缴费",option="业务缴费")
+	@RequestMapping(value = "/pay/biz",method=RequestMethod.POST)
+	public String payBiz(HttpServletRequest request) throws Exception {
+		String customerCode = request.getParameter("customerCode");
+		Customer customer = customerService.findByCode(customerCode);
+		if(customer == null)
+			throw new MyException("客户不存在");
+		
+		String payment = request.getParameter("payment");
+		Float thisPay = Float.valueOf(payment);
+		
+		List<Charge> charges = new ArrayList<Charge>();
+		for(String key : request.getParameterMap().keySet()) {
+			if(key.startsWith("Charge_")) {
+				String chargeName = key.replace("Charge_", "");
+				Charge charge = chargeService.findByName(chargeName);
+				if(charge != null)
+					charges.add(charge);
+			}
+		}
+		BillGenerater billGenerater = new BillGenerater(customer);
+		Bill bill = billGenerater.genBill4DedivatedCharge("业务缴费", charges);
+		
+		doBizPay(customer,bill,thisPay);
+
+		return "redirect:/pay/bill?id=" + bill.getId();
+	}
+	
+	
+	@RequestMapping(value="/pay/bill",method=RequestMethod.GET)
+	public String paySuccess(int id,ModelMap model) throws MyException {
+		Bill bill = billService.findById(id);
+		if(bill == null)
+			throw new MyException("账单不存在");
+		
+		List<PayItem> payItems = new ArrayList<PayItem>();
+		for(String s : bill.getDetailContent().split(";")) {
+			if(s.length() == 0)
+				continue;
+			String[] ss = s.split(":");
+			if(ss.length != 2)
+				continue;
+			payItems.add(new PayItem(ss[0],Float.valueOf(ss[1])));
+		}
+		model.addAttribute("Name", "缴费");
+		model.addAttribute("payitems", payItems);
+		return "/pay/pay_bill";
 	}
 	
 	@RequestMapping(value="/pay/history",method=RequestMethod.GET)
@@ -116,6 +185,18 @@ public class PayController {
 	public String autoPay(@RequestParam String customerCode) throws Exception {
 		doPay(customerCode,new Float(0));
 		return "redirect:/approve/customerbill/list";
+	}
+	
+	private void doBizPay(Customer customer,Bill bill,Float thisPay) throws MyException {
+		if((customer.getBalance() + thisPay) < bill.getTotalPostage())
+			throw new MyException("费用不够，请检查");
+		bill.setAutoChargeFlag(Consts.NON_BILL_AUTO_CHARGE_FLAG);
+		bill.setIsCharged(1);
+		bill.setChargeDate(new Date());
+		bill = billService.save(bill);
+		Float newBalance = customer.getBalance() + thisPay - bill.getTotalPostage();
+		customer.setBalance(newBalance);
+		customerService.save(customer);
 	}
 	
 	private void doPay(String customerCode,Float thisPay) throws MyException {

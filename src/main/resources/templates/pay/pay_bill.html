@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>缴费成功</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/js/jquery-3.2.0.min.js"></script>
+	<script type="text/javascript" src="/js/water.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>客户缴费清单</span></div>
+		<div id="printContent">
+			<div>缴费清单</div>
+			<div>
+				<table border="0">
+					<tr>
+						<td width="250">名称</td>
+						<td width="50">小计</td>
+					</tr>
+					<tr th:each="item : ${payitems}">
+						<td th:text="${item.itemName}"></td>
+						<td th:text="${item.itemPrice}"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<input class="btn btn-default" type="button" id="btnPrint" value="打印"/>  
+	</div>
+<script type="text/javascript">  
+$(function(){  
+        $("#btnPrint").click(function(){ $("#printContent").printArea(); });  
+});  
+</script>
+</body>
+</html>

@@ -36,5 +36,9 @@ public class BillService {
 	public int countPendingBill() {
 		return billDao.countByAutoChargeFlag(Consts.BILL_AUTO_CHARGE_FLAG);
 	}
+	
+	public Bill findById(int id) {
+		return billDao.findById(id);
+	}
 
 }

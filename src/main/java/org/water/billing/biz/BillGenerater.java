@@ -1,6 +1,7 @@
 package org.water.billing.biz;
 
 import java.util.Date;
+import java.util.List;
 
 import org.water.billing.consts.ChargeTypeEnum;
 import org.water.billing.consts.Consts;
@@ -19,6 +20,16 @@ public class BillGenerater {
 	public BillGenerater(Customer customer) {
 		this.customer = customer;
 		totalWaterNumber = customer.getCustomerWater().getNewNumber() - customer.getCustomerWater().getOrgNumber();
+	}
+	
+	public Bill genBill4DedivatedCharge(String billName,List<Charge> charges) {
+		Bill bill = new Bill();
+		bill.setName(billName);
+		calPostage4PriceByDedicated(charges);
+		bill.setTotalPostage(totalPostage);
+		bill.setDetailContent(detailedBill);
+		bill.setCustomerCode(customer.getCustomerInfo().getCode());
+		return bill;
 	}
 	
 	public Bill genBill() {
@@ -73,6 +84,13 @@ public class BillGenerater {
 		for(Charge charge : customerType.getCharges()) {
 			if(charge.getChargeType() != ChargeTypeEnum.CHARGE_BY_DEDICATE_PRICE.getId()) 
 				continue;
+			totalPostage +=  charge.getChargeParameter().getPriceByDedicated();
+			detailedBill += ";" + charge.getName() + ":" +  charge.getChargeParameter().getPriceByDedicated();
+		}
+	}
+	
+	private void calPostage4PriceByDedicated(List<Charge> charges) {
+		for(Charge charge : charges) {
 			totalPostage +=  charge.getChargeParameter().getPriceByDedicated();
 			detailedBill += ";" + charge.getName() + ":" +  charge.getChargeParameter().getPriceByDedicated();
 		}

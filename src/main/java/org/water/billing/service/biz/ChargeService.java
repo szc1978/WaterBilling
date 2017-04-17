@@ -35,4 +35,8 @@ public class ChargeService {
 	public Charge findById(int id) {
 		return chargeDao.findById(id);
 	}
+	
+	public Charge findByName(String name) {
+		return chargeDao.findByName(name);
+	}
 }
