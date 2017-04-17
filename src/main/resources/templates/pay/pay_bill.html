@@ -21,8 +21,8 @@
 						<td width="50">小计</td>
 					</tr>
 					<tr th:each="item : ${payitems}">
-						<td th:text="${item.itemName}"></td>
-						<td th:text="${item.itemPrice}"></td>
+						<td th:text="${item.name}"></td>
+						<td th:text="${item.price}"></td>
 					</tr>
 				</table>
 			</div>

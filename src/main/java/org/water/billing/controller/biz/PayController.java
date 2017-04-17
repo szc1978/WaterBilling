@@ -20,7 +20,6 @@ import org.water.billing.GlobalConfiguration;
 import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.biz.BillGenerater;
-import org.water.billing.biz.PayItem;
 import org.water.billing.consts.ChargeTypeEnum;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
@@ -137,14 +136,17 @@ public class PayController {
 		if(bill == null)
 			throw new MyException("账单不存在");
 		
-		List<PayItem> payItems = new ArrayList<PayItem>();
+		List<Map<String,String>> payItems = new ArrayList<Map<String,String>>();
 		for(String s : bill.getDetailContent().split(";")) {
 			if(s.length() == 0)
 				continue;
 			String[] ss = s.split(":");
 			if(ss.length != 2)
 				continue;
-			payItems.add(new PayItem(ss[0],Float.valueOf(ss[1])));
+			Map<String,String> sss = new HashMap<String,String>();
+			sss.put("name", ss[0]);
+			sss.put("price", ss[1]);
+			payItems.add(sss);
 		}
 		model.addAttribute("Name", "缴费");
 		model.addAttribute("payitems", payItems);
