@@ -24,16 +24,8 @@ public class WaterMeter {
 	private int id = 0;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="vender_id")
-	private WaterMeterConfig vender;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="model_id")
-	private WaterMeterConfig model;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="size_id")
-	private WaterMeterConfig size;
+	@JoinColumn(name="meter_type_id")
+	private WaterMeterType meterType;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="usage_id")
@@ -72,30 +64,6 @@ public class WaterMeter {
 		this.id = id;
 	}
 
-	public WaterMeterConfig getVender() {
-		return vender;
-	}
-
-	public void setVender(WaterMeterConfig vender) {
-		this.vender = vender;
-	}
-
-	public WaterMeterConfig getModel() {
-		return model;
-	}
-
-	public void setModel(WaterMeterConfig model) {
-		this.model = model;
-	}
-
-	public WaterMeterConfig getSize() {
-		return size;
-	}
-
-	public void setSize(WaterMeterConfig size) {
-		this.size = size;
-	}
-
 	public WaterMeterConfig getUsage() {
 		return usage;
 	}
@@ -110,6 +78,46 @@ public class WaterMeter {
 
 	public void setStatus(WaterMeterConfig status) {
 		this.status = status;
+	}
+
+	public WaterMeterType getMeterType() {
+		return meterType;
+	}
+
+	public void setMeterType(WaterMeterType meterType) {
+		this.meterType = meterType;
+	}
+
+	public String getLocationNumber() {
+		return locationNumber;
+	}
+
+	public void setLocationNumber(String locationNumber) {
+		this.locationNumber = locationNumber;
+	}
+
+	public String getBodyNumber() {
+		return bodyNumber;
+	}
+
+	public void setBodyNumber(String bodyNumber) {
+		this.bodyNumber = bodyNumber;
+	}
+
+	public String getFirstNumber() {
+		return firstNumber;
+	}
+
+	public void setFirstNumber(String firstNumber) {
+		this.firstNumber = firstNumber;
+	}
+
+	public Date getStatusTime() {
+		return statusTime;
+	}
+
+	public void setStatusTime(Date statusTime) {
+		this.statusTime = statusTime;
 	}
 	
 }

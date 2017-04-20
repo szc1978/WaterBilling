@@ -7,7 +7,7 @@ public enum ResourceEnum {
 	CUSTOMER_TYPE("客户类别管理","/customer/type"),
 	CUSTOMER_FIELD("客户字段管理","/customer/field"),
 	WATER_PROVIDER("供水片区管理","/customer/waterprovider"),
-	WATER_METER("水表管理","/customer/watermeter"),
+	WATER_METER("水表管理","/customer/watermetertype"),
 	CHARGE_TYPE("资费类型","/charge/type"),
 	APPROVE_CUSTOMER("客户销户开户审核","/approve/customer"),
 	APPROVE_CUSTOMER_WATER("客户用水量审核","/approve/customerwater"),

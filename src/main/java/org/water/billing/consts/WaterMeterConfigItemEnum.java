@@ -1,7 +1,7 @@
 package org.water.billing.consts;
 
 public enum WaterMeterConfigItemEnum {
-	VENDER(1,"水表厂家"),
+	PRODUCER(1,"水表厂家"),
 	MODEL(2,"水表型号"),
 	SIZE(3,"水表口径"),
 	USAGE(4,"水表用途"),

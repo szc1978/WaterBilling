@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script src="/js/jquery-3.2.0.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>客户水表信息管理</span></div>
+		<div class="col-sm-13" align="right">
+    		<a th:href="@{/customer/watermetertype/form}"><button type="button" class="btn btn-default">新增水表</button></a>
+    	</div>
+    	<div>
+			<table class="table table-striped">
+				<thead>
+			    	<tr>
+			        	<th>编号<i class="sort"></i></th>
+			        	<th>水表名称</th>
+			        	<th>水表厂家</th>
+			        	<th>水表型号</th>
+			        	<th>水表口径</th>
+			        	<th>操作</th>
+			        </tr>
+				</thead>
+				<tbody>
+					<tr th:each="meter,meterStat : ${meters}"> 
+				        <td th:text="${meter.index} + 1">1</td> 
+				        <td th:text="${meter.name}"></td> 
+				        <td th:text="${meter.proceder.configItemValue}"></td>
+				        <td th:text="${meter.model.configItemValue}"></td>
+				        <td th:text="${meter.size.configItemValue}"></td>
+				        <td>
+				        	<a th:href="@{/customer/watermetertype/form(id=${meter.id})}">编辑</a>
+				        </td>
+			        </tr>        
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

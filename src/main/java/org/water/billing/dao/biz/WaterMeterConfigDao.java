@@ -9,4 +9,6 @@ public interface WaterMeterConfigDao extends JpaRepository<WaterMeterConfig, Int
 	public WaterMeterConfig findById(int id);
 	
 	public List<WaterMeterConfig> findByConfigItemIdAndConfigItemValue(int id,String value);
+	
+	public List<WaterMeterConfig> findByConfigItemId(int id);
 }

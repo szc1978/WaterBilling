@@ -21,8 +21,12 @@ public class WaterMeterConfigService {
 		return waterMeterConfigDao.save(config);
 	}
 	
-	public List<WaterMeterConfig> findByIdAndValue(int id,String value) {
+	public List<WaterMeterConfig> findByConfigItemIdAndValue(int id,String value) {
 		return waterMeterConfigDao.findByConfigItemIdAndConfigItemValue(id, value);
+	}
+	
+	public List<WaterMeterConfig> findByConfigItemId(int id) {
+		return waterMeterConfigDao.findByConfigItemId(id);
 	}
 	
 	public List<WaterMeterConfig> findAll() {
