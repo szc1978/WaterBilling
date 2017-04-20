@@ -40,15 +40,30 @@ public class WaterMeterTypeController {
 		WaterMeterType waterMeterType = waterMeterTypeService.findById(id);
 		if(waterMeterType == null)
 			waterMeterType = new WaterMeterType();
-		model.addAttribute("waterMterType", waterMeterType);
+		model.addAttribute("waterMeterType", waterMeterType);
 		List<WaterMeterConfig> producers = waterMeterConfigService.findByConfigItemId(WaterMeterConfigItemEnum.PRODUCER.getId());
 		model.addAttribute("producers",producers);
+		List<WaterMeterConfig> models = waterMeterConfigService.findByConfigItemId(WaterMeterConfigItemEnum.MODEL.getId());
+		model.addAttribute("models",models);
+		List<WaterMeterConfig> sizes = waterMeterConfigService.findByConfigItemId(WaterMeterConfigItemEnum.SIZE.getId());
+		model.addAttribute("sizes",sizes);
 		return "/customer/water_meter_type_form";
 	}
 	
 	@RequestMapping(value="/customer/watermetertype/form",method=RequestMethod.POST)
 	public String waterMeter(@ModelAttribute WaterMeterType waterMeterType) throws MyException {
-
+		WaterMeterConfig producer = waterMeterType.getProducer();
+		if(producer.getId() == 0)
+			producer = waterMeterConfigService.save(producer);
+		WaterMeterConfig model = waterMeterType.getModel();
+		if(model.getId() == 0)
+			model = waterMeterConfigService.save(model);
+		WaterMeterConfig size = waterMeterType.getSize();
+		if(size.getId() == 0)
+			size = waterMeterConfigService.save(size);
+		waterMeterType.setProducer(producer);
+		waterMeterType.setModel(model);
+		waterMeterType.setSize(size);
 		waterMeterTypeService.save(waterMeterType);
 		
 		return "/customer/water_meter_type_list";

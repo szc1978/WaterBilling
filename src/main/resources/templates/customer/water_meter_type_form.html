@@ -7,36 +7,73 @@
 	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="/js/jquery-3.2.0.min.js"></script>
 	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script>
+		function add_select_option(selectid,inputname) {
+			var select = document.getElementById(selectid);
+			var value = document.getElementById(inputname).value;
+			select.options[select.options.length]=new Option(value,"0");
+			select.options[select.options.length].selected = true;
+		}
+		
+		function set_name(name) {
+			document.getElementById("item_name").value = name;
+		}
+	</script>
 </head>
 
 <body>
 	<div class="container">
 		<div class="formtitle"><span>水表管理</span></div>
-		<form th:action="@{/customer/watermetertype}" method="post" th:object="${waterMterType}" >
+		<form th:action="@{/customer/watermetertype/form}" method="post" th:object="${waterMeterType}" >
 			<div class="col-sm-4">
-				<div class="form-group ">
-					<label for="name">水表厂家<span class="glyphicon glyphicon-plus-sign"></span>:</label>
-					<select class="form-control"  >
+				<div>
+					<label for="name">
+						名称:
+					</label>
+				</div>
+				<div class=" form-group">
+					<input type="text" class="form-control" th:value="${waterMeterType.name}" th:field="*{name}" />
+				</div>
+				<div>
+					<label for="name">
+						水表厂家
+						<a data-toggle="modal" href="#" data-target="#myModal" onclick="set_name('producer_select');"><span class="glyphicon glyphicon-plus-sign"></span></a> 
+					</label>
+				</div>
+				<div class=" form-group">
+					<select class="form-control" id="producer_select" th:value="${waterMeterType.producer.configItemValue}" th:field="*{producer.configItemValue}">
 						<option th:each="producer : ${producers}" th:value="${producer.configItemId}" th:text="${producer.configItemValue}"></option>
 					</select>
 				</div>
-				<div class="form-group ">
-					<label for="name">水表型号<span class="glyphicon glyphicon-plus-sign"></span>:</label>
-					<select class="form-control"  >
-						<option th:each="producer : ${producers}" th:value="${producer.configItemId}" th:text="${producer.configItemValue}"></option>
+				<div>
+					<label for="name">
+						水表型号
+						<a data-toggle="modal" href="#" data-target="#myModal" onclick="set_name('model_select');"><span class="glyphicon glyphicon-plus-sign"></span></a> :
+					</label>
+				</div>
+				<div class=" form-group">
+					<select class="form-control" id="model_select" th:value="${waterMeterType.model.configItemValue}" th:field="*{model.configItemValue}" >
+						<option th:each="model : ${models}" th:value="${model.configItemId}" th:text="${model.configItemValue}"></option>
 					</select>
 				</div>
-				
-				<div class="">
-					<input type="submit" class="btn btn-default" value="保存" />
+				<div>
+					<label for="name">
+						水表口径
+						<a data-toggle="modal" href="#" data-target="#myModal" onclick="set_name('size_select');"><span class="glyphicon glyphicon-plus-sign"></span></a> :
+					</label>
 				</div>
-
+				<div class=" form-group">
+					<select class="form-control" id="size_select" th:value="${waterMeterType.size.configItemValue}" th:field="*{size.configItemValue}">
+						<option th:each="size : ${sizes}" th:value="${size.configItemId}" th:text="${size.configItemValue}"></option>
+					</select>
+				</div>
+				<div class="form-group ">
+					<input type="submit" class="btn btn-default " value="保存" />
+				</div>
 			</div>
-
+			
 		</form>
-<button class="btn btn-default" data-toggle="modal" data-target="#myModal">
-	<span class="glyphicon glyphicon-plus-sign"></span>
-</button>
+
 	</div>
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -47,11 +84,11 @@
 			</div>
 			<div class="modal-body">
 				<input type="text" class="form-group form-control" id="config_item_value"/>
-				<input type="hidden" value="0"/>
+				<input type="hidden" id="item_name" value=""/>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-				<button type="button" class="btn btn-default">保存</button>
+				<button type="button" class="btn btn-default" onclick="add_select_option(document.getElementById('item_name').value,'config_item_value');" data-dismiss="modal">保存</button>
 			</div>
 		</div>
 	</div>

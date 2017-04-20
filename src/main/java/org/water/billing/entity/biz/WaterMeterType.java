@@ -23,15 +23,15 @@ public class WaterMeterType {
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="producer_id")
-	private WaterMeterConfig producer;
+	private WaterMeterConfig producer = new WaterMeterConfig();
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="model_id")
-	private WaterMeterConfig model;
+	private WaterMeterConfig model = new WaterMeterConfig();
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="size_id")
-	private WaterMeterConfig size;
+	private WaterMeterConfig size = new WaterMeterConfig();
 	
 	public WaterMeterType() {
 		

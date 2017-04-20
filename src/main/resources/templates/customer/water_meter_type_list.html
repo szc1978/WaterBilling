@@ -28,10 +28,10 @@
 			        </tr>
 				</thead>
 				<tbody>
-					<tr th:each="meter,meterStat : ${meters}"> 
-				        <td th:text="${meter.index} + 1">1</td> 
+					<tr th:each="meter,meterStat : ${waterMeterTypes}"> 
+				        <td th:text="${meterStat.index} + 1">1</td> 
 				        <td th:text="${meter.name}"></td> 
-				        <td th:text="${meter.proceder.configItemValue}"></td>
+				        <td th:text="${meter.producer.configItemValue}"></td>
 				        <td th:text="${meter.model.configItemValue}"></td>
 				        <td th:text="${meter.size.configItemValue}"></td>
 				        <td>

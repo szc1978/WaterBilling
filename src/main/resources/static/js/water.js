@@ -61,3 +61,4 @@ function float_input_validate(obj){
 function int_input_validate(obj) {
 	obj.value = obj.value.replace(/[^\d]/g,"");
 }
+
