@@ -73,42 +73,36 @@
 					 </select>
 				</div>
 				
-				
-				<div class="col-sm-3 form-group ">
-					 <label for="name">水表厂家:</label>
-					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				<div class="col-sm-4 form-group ">
+					 <label for="name">水表类型:</label>
+					 <select class="form-control" th:field="*{waterMeter.meterType.id}">
+					 	<option th:each="meterType : ${waterMeterTypeList}" th:value="${meterType.id}" th:text="${meterType.name}" th:if="${customer.waterMeter.meterType.id eq meterType.id}" th:selected="true"></option>
+					 	<option th:each="meterType : ${waterMeterTypeList}" th:value="${meterType.id}" th:text="${meterType.name}" th:if="${customer.waterMeter.meterType.id ne meterType.id}" ></option>
+					 </select>
 				</div>
-				<div class="col-sm-3 form-group ">
-					 <label for="name">水表型号:</label>
-					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+				<div class="col-sm-4 form-group ">
+					<label for="name">水表用途:</label>
+					<select class="form-control" th:value="${customer.waterMeter.usage}" th:field="*{waterMeter.usage}" >
+					 	<option th:each="usage : ${meter_usage}" th:value="${usage}" th:text="${usage}"></option>
+					 </select>
 				</div>
-				<div class="col-sm-3 form-group ">
-					 <label for="name">水表口径:</label>
-					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
-				</div>
-				<div class="col-sm-3 form-group ">
-					 <label for="name">水表用途:</label>
-					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
-				</div>
-				<div class="col-sm-3 form-group ">
+				<div class="col-sm-4 form-group ">
 					 <label for="name">水表状态:</label>
-					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+					 <select class="form-control" th:value="${customer.waterMeter.status}" th:field="*{waterMeter.status}" >
+					 	<option th:each="status : ${meter_status}" th:value="${status}" th:text="${status}"></option>
+					 </select>
 				</div>
-				<div class="col-sm-3 form-group ">
-					 <label for="name">状态日期:</label>
-					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
-				</div>
-				<div class="col-sm-3 form-group ">
+				<div class="col-sm-4 form-group ">
 					 <label for="name">表位号:</label>
-					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+					 <input type="text" class="form-control" th:value="${customer.waterMeter.locationNumber}" th:field="*{waterMeter.locationNumber}" onkeyup="float_input_validate(this)" />
 				</div>
-				<div class="col-sm-3 form-group ">
+				<div class="col-sm-4 form-group ">
 					 <label for="name">表身号:</label>
-					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+					 <input type="text" class="form-control" th:value="${customer.waterMeter.bodyNumber}" th:field="*{waterMeter.bodyNumber}" onkeyup="float_input_validate(this)" />
 				</div>
 				<div class="col-sm-4 form-group ">
 					 <label for="name">水表起度:</label>
-					 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:field="*{customerWater.orgNumber}" onkeyup="float_input_validate(this)" />
+					 <input type="text" class="form-control" th:value="${customer.waterMeter.firstNumber}" th:field="*{waterMeter.firstNumber}" onkeyup="float_input_validate(this)" />
 				</div>
 				
 				<div class="col-sm-4 form-group ">
@@ -119,12 +113,13 @@
 					 <label for="name">客户余额:</label>
 					 <input type="text" class="form-control" th:value="${customer.balance}" th:field="*{balance}" onkeyup="float_input_validate(this)" />
 				</div>
-				<div class="col-sm-4">
+				<div class="col-sm-12">
 					<input type="submit" class="btn btn-default" value="保存" />
 				</div>
 				<input type="hidden" th:value="${customer.id}" th:field="*{id}"/>
 				<input type="hidden" th:value="${customer.customerInfo.id}" th:field="*{customerInfo.id}"/>
 				<input type="hidden" th:value="${customer.customerWater.id}" th:field="*{customerWater.id}"/>
+				<input type="hidden" th:value="${customer.waterMeter.id}" th:field="*{waterMeter.id}" />
 				<input type="hidden" th:value="${customer.status}" th:field="*{status}" />
 			</div>
 			<div class="col-sm-12">* 从每年的该月到下一年该月为一个缴费周期，阶梯计费从该月计算</div>

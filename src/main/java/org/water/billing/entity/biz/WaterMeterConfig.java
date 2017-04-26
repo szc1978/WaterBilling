@@ -24,6 +24,11 @@ public class WaterMeterConfig {
 	public WaterMeterConfig() {
 		
 	}
+	
+	public WaterMeterConfig(int configItemId,String configItemValue) {
+		this.configItemId = configItemId;
+		this.configItemValue = configItemValue;
+	}
 
 	public int getId() {
 		return id;

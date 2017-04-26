@@ -118,6 +118,8 @@
                         <ul id="water" class="nav nav-list collapse secondmenu" style="height: 0px;">
                             <li><a href="/waterdata/input_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 数据录入</a></li>
                             <li><a href="/waterdata/import_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 数据导入</a></li>
+                            <li><a href="/waterdata/import_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 停水复水操作</a></li>
+                            <li><a href="/waterdata/import_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 更换水表</a></li>
                         </ul>
                     </li>
                     <li th:if="${#strings.contains(userResources,'/customer')}">
@@ -175,6 +177,8 @@
                             <li th:if="${#strings.contains(userResources,'/admin/role')}"><a href="/admin/role" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 系统用户权限管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/admin/privilege')}"><a href="/admin/privilege" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 页面功能管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/admin/configuration')}"><a href="/admin/configuration" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 系统全局配置</a></li>
+                            <li th:if="${#strings.contains(userResources,'/admin/publicannouncement')}"><a href="/admin/publicannouncement" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 发布公告</a></li>
+                            <li th:if="${#strings.contains(userResources,'/admin/configuration')}"><a href="/admin/configuration" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 统计数据</a></li>
                         </ul>
                     </li>
                     <li th:if="${#strings.contains(userResources,'/log')}">

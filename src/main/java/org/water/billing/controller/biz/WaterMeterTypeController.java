@@ -1,10 +1,6 @@
 package org.water.billing.controller.biz;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -52,21 +48,27 @@ public class WaterMeterTypeController {
 	
 	@RequestMapping(value="/customer/watermetertype/form",method=RequestMethod.POST)
 	public String waterMeter(@ModelAttribute WaterMeterType waterMeterType) throws MyException {
-		WaterMeterConfig producer = waterMeterType.getProducer();
-		if(producer.getId() == 0)
+		WaterMeterConfig producer = waterMeterConfigService.findByConfigItemIdAndValue(WaterMeterConfigItemEnum.PRODUCER.getId(), waterMeterType.getProducer().getConfigItemValue());
+		if(producer == null) {
+			producer = new WaterMeterConfig(WaterMeterConfigItemEnum.PRODUCER.getId(), waterMeterType.getProducer().getConfigItemValue());
 			producer = waterMeterConfigService.save(producer);
-		WaterMeterConfig model = waterMeterType.getModel();
-		if(model.getId() == 0)
+		}
+		WaterMeterConfig model = waterMeterConfigService.findByConfigItemIdAndValue(WaterMeterConfigItemEnum.MODEL.getId(), waterMeterType.getModel().getConfigItemValue());
+		if(model == null) {
+			model = new WaterMeterConfig(WaterMeterConfigItemEnum.MODEL.getId(), waterMeterType.getModel().getConfigItemValue());
 			model = waterMeterConfigService.save(model);
-		WaterMeterConfig size = waterMeterType.getSize();
-		if(size.getId() == 0)
+		}
+		WaterMeterConfig size = waterMeterConfigService.findByConfigItemIdAndValue(WaterMeterConfigItemEnum.SIZE.getId(), waterMeterType.getSize().getConfigItemValue());
+		if(size == null) {
+			size = new WaterMeterConfig(WaterMeterConfigItemEnum.SIZE.getId(), waterMeterType.getSize().getConfigItemValue());
 			size = waterMeterConfigService.save(size);
+		}
 		waterMeterType.setProducer(producer);
 		waterMeterType.setModel(model);
 		waterMeterType.setSize(size);
 		waterMeterTypeService.save(waterMeterType);
 		
-		return "/customer/water_meter_type_list";
+		return "redirect:/customer/watermetertype";
 	}
 	
 }

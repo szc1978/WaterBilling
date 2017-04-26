@@ -1,18 +1,6 @@
 package org.water.billing.consts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Consts {
-	public static final List<String> CHARGE_FROM_TYPE = new ArrayList<String>() {
-		private static final long serialVersionUID = -2145618765457370938L;
-		{ add("抄表");add("固定");add("其他"); }
-	};
-	
-	public static final List<String> CUSTOMER_CERTIFICATE_TYPE = new ArrayList<String>() {
-		private static final long serialVersionUID = -2409239467580519026L;
-		{ add("身份证");add("军官证");add("驾驶证"); }
-	};
 	
 	public static final Integer MIN_ADMIN_USER_PWD_LENGTH = 4;
 	
@@ -36,4 +24,9 @@ public class Consts {
 	public static final String GCK_DISABLE_APPROVE_CUSTOMER = "disable_approve_customer";
 	public static final String GCK_DISABLE_APPROVE_CUSTOMER_WATER = "disable_approve_customer_water";
 	public static final String GCK_DISABLE_APPROVE_CUSTOMER_BILL = "disable_approve_customer_bill";
+	public static final String GCK_CUSTOMER_WATER_METER_USAGE = "customer_water_meter_usage";
+	public static final String GCK_CUSTOMER_WATER_METER_STATUS = "customer_water_meter_status";
+	public static final String GCK_CUSTOMER_READ_METER_CYCLE = "customer_read_status_cycle";
+	public static final String GCK_CUSTOMER_CERTIFICATE_NAME = "customer_certificate_name";
+	public static final String GCK_CHARGE_FROM_TYPE = "charge_from_type";
 }

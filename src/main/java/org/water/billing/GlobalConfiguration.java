@@ -1,5 +1,6 @@
 package org.water.billing;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -61,5 +62,15 @@ public class GlobalConfiguration {
 	
 	public String getConfigValueByItemName(String itemName) {
 		return configurationMap.get(itemName);
+	}
+	
+	public List<String> getConfigValueList(String itemName) {
+		List<String> res = new ArrayList<String>();
+		String value = configurationMap.get(itemName);
+		if(value == null)
+			return res;
+		for(String s : value.split("\\s+"))
+			res.add(s);
+		return res;
 	}
 }

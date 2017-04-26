@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.GlobalConfiguration;
 import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.consts.ChargeTypeEnum;
 import org.water.billing.consts.Consts;
@@ -58,7 +59,7 @@ public class ChargeController {
 		
 		List<Map<String,String>> chargeTypes = genChargeType4Thymeleaf();
 		map.addAttribute("chargeTypes", chargeTypes);
-		map.addAttribute("chargeFroms",Consts.CHARGE_FROM_TYPE);
+		map.addAttribute("chargeFroms",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CHARGE_FROM_TYPE));
 		
 		return "/charge/charge_form";
 	}

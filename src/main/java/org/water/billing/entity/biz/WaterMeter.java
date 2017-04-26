@@ -1,7 +1,5 @@
 package org.water.billing.entity.biz;
 
-import java.util.Date;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,10 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="water_meter")
@@ -23,17 +18,15 @@ public class WaterMeter {
 	@Column ( name = "id",length=10)
 	private int id = 0;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name="meter_type_id")
 	private WaterMeterType meterType;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="usage_id")
-	private WaterMeterConfig usage;
-	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="status_id")
-	private WaterMeterConfig status;
+
+	@Column(name="meter_usage")
+	private String usage;
+
+	@Column(name="status")
+	private String status;
 	
 	@Column(name="location_number")
 	private String locationNumber;
@@ -42,15 +35,7 @@ public class WaterMeter {
 	private String bodyNumber;
 	
 	@Column(name="first_number")
-	private String firstNumber;
-	
-	@Column(name = "status_time",length=64,updatable = false)
-	@Temporal(TemporalType.TIMESTAMP) 
-	private Date statusTime; 
-	@PrePersist
-    protected void onCreate() {
-		statusTime = new Date();
-    }
+	private Float firstNumber;
 	
 	public WaterMeter() {
 		
@@ -64,19 +49,19 @@ public class WaterMeter {
 		this.id = id;
 	}
 
-	public WaterMeterConfig getUsage() {
+	public String getUsage() {
 		return usage;
 	}
 
-	public void setUsage(WaterMeterConfig usage) {
+	public void setUsage(String usage) {
 		this.usage = usage;
 	}
 
-	public WaterMeterConfig getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(WaterMeterConfig status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
@@ -104,20 +89,13 @@ public class WaterMeter {
 		this.bodyNumber = bodyNumber;
 	}
 
-	public String getFirstNumber() {
+	public Float getFirstNumber() {
 		return firstNumber;
 	}
 
-	public void setFirstNumber(String firstNumber) {
+	public void setFirstNumber(Float firstNumber) {
 		this.firstNumber = firstNumber;
 	}
 
-	public Date getStatusTime() {
-		return statusTime;
-	}
-
-	public void setStatusTime(Date statusTime) {
-		this.statusTime = statusTime;
-	}
 	
 }

@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>无标题文档</title>
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/js/jquery-3.2.0.min.js"></script>
+	<script type="text/javascript" src="/js/water.js"></script>
+</head>
+
+<body>
+	<div class="container">
+	    <div class="formtitle"><span>发布公告</span></div>
+		<form th:action="@{/admin/publicannouncement}" method="post" th:object="${announcement}">
+			<div class="con-mid-8">
+				<div class="col-sm-9 form-group ">
+					 <label for="name">公告名称:</label>
+					 <input type="text" class="form-control" th:value="${announcement.name}" th:field="*{name}" />
+				</div>
+			</div>
+			<div class="con-mid-8">
+				<div class="col-sm-9 form-group ">
+					 <label for="name">公告内容:</label>
+					 <textarea class="form-control" th:value="${announcement.content}" th:field="*{content}" rows="10" />
+				</div>
+			</div>
+			<div class="col-sm-9">
+				<input type="submit" value="保存" class="btn btn-default"/>
+			</div>
+		</form>
+    </div>
+</body>
+
+</html>

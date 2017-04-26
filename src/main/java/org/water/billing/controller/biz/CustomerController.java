@@ -11,15 +11,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.GlobalConfiguration;
 import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.consts.Consts;
-import org.water.billing.consts.ReadMeterCycleEnum;
 import org.water.billing.entity.biz.Customer;
 import org.water.billing.entity.biz.CustomerType;
+import org.water.billing.entity.biz.WaterMeterType;
 import org.water.billing.entity.biz.WaterProvider;
 import org.water.billing.service.biz.CustomerService;
 import org.water.billing.service.biz.CustomerTypeService;
+import org.water.billing.service.biz.WaterMeterTypeService;
 import org.water.billing.service.biz.WaterProviderService;
 import org.water.billing.utils.Utils;
 
@@ -34,6 +36,9 @@ public class CustomerController {
 	
 	@Autowired
 	WaterProviderService waterProviderService;
+	
+	@Autowired
+	WaterMeterTypeService waterMeterTypeService;
 
 	@RequestMapping(value="/customer/manage/list",method=RequestMethod.GET)
 	public String customer(@RequestParam(defaultValue="1") int page,
@@ -90,12 +95,16 @@ public class CustomerController {
 		if(customer == null)
 			customer = new Customer();
 		map.addAttribute("customer", customer);
-		map.addAttribute("certificateNames",Consts.CUSTOMER_CERTIFICATE_TYPE);
+		map.addAttribute("certificateNames",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CUSTOMER_CERTIFICATE_NAME));
+		map.addAttribute("meter_usage",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CUSTOMER_WATER_METER_USAGE));
+		map.addAttribute("meter_status",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CUSTOMER_WATER_METER_STATUS));
+		map.addAttribute("readMeterCycles",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CUSTOMER_READ_METER_CYCLE));
 		List<CustomerType> customerTypes = customerTypeService.findAll();
 		map.addAttribute("customerTypes",customerTypes);
 		List<WaterProvider> waterProviders = waterProviderService.findAll();
 		map.addAttribute("waterProviders",waterProviders);
-		map.addAttribute("readMeterCycles",getReadMeterCycleList());
+		List<WaterMeterType> waterMeterTypeList = waterMeterTypeService.findAll();
+		map.addAttribute("waterMeterTypeList", waterMeterTypeList);
 		return "/customer/customer_form";
 	}
 
@@ -130,12 +139,5 @@ public class CustomerController {
 		customer.setStatus(status);
 		customerService.save(customer);
 		return "redirect:/approve/customer/list";
-	}
-	
-	private List<String> getReadMeterCycleList() {
-		List<String> readMeterCycles = new ArrayList<String>();
-		for(ReadMeterCycleEnum cycle : ReadMeterCycleEnum.values())
-			readMeterCycles.add(cycle.getName());
-		return readMeterCycles;
 	}
 }

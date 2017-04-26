@@ -17,7 +17,8 @@ public enum ResourceEnum {
 	ADMIN_PRIVILEGE("页面功能管理","/admin/privilege"),
 	ADMIN_GOLBAL_CONFIG("系统全局配置","/admin/configuration"),
 	OP_LOG("操作日志","/log/operation"),
-	LOGIN_LOG("登录日志","/log/login")
+	LOGIN_LOG("登录日志","/log/login"),
+	PUBLIC_ANNOUNCEMENT("发布公告","/admin/publicannouncement")
 	;
 	
 	

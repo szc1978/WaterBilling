@@ -35,7 +35,7 @@ public class Customer {
 	@Column(name="read_meter_cycle")
 	private String readMeterCycle;
 	
-	/*2 bit, pending|active
+	/*4 bit, pending|reserve|waterstatus|accountstatus
 	 * 0 : inactive
 	 * 1 : active
 	 * 2 : active -> inactive, pending for approve

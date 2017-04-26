@@ -12,56 +12,80 @@
 <body>
 	<div class="container">
 	    <div class="formtitle"><span>系统全局配置</span></div>
-			<form th:action="@{/admin/configuration}" method="post">
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">业务设置</h3>
+		<form th:action="@{/admin/configuration}" method="post">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">业务设置</h3>
+				</div>
+				<div class="panel-body form-inline">
+					<label>收取滞纳金天数：</label>
+					<input class="form-control" type="text" name="gloabl_config_late_pay_day" th:value="${late_pay_day}" onkeyup="int_input_validate(this)"/>
+					<label> 滞纳金比例(%)：</label>
+					<input class="form-control" type="text" name="gloabl_config_late_pay_ratio" th:value="${late_pay_ratio}" onkeyup="float_input_validate(this)"/>
+				</div>
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">审核设置(如果取消审核机制，相应的更新在5分钟类会自动完成)</h3>
+				</div>
+				<div class="panel-body form-inline">
+					<label>客户开户销户无须审核：</label>
+					<div class="radio">
+  						<label>
+    						<input type="radio" name="gloabl_config_disable_approve_customer" th:if="${disable_approve_customer == '1'}" value="1" th:checked="true" th:text="是"/>
+    						<input type="radio" name="gloabl_config_disable_approve_customer" th:if="${disable_approve_customer == '0'}" value="1"  th:text="是"/>
+    						<input type="radio" name="gloabl_config_disable_approve_customer" th:if="${disable_approve_customer == '1'}" value="0" th:text="否"/>
+    						<input type="radio" name="gloabl_config_disable_approve_customer" th:if="${disable_approve_customer == '0'}" value="0" th:checked="true"  th:text="否"/>
+  						</label>
 					</div>
-					<div class="panel-body form-inline">
-						<label>收取滞纳金天数：</label>
-						<input class="form-control" type="text" name="gloabl_config_late_pay_day" th:value="${late_pay_day}" onkeyup="int_input_validate(this)"/>
-						<label> 滞纳金比例(%)：</label>
-						<input class="form-control" type="text" name="gloabl_config_late_pay_ratio" th:value="${late_pay_ratio}" onkeyup="float_input_validate(this)"/>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<label>客户用水量录入无须审核：</label>
+					<div class="radio">
+  						<label>
+  							<input type="radio" name="gloabl_config_disable_approve_customer_water" th:if="${disable_approve_customer_water == '1'}" value="1" th:checked="true" th:text="是"/>
+    						<input type="radio" name="gloabl_config_disable_approve_customer_water" th:if="${disable_approve_customer_water == '0'}" value="1"  th:text="是"/>
+    						<input type="radio" name="gloabl_config_disable_approve_customer_water" th:if="${disable_approve_customer_water == '1'}" value="0" th:text="否"/>
+    						<input type="radio" name="gloabl_config_disable_approve_customer_water" th:if="${disable_approve_customer_water == '0'}" value="0" th:checked="true"  th:text="否"/>
+  						</label>
+					</div>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<label>客户自动销账无须审核：</label>
+					<div class="radio">
+  						<label>
+  							<input type="radio" name="gloabl_config_disable_approve_customer_bill" th:if="${disable_approve_customer_bill == '1'}" value="1" th:checked="true" th:text="是"/>
+    						<input type="radio" name="gloabl_config_disable_approve_customer_bill" th:if="${disable_approve_customer_bill == '0'}" value="1"  th:text="是"/>
+    						<input type="radio" name="gloabl_config_disable_approve_customer_bill" th:if="${disable_approve_customer_bill == '1'}" value="0" th:text="否"/>
+    						<input type="radio" name="gloabl_config_disable_approve_customer_bill" th:if="${disable_approve_customer_bill == '0'}" value="0" th:checked="true"  th:text="否"/>
+  						</label>
 					</div>
 				</div>
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<h3 class="panel-title">审核设置(如果取消审核机制，相应的更新在5分钟类会自动完成)</h3>
-					</div>
-					<div class="panel-body form-inline">
-						<label>客户开户销户无须审核：</label>
-						<div class="radio">
-  							<label>
-    							<input type="radio" name="gloabl_config_disable_approve_customer" th:if="${disable_approve_customer == '1'}" value="1" th:checked="true" th:text="是"/>
-    							<input type="radio" name="gloabl_config_disable_approve_customer" th:if="${disable_approve_customer == '0'}" value="1"  th:text="是"/>
-    							<input type="radio" name="gloabl_config_disable_approve_customer" th:if="${disable_approve_customer == '1'}" value="0" th:text="否"/>
-    							<input type="radio" name="gloabl_config_disable_approve_customer" th:if="${disable_approve_customer == '0'}" value="0" th:checked="true"  th:text="否"/>
-  							</label>
-						</div>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<label>客户用水量录入无须审核：</label>
-						<div class="radio">
-  							<label>
-  								<input type="radio" name="gloabl_config_disable_approve_customer_water" th:if="${disable_approve_customer_water == '1'}" value="1" th:checked="true" th:text="是"/>
-    							<input type="radio" name="gloabl_config_disable_approve_customer_water" th:if="${disable_approve_customer_water == '0'}" value="1"  th:text="是"/>
-    							<input type="radio" name="gloabl_config_disable_approve_customer_water" th:if="${disable_approve_customer_water == '1'}" value="0" th:text="否"/>
-    							<input type="radio" name="gloabl_config_disable_approve_customer_water" th:if="${disable_approve_customer_water == '0'}" value="0" th:checked="true"  th:text="否"/>
-  							</label>
-						</div>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-						<label>客户自动销账无须审核：</label>
-						<div class="radio">
-  							<label>
-  								<input type="radio" name="gloabl_config_disable_approve_customer_bill" th:if="${disable_approve_customer_bill == '1'}" value="1" th:checked="true" th:text="是"/>
-    							<input type="radio" name="gloabl_config_disable_approve_customer_bill" th:if="${disable_approve_customer_bill == '0'}" value="1"  th:text="是"/>
-    							<input type="radio" name="gloabl_config_disable_approve_customer_bill" th:if="${disable_approve_customer_bill == '1'}" value="0" th:text="否"/>
-    							<input type="radio" name="gloabl_config_disable_approve_customer_bill" th:if="${disable_approve_customer_bill == '0'}" value="0" th:checked="true"  th:text="否"/>
-  							</label>
-						</div>
-					</div>
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">水表参数设置(用空格隔开多个值)</h3>
 				</div>
-				<input type="submit" value="保存" class="btn btn-default"/>
-			</form>
+				<div class="panel-body ">
+					<label>水表状态：</label>
+					<input class="form-control" type="text" name="gloabl_config_customer_water_meter_status" th:value="${customer_water_meter_status}" />
+					<label> 水表用途：</label>
+					<input class="form-control" type="text" name="gloabl_config_customer_water_meter_usage" th:value="${customer_water_meter_usage}" />
+				</div>
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">客户参数设置(用空格隔开多个值)</h3>
+				</div>
+				<div class="panel-body ">
+					<label>开户证件：</label>
+					<input class="form-control" type="text" name="gloabl_config_customer_certificate_name" th:value="${customer_certificate_name}" />
+					<label> 收费来源：</label>
+					<input class="form-control" type="text" name="gloabl_config_charge_from_type" th:value="${charge_from_type}" />
+					<label> 抄表周期：</label>
+					<input class="form-control" type="text" name="gloabl_config_customer_read_status_cycle" th:value="${customer_read_status_cycle}" />
+				</div>
+			</div>
+			<input type="submit" value="保存" class="btn btn-default"/>
+		</form>
     </div>
 </body>
 
