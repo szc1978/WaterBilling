@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,7 +36,7 @@ public class PublicAnnouncement {
 	@Temporal(TemporalType.TIMESTAMP) 
 	@Column(name = "createDate", length = 32)  
 	private Date createDate;
-	@PrePersist
+	@PreUpdate
     protected void onCreate() {
 		createDate = new Date();
     }

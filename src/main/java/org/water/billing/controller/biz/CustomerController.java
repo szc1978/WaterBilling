@@ -15,10 +15,12 @@ import org.water.billing.GlobalConfiguration;
 import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.consts.Consts;
+import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Customer;
 import org.water.billing.entity.biz.CustomerType;
 import org.water.billing.entity.biz.WaterMeterType;
 import org.water.billing.entity.biz.WaterProvider;
+import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.CustomerService;
 import org.water.billing.service.biz.CustomerTypeService;
 import org.water.billing.service.biz.WaterMeterTypeService;
@@ -39,6 +41,9 @@ public class CustomerController {
 	
 	@Autowired
 	WaterMeterTypeService waterMeterTypeService;
+	
+	@Autowired
+	BillService billService;
 
 	@RequestMapping(value="/customer/manage/list",method=RequestMethod.GET)
 	public String customer(@RequestParam(defaultValue="1") int page,
@@ -49,6 +54,11 @@ public class CustomerController {
 		map.addAttribute("pageUrl", "/customer/manage/list");
 		map.addAttribute("customers",pageInfo.getContent());
 		Utils.setPageInfo4ModelMap(pageInfo, map);
+		return "/customer/customer_list";
+	}
+	
+	@RequestMapping(value="/customer/manage/search",method=RequestMethod.POST)
+	public String searchCustomer() {
 		return "/customer/customer_list";
 	}
 	
@@ -69,6 +79,11 @@ public class CustomerController {
 			throw new MyException("客户正处于等待审核状态");
 		if((customer.getStatus() & Consts.CUSTOMER_STATUS_ACTIVE_BIT) == 0)
 			throw new MyException("客户已经处于销户状态");
+		
+		List<Bill> unchangedBills = billService.findUnchargedBill(customer.getCustomerInfo().getCode());
+		if(unchangedBills.size() != 0)
+			throw new MyException("客户还在欠费中，无法销户！");
+		
 		customer.setStatus(Consts.CUSTOMER_STATUS_PENDING_BIT);
 		Customer res = customerService.save(customer);
 		return "redirect:/customer/manage/list/" + res.getId();

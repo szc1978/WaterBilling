@@ -1,5 +1,8 @@
 package org.water.billing.service.admin;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +29,22 @@ public class PublicAnnouncementService {
 		return announcementDao.save(announcement);
 	}
 	
+	public void remove(PublicAnnouncement announcement) {
+		announcementDao.delete(announcement.getId());
+	}
+	
+	public List<PublicAnnouncement> findLatest5Announce() {
+		Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC,"id"));
+		Pageable page = new PageRequest(0,5,sort);
+		Page<PublicAnnouncement> announces = announcementDao.findAll(page);
+		return announces.getContent();
+	}
 
-
+	public int countNewAnnouncement(Date fromDate) {
+		return announcementDao.countByCreateDateGreaterThan(fromDate);
+	}
+	
+	public PublicAnnouncement findById(int id) {
+		return announcementDao.findById(id);
+	}
 }

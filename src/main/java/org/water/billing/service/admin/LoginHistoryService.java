@@ -30,5 +30,14 @@ public class LoginHistoryService {
 			return history.getContent().get(0);
 		return null;
 	}
+	
+	public LoginHistory findThisLoginByUserName(String userName) {
+		Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC,"id"));
+		Pageable page = new PageRequest(0,1,sort);
+		Page<LoginHistory> history = loginLogDao.findByUserName(userName,page);
+		if(history.getNumberOfElements() == 1)
+			return history.getContent().get(0);
+		return null;
+	}
 
 }

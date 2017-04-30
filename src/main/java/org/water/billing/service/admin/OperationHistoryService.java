@@ -28,9 +28,9 @@ public class OperationHistoryService {
 		return opHistoryDao.save(op);
 	}
 
-	public List<OperationHistory> findLatest10ByUserName(String userName) {
+	public List<OperationHistory> findLatest5ByUserName(String userName) {
 		Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC,"id"));
-		Pageable page = new PageRequest(0,10,sort);
+		Pageable page = new PageRequest(0,5,sort);
 		Page<OperationHistory> history = opHistoryDao.findAll(page);
 		return history.getContent();
 	}

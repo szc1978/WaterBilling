@@ -16,35 +16,56 @@
 		    <i>您上次登录的时间：<b th:if="${loginHistory != null}" th:text="${loginHistory.loginTime}"></b></i> <p></p>
 		    <i>您上次登录的机器IP：<b th:if="${loginHistory != null}" th:text="${loginHistory.ip}"></b></i><p></p>
 
-		    <span></span><p></p><p></p>
+		    <hr align="center" width="100%" size="1"></hr>
+		    最近公告:<br></br>
+		    <div>
+			    <table class="table table-striped">
+			    	<thead>
+			    		<tr>
+			        		<th>编号</th>
+			        		<th>公告</th>
+			        		<th>发布者</th>
+			        		<th>发布日期</th>
+			        	</tr>
+			        </thead>
+			        <tbody>
+			        <tr th:each="announcement,announcementStat : ${announcements}"> 
+				        <td th:text="${announcementStat.index} + 1">1</td> 
+				        <td ><a th:href="@{/profile/announcementview(id=${announcement.id})}" th:text="${announcement.name}"></a></td> 
+				        <td th:text="${announcement.publisher.chineseName}"></td>
+				        <td th:text="${announcement.createDate}"></td>
+			        </tr>        
+			        </tbody>
+			    </table>
+		    </div>
 		    
 		    <hr align="center" width="100%" size="1"></hr>
 		    您最近处理的业务,如果发现异常请及时联系管理员：<br></br>
 		    <div>
-		    <table class="table table-striped">
-		    	<thead>
-		    		<tr>
-		        		<th>编号</th>
-		        		<th>用户名</th>
-		        		<th>模块</th>
-		        		<th>操作</th>
-		        		<th>IP</th>
-		        		<th>内容</th>
-		        		<th>日期</th>
-		        	</tr>
-		        </thead>
-		        <tbody>
-		        <tr th:each="history,historyStat : ${opHistory}"> 
-			        <td th:text="${historyStat.index} + 1">1</td> 
-			        <td th:text="${history.userChineseName}"></td> 
-			        <td th:text="${history.moduleName}"></td>
-			        <td th:text="${history.opName}"></td>
-			        <td th:text="${history.ip}"></td>
-			        <td th:text="${history.content}"></td>
-			        <td th:text="${history.opTime}"></td>
-		        </tr>        
-		        </tbody>
-		    </table>
+			    <table class="table table-striped">
+			    	<thead>
+			    		<tr>
+			        		<th>编号</th>
+			        		<th>用户名</th>
+			        		<th>模块</th>
+			        		<th>操作</th>
+			        		<th>IP</th>
+			        		<th>内容</th>
+			        		<th>日期</th>
+			        	</tr>
+			        </thead>
+			        <tbody>
+			        <tr th:each="history,historyStat : ${opHistory}"> 
+				        <td th:text="${historyStat.index} + 1">1</td> 
+				        <td th:text="${history.userChineseName}"></td> 
+				        <td th:text="${history.moduleName}"></td>
+				        <td th:text="${history.opName}"></td>
+				        <td th:text="${history.ip}"></td>
+				        <td th:text="${history.content}"></td>
+				        <td th:text="${history.opTime}"></td>
+			        </tr>        
+			        </tbody>
+			    </table>
 		    </div>
 		    <hr align="center" width="100%" size="1"></hr>
 

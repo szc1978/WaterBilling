@@ -45,6 +45,7 @@
 			filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4A515B', endColorstr='#3C4049');
 			-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#4A515B', endColorstr='#3C4049')";
 			border-color: #2B2E33;
+			cursor:pointer;
 		}
 
 		#main-nav.nav-tabs.nav-stacked > li.active > a, #main-nav.nav-tabs.nav-stacked > li > a:hover > span {
@@ -99,7 +100,11 @@
             <div class="col-md-9">
                 <ul id="main-nav" class="nav nav-tabs nav-stacked" style="">
                     <li class="active">
-                        <a href="/profile/userprofile" target="rightFrame"> <i class="glyphicon glyphicon-home"></i> 首页 </a>
+                        <a href="/profile/userprofile" target="rightFrame"> 
+                        	<i class="glyphicon glyphicon-home"></i>
+                        	 首页 
+                        	<span id="home" class="badge" th:if="${newAnnouncementCount gt 0}" th:text="${newAnnouncementCount}"></span>
+                        </a>
                     </li>
                     <li th:if="${#strings.contains(userResources,'/pay')}">
                         <a href="#pay" class="nav-header collapsed" data-toggle="collapse">
@@ -177,7 +182,7 @@
                             <li th:if="${#strings.contains(userResources,'/admin/role')}"><a href="/admin/role" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 系统用户权限管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/admin/privilege')}"><a href="/admin/privilege" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 页面功能管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/admin/configuration')}"><a href="/admin/configuration" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 系统全局配置</a></li>
-                            <li th:if="${#strings.contains(userResources,'/admin/publicannouncement')}"><a href="/admin/publicannouncement" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 发布公告</a></li>
+                            <li th:if="${#strings.contains(userResources,'/admin/announcement')}"><a href="/admin/announcement/list" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 公告管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/admin/configuration')}"><a href="/admin/configuration" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 统计数据</a></li>
                         </ul>
                     </li>

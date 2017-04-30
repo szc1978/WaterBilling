@@ -51,6 +51,9 @@ public class Bill {
 	@Column(name="is_charged",length=1)
 	private int isCharged = 0;
 	
+	@Column(name="is_print_expenses")
+	private int isPrintExpenses = 0;
+	
 	@Column(name="auto_charge_flag")
 	private int autoChargeFlag = Consts.NON_BILL_AUTO_CHARGE_FLAG;
 		
@@ -176,6 +179,14 @@ public class Bill {
 
 	public void setCustomerCode(String customerCode) {
 		this.customerCode = customerCode;
+	}
+
+	public int getIsPrintExpenses() {
+		return isPrintExpenses;
+	}
+
+	public void setIsPrintExpenses(int isPrintExpenses) {
+		this.isPrintExpenses = isPrintExpenses;
 	}
 	
 	

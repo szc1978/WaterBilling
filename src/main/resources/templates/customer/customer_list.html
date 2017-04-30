@@ -11,7 +11,29 @@
 	<div class="container">
 		<div class="formtitle"><span>客户列表</span></div>
     	<div class="col-sm-13" align="right">
-    		<a th:href="@{/customer/manage/form}"><button type="button" class="btn btn-default">新增客户</button></a>
+    		<form class="form-inline form-group" th:action="@{/}" method="post" >
+    			<input type="text" class="form-control" name="code" th:placeholder="客户编号" />
+   				<input type="text" class="form-control" name="k" th:placeholder="客户名或者住址关键字" />
+   				<select class="form-control" name="status_customer">
+   					<option value="" th:selected="true">供水片区</option>
+   					<option value="">正常</option>
+   					<option value="">销户</option>
+   					<option value="">欠费</option>
+   				</select>
+   				<select class="form-control" name="status_customer">
+   					<option value="" th:selected="true">客户状态</option>
+   					<option value="">正常</option>
+   					<option value="">销户</option>
+   					<option value="">欠费</option>
+   				</select>
+   				<select class="form-control" name="status_meter">
+   					<option value="" th:selected="true">水表状态</option>
+   					<option value="">正常</option>
+   					<option value="">停水</option>
+   				</select>
+  				<input type="submit" value="搜索" class="btn btn-default"/>
+  				<a th:href="@{/customer/manage/form}"><button type="button" class="btn btn-default">新增客户</button></a>
+    		</form>
     	</div>
 		<div>
 			<table class="table table-striped">
@@ -40,6 +62,8 @@
 				        	<a th:href="@{/customer/manage/form(id=${customer.id})}">编辑</a>
 				        	<a th:if="${customer.status eq 0}" th:href="@{/customer/manage/activate(id=${customer.id})}">重新开户</a>
 				        	<a th:if="${customer.status eq 1}" th:href="@{/customer/manage/deactivate(id=${customer.id})}">销户</a>
+				        	<a th:href="@{/customer/manage/form(id=${customer.id})}">停水</a>
+				        	<a th:href="@{/customer/manage/form(id=${customer.id})}">水表维护</a>
 				        </td>
 			        </tr>        
 			        </tbody>

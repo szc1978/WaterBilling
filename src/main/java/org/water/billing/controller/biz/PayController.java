@@ -148,8 +148,8 @@ public class PayController {
 			sss.put("price", ss[1]);
 			payItems.add(sss);
 		}
-		model.addAttribute("Name", "缴费");
 		model.addAttribute("payitems", payItems);
+		model.addAttribute("bill", bill);
 		return "/pay/pay_bill";
 	}
 	
@@ -187,6 +187,20 @@ public class PayController {
 	public String autoPay(@RequestParam String customerCode) throws Exception {
 		doPay(customerCode,new Float(0));
 		return "redirect:/approve/customerbill/list";
+	}
+	
+	@OpAnnotation(moduleName="客户缴费",option="打印账单发票")
+	@RequestMapping(value = "/pay/print_expenses",method=RequestMethod.POST)
+	public String printExpenses(@RequestParam int id,ModelMap model) throws Exception {
+		Bill bill = billService.findById(id);
+		if(bill.getIsCharged() == 0)
+			throw new MyException("该账单还未缴费！！！");
+		if(bill.getIsPrintExpenses() == 1)
+			throw new MyException("该账单已经打印！！！");
+		bill.setIsPrintExpenses(1);
+		billService.save(bill);
+		model.addAttribute("msg", "该账单发票已打印，将无法再打印");
+		return "/msg";
 	}
 	
 	private void doBizPay(Customer customer,Bill bill,Float thisPay) throws MyException {

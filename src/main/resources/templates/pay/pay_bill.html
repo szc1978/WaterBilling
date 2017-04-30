@@ -27,7 +27,17 @@
 				</table>
 			</div>
 		</div>
-		<input class="btn btn-default" type="button" id="btnPrint" value="打印"/>  
+		<div th:if="${bill.isPrintExpenses eq 0}">
+			<input class="btn btn-default" type="button" id="btnPrint" value="打印"/>
+			<form name="print_complete" th:action="@{/pay/print_expenses}" method="post">
+				<input type="hidden" th:value="${bill.id}" name="id"/>
+				<input class="btn btn-default" type="submit" id="btnPrint" value="打印完成"/>
+			</form>
+			<div>完成打印后务必点击打印完成</div>
+		</div>
+		<div th:if="${bill.isPrintExpenses eq 1}">
+			<span>该账单发票已打印过！</span>
+		</div>
 	</div>
 <script type="text/javascript">  
 $(function(){  

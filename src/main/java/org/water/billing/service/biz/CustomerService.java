@@ -68,4 +68,8 @@ public class CustomerService {
 	public int countPendingCustomerWaterNumberMsg() {
 		return customerDao.countPendingWaterNumber();
 	}
+	
+	public Page<Customer> searchCustomer() {
+		return null;
+	}
 }

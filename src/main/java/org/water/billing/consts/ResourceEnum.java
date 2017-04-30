@@ -18,7 +18,7 @@ public enum ResourceEnum {
 	ADMIN_GOLBAL_CONFIG("系统全局配置","/admin/configuration"),
 	OP_LOG("操作日志","/log/operation"),
 	LOGIN_LOG("登录日志","/log/login"),
-	PUBLIC_ANNOUNCEMENT("发布公告","/admin/publicannouncement")
+	PUBLIC_ANNOUNCEMENT("公告管理","/admin/announcement")
 	;
 	
 	
