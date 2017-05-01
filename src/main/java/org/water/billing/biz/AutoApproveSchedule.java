@@ -52,7 +52,7 @@ public class AutoApproveSchedule {
 			return;
 		List<Customer> allCustomersWhichHaveNewWaterNumber = customerService.findAllCustomersWhichHaveNewBill();
 		for(Customer customer : allCustomersWhichHaveNewWaterNumber) {
-			BillGenerater billGenerater = new BillGenerater(customer);
+			BillGenerater billGenerater = new BillGenerater(customer,Consts.BILL_TYPE_WATER);
 			Bill bill = billGenerater.genBill();
 			billService.save(bill);
 			

@@ -29,6 +29,10 @@ public class BillService {
 		return billDao.save(bill);
 	}
 	
+	public void delete(Bill bill) {
+		billDao.delete(bill);
+	}
+	
 	public List<Bill> findAllPendingBill() {
 		return billDao.findByAutoChargeFlag(Consts.BILL_AUTO_CHARGE_FLAG);
 	}

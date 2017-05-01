@@ -17,6 +17,9 @@ public class Consts {
 	public static final int BILL_AUTO_CHARGE_FLAG = 1;
 	public static final int NON_BILL_AUTO_CHARGE_FLAG = 0;
 	
+	public static final int BILL_TYPE_WATER = 1;
+	public static final int BILL_TYPE_BIZ = 2;
+	
 	public static final String SuperAdminName = "sys";
 	
 	public static final String GCK_LATE_PAY_DAY = "late_pay_day";

@@ -129,7 +129,7 @@ public class WaterDataController {
 			throw new MyException("该业务已经处理");
 		
 		if(action == Consts.ACCEPT_PENGDING_MSG) {
-			BillGenerater billGenerater = new BillGenerater(customer);
+			BillGenerater billGenerater = new BillGenerater(customer,Consts.BILL_TYPE_WATER);
 			Bill bill = billGenerater.genBill();
 			billService.save(bill);
 			

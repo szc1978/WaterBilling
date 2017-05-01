@@ -95,9 +95,27 @@ public class PayController {
 		String payment = request.getParameter("payment");
 		Float thisPay = Float.valueOf(payment);
 		
-		doPay(customerCode,thisPay);
+		Bill bill = doPay(customerCode,thisPay);
 
-		return "redirect:/pay/water?code=" + customerCode;
+		return "redirect:/pay/bill?id=" + bill.getId();
+	}
+	
+	@OpAnnotation(moduleName="客户缴费",option="撤销缴费")
+	@RequestMapping(value = "/pay/pay_rollback",method=RequestMethod.POST)
+	public String payRollback(@RequestParam int id,ModelMap model) throws Exception {
+		Bill bill = billService.findById(id);
+		if(bill == null)
+			throw new MyException("账单不存在");
+		if(bill.getIsPrintExpenses() == 1)
+			throw new MyException("该账单已经打印过发票，无法撤销");
+		bill.setIsCharged(0);
+		if(bill.getBillType() == Consts.BILL_TYPE_WATER)
+			billService.save(bill);
+		if(bill.getBillType() == Consts.BILL_TYPE_BIZ)
+			billService.delete(bill);
+
+		model.addAttribute("msg", "该账单缴费撤销成功！");
+		return "/msg";
 	}
 
 	
@@ -121,8 +139,9 @@ public class PayController {
 					charges.add(charge);
 			}
 		}
-		BillGenerater billGenerater = new BillGenerater(customer);
+		BillGenerater billGenerater = new BillGenerater(customer,Consts.BILL_TYPE_BIZ);
 		Bill bill = billGenerater.genBill4DedivatedCharge("业务缴费", charges);
+		bill.setBillType(Consts.BILL_TYPE_BIZ);
 		
 		doBizPay(customer,bill,thisPay);
 
@@ -215,12 +234,11 @@ public class PayController {
 		customerService.save(customer);
 	}
 	
-	private void doPay(String customerCode,Float thisPay) throws MyException {
+	private Bill doPay(String customerCode,Float thisPay) throws MyException {
 		Map<String,Object> payInformation = getPayInformation(customerCode);
 		Float unpaied = payInformation.get("unpaied") == null ? new Float(0) : (Float) payInformation.get("unpaied");
 		Float latePayment = payInformation.get("latePayment") == null ? new Float(0) : (Float) payInformation.get("latePayment");
 		Bill latestBill = payInformation.get("latestBill") == null ? new Bill() : (Bill) payInformation.get("latestBill");
-		
 		
 		Customer customer = customerService.findByCode(customerCode);
 		if((customer.getBalance() + thisPay) < (unpaied + latePayment + latestBill.getTotalPostage()))
@@ -236,6 +254,8 @@ public class PayController {
 		Float newBalance = customer.getBalance() + thisPay - (unpaied + latePayment + latestBill.getTotalPostage());
 		customer.setBalance(newBalance);
 		customerService.save(customer);
+		
+		return latestBill;
 	}
 	
 	private Map<String,Object> getPayInformation(String customerCode) {

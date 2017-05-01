@@ -33,6 +33,10 @@
 				<input type="hidden" th:value="${bill.id}" name="id"/>
 				<input class="btn btn-default" type="submit" id="btnPrint" value="打印完成"/>
 			</form>
+			<form name="rollback_pay" th:action="@{/pay/pay_rollback}" method="post">
+				<input type="hidden" th:value="${bill.id}" name="id"/>
+				<input class="btn btn-default" type="submit" id="btnRollback" value="撤销缴费"/>
+			</form>
 			<div>完成打印后务必点击打印完成</div>
 		</div>
 		<div th:if="${bill.isPrintExpenses eq 1}">

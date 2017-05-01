@@ -54,6 +54,9 @@ public class Bill {
 	@Column(name="is_print_expenses")
 	private int isPrintExpenses = 0;
 	
+	@Column(name="bill_type")
+	private int billType = Consts.BILL_TYPE_WATER;
+	
 	@Column(name="auto_charge_flag")
 	private int autoChargeFlag = Consts.NON_BILL_AUTO_CHARGE_FLAG;
 		
@@ -187,6 +190,14 @@ public class Bill {
 
 	public void setIsPrintExpenses(int isPrintExpenses) {
 		this.isPrintExpenses = isPrintExpenses;
+	}
+
+	public int getBillType() {
+		return billType;
+	}
+
+	public void setBillType(int billType) {
+		this.billType = billType;
 	}
 	
 	

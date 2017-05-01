@@ -16,14 +16,17 @@ public class BillGenerater {
 	private Float totalPostage = new Float(0);
 	private String detailedBill = "";
 	private Float totalWaterNumber;
+	private int billType;
 	
-	public BillGenerater(Customer customer) {
+	public BillGenerater(Customer customer,int billType) {
 		this.customer = customer;
+		this.billType = billType;
 		totalWaterNumber = customer.getCustomerWater().getNewNumber() - customer.getCustomerWater().getOrgNumber();
 	}
 	
 	public Bill genBill4DedivatedCharge(String billName,List<Charge> charges) {
 		Bill bill = new Bill();
+		bill.setBillType(billType);
 		bill.setName(billName);
 		calPostage4PriceByDedicated(charges);
 		bill.setTotalPostage(totalPostage);
