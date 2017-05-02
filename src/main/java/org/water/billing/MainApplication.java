@@ -86,7 +86,7 @@ public class MainApplication{
 		defaultGlobalConfig.put(Consts.GCK_DISABLE_APPROVE_CUSTOMER, "0");
 		defaultGlobalConfig.put(Consts.GCK_DISABLE_APPROVE_CUSTOMER_WATER, "0");
 		defaultGlobalConfig.put(Consts.GCK_DISABLE_APPROVE_CUSTOMER_BILL, "0");
-		defaultGlobalConfig.put(Consts.GCK_CUSTOMER_WATER_METER_STATUS, "停用 使用");
+		//defaultGlobalConfig.put(Consts.GCK_CUSTOMER_WATER_METER_STATUS, "停用 使用");
 		defaultGlobalConfig.put(Consts.GCK_CUSTOMER_WATER_METER_USAGE, "记录水量");
 		defaultGlobalConfig.put(Consts.GCK_CUSTOMER_CERTIFICATE_NAME, "身份证 军官证 驾驶证");
 		defaultGlobalConfig.put(Consts.GCK_CHARGE_FROM_TYPE, "抄表 固定");

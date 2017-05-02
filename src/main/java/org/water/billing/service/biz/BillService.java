@@ -17,7 +17,7 @@ public class BillService {
 	BillDao billDao;
 	
 	public List<Bill> findCustomerBill(String customerCode,Date fromDate,Date toDate) {
-		return billDao.findByCustomerCodeAndChargeDateBetween(customerCode, fromDate, toDate);
+		return billDao.findCustomerBill(customerCode, fromDate, toDate);
 	}
 	
 	public List<Bill> findUnchargedBill(String customerCode) {

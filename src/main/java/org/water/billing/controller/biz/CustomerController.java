@@ -18,11 +18,13 @@ import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Customer;
 import org.water.billing.entity.biz.CustomerType;
+import org.water.billing.entity.biz.CustomerWaterMeter;
 import org.water.billing.entity.biz.WaterMeterType;
 import org.water.billing.entity.biz.WaterProvider;
 import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.CustomerService;
 import org.water.billing.service.biz.CustomerTypeService;
+import org.water.billing.service.biz.CustomerWaterMeterService;
 import org.water.billing.service.biz.WaterMeterTypeService;
 import org.water.billing.service.biz.WaterProviderService;
 import org.water.billing.utils.Utils;
@@ -43,6 +45,9 @@ public class CustomerController {
 	WaterMeterTypeService waterMeterTypeService;
 	
 	@Autowired
+	CustomerWaterMeterService customerWaterMeterService;
+	
+	@Autowired
 	BillService billService;
 
 	@RequestMapping(value="/customer/manage/list",method=RequestMethod.GET)
@@ -57,9 +62,9 @@ public class CustomerController {
 		return "/customer/customer_list";
 	}
 	
-	@RequestMapping(value="/customer/manage/search",method=RequestMethod.POST)
+	@RequestMapping(value="/customer/manage/search",method=RequestMethod.GET)
 	public String searchCustomer() {
-		return "/customer/customer_list";
+		return "/customer/customer_search_form";
 	}
 	
 	@OpAnnotation(moduleName="客户管理",option="增加修改客户")
@@ -111,15 +116,13 @@ public class CustomerController {
 			customer = new Customer();
 		map.addAttribute("customer", customer);
 		map.addAttribute("certificateNames",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CUSTOMER_CERTIFICATE_NAME));
-		map.addAttribute("meter_usage",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CUSTOMER_WATER_METER_USAGE));
-		map.addAttribute("meter_status",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CUSTOMER_WATER_METER_STATUS));
+		
 		map.addAttribute("readMeterCycles",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CUSTOMER_READ_METER_CYCLE));
 		List<CustomerType> customerTypes = customerTypeService.findAll();
 		map.addAttribute("customerTypes",customerTypes);
 		List<WaterProvider> waterProviders = waterProviderService.findAll();
 		map.addAttribute("waterProviders",waterProviders);
-		List<WaterMeterType> waterMeterTypeList = waterMeterTypeService.findAll();
-		map.addAttribute("waterMeterTypeList", waterMeterTypeList);
+		
 		return "/customer/customer_form";
 	}
 
@@ -154,5 +157,60 @@ public class CustomerController {
 		customer.setStatus(status);
 		customerService.save(customer);
 		return "redirect:/approve/customer/list";
+	}
+	
+	@RequestMapping(value="/customer/manage/watermeter",method=RequestMethod.GET)
+	public String listCustomerWaterMeter(@RequestParam int id,ModelMap model) throws MyException {
+		List<CustomerWaterMeter> meters = customerWaterMeterService.findCustomerMeters(id);
+		model.addAttribute("meters", meters);
+		model.addAttribute("customer_id", id);
+		return "/customer/customer_water_meter";
+	}
+	
+	@RequestMapping(value="/customer/manage/watermeter",method=RequestMethod.POST)
+	public String customerWaterMeter(@RequestParam int customerId,@ModelAttribute CustomerWaterMeter customerWaterMeter) throws MyException {
+		Customer customer = customerService.findById(customerId);
+		if(customer == null)
+			throw new MyException("客户不存在");
+		customerWaterMeter.setCustomer(customer);
+		customerWaterMeterService.save(customerWaterMeter);
+		return "redirect:/customer/manage/watermeter?id=" + customer.getId();
+	}
+	
+	@RequestMapping(value="/customer/manage/watermeterform",method=RequestMethod.GET)
+	public String customerWaterMeterForm(@RequestParam(defaultValue="0") int meterId,@RequestParam int customerId,ModelMap model) {
+		CustomerWaterMeter meter = customerWaterMeterService.findById(meterId);
+		if(meter == null)
+			meter = new CustomerWaterMeter();
+		model.addAttribute("meter", meter);
+		model.addAttribute("customer_id", customerId);
+		model.addAttribute("meter_usage",GlobalConfiguration.getInstance().getConfigValueList(Consts.GCK_CUSTOMER_WATER_METER_USAGE));
+		List<WaterMeterType> waterMeterTypeList = waterMeterTypeService.findAll();
+		model.addAttribute("waterMeterTypeList", waterMeterTypeList);
+		return "/customer/customer_water_meter_form";
+	}
+
+	@OpAnnotation(moduleName="客户水表操作",option="停水")
+	@RequestMapping(value="/customer/manage/watermeter/stop",method=RequestMethod.GET)
+	public String disMeter(@RequestParam(defaultValue="0") int meterId,
+							@RequestParam int customerId) throws MyException {
+		CustomerWaterMeter meter = customerWaterMeterService.findById(meterId);
+		if(meter == null)
+			throw new MyException("水表不存在");
+		meter.setStatus(2);
+		customerWaterMeterService.save(meter);
+		return "redirect:/customer/manage/watermeter?id=" + customerId;
+	}
+	
+	@OpAnnotation(moduleName="客户水表操作",option="复水")
+	@RequestMapping(value="/customer/manage/watermeter/use",method=RequestMethod.GET)
+	public String enMeter(@RequestParam(defaultValue="0") int meterId,
+							@RequestParam int customerId) throws MyException {
+		CustomerWaterMeter meter = customerWaterMeterService.findById(meterId);
+		if(meter == null)
+			throw new MyException("水表不存在");
+		meter.setStatus(1);
+		customerWaterMeterService.save(meter);
+		return "redirect:/customer/manage/watermeter?id=" + customerId;
 	}
 }

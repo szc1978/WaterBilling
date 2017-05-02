@@ -10,18 +10,29 @@ import org.water.billing.entity.biz.Charge;
 import org.water.billing.entity.biz.ChargeParameter;
 import org.water.billing.entity.biz.Customer;
 import org.water.billing.entity.biz.CustomerType;
+import org.water.billing.entity.biz.CustomerWaterMeter;
+import org.water.billing.entity.biz.WaterMeterData;
 
 public class BillGenerater {
+	private CustomerWaterMeter customerWaterMeter = null;
 	private Customer customer = null;
+	private WaterMeterData waterMeterData = null;
 	private Float totalPostage = new Float(0);
 	private String detailedBill = "";
 	private Float totalWaterNumber;
 	private int billType;
 	
+	public BillGenerater(CustomerWaterMeter customerWaterMeter,int billType) {
+		this.customerWaterMeter = customerWaterMeter;
+		waterMeterData = customerWaterMeter.getWaterMeterData();
+		this.customer = customerWaterMeter.getCustomer();
+		this.billType = billType;
+		totalWaterNumber = waterMeterData.getNewNumber() - waterMeterData.getOrgNumber();
+	}
+	
 	public BillGenerater(Customer customer,int billType) {
 		this.customer = customer;
 		this.billType = billType;
-		totalWaterNumber = customer.getCustomerWater().getNewNumber() - customer.getCustomerWater().getOrgNumber();
 	}
 	
 	public Bill genBill4DedivatedCharge(String billName,List<Charge> charges) {
@@ -32,6 +43,7 @@ public class BillGenerater {
 		bill.setTotalPostage(totalPostage);
 		bill.setDetailContent(detailedBill);
 		bill.setCustomerCode(customer.getCustomerInfo().getCode());
+		bill.setCustomerWaterMeterId(0);
 		return bill;
 	}
 	
@@ -41,14 +53,16 @@ public class BillGenerater {
 		calPostage4PriceByStep();
 		calPostage4PriceByDedicated();
 		Bill bill = new Bill();
-		bill.setBeginWaterWord(customer.getCustomerWater().getOrgNumber());
-		bill.setEndWaterWord(customer.getCustomerWater().getNewNumber());
+		bill.setBillType(billType);
+		bill.setBeginWaterWord(waterMeterData.getOrgNumber());
+		bill.setEndWaterWord(waterMeterData.getNewNumber());
 		bill.setTotalPostage(totalPostage);
 		bill.setDetailContent(detailedBill);
-		bill.setName(customer.getName() + customer.getCustomerWater().getPayMonth() + "月账单");
+		bill.setName(customerWaterMeter.getBodyNumber() + waterMeterData.getPayMonth() + "月账单");
 		bill.setInputDate(new Date());
-		bill.setInputerName(customer.getCustomerWater().getInputerName());
+		bill.setInputerName(waterMeterData.getInputerName());
 		bill.setCustomerCode(customer.getCustomerInfo().getCode());
+		bill.setCustomerWaterMeterId(customerWaterMeter.getId());
 		if(customer.getBalance() >= totalPostage)
 			bill.setAutoChargeFlag(Consts.BILL_AUTO_CHARGE_FLAG);
 		return bill;
@@ -105,8 +119,8 @@ public class BillGenerater {
 			if(charge.getChargeType() != ChargeTypeEnum.CHARGE_STEP_BY_STEP.getId())
 				continue;
 			
-			Float p1 = calPostage4Step(charge,customer.getCustomerWater().getYearCount() + totalWaterNumber);
-			Float p2 = calPostage4Step(charge,customer.getCustomerWater().getYearCount());
+			Float p1 = calPostage4Step(charge,waterMeterData.getYearCount() + totalWaterNumber);
+			Float p2 = calPostage4Step(charge,waterMeterData.getYearCount());
 			
 			totalPostage += (p1 - p2);
 			detailedBill += ";" + charge.getName() + ":" + (p1-p2);

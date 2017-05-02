@@ -37,8 +37,8 @@ public class SysConfigurationController {
 							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_DISABLE_APPROVE_CUSTOMER_BILL));
 		map.addAttribute("customer_water_meter_usage",
 				GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_CUSTOMER_WATER_METER_USAGE));
-		map.addAttribute("customer_water_meter_status",
-				GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_CUSTOMER_WATER_METER_STATUS));
+		//map.addAttribute("customer_water_meter_status",
+		//		GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_CUSTOMER_WATER_METER_STATUS));
 		map.addAttribute("customer_certificate_name",
 				GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_CUSTOMER_CERTIFICATE_NAME));
 		map.addAttribute("charge_from_type",

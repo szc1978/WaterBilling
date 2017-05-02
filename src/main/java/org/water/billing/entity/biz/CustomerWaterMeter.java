@@ -3,16 +3,21 @@ package org.water.billing.entity.biz;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.water.billing.consts.Consts;
+
 @Entity
-@Table(name="water_meter")
-public class WaterMeter {
+@Table(name="customer_water_meter")
+public class CustomerWaterMeter {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column ( name = "id",length=10)
@@ -20,13 +25,13 @@ public class WaterMeter {
 	
 	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name="meter_type_id")
-	private WaterMeterType meterType;
+	private WaterMeterType meterType = new WaterMeterType();
 
 	@Column(name="meter_usage")
 	private String usage;
 
 	@Column(name="status")
-	private String status;
+	private int status = Consts.WATER_METER_STATUS_USING;
 	
 	@Column(name="location_number")
 	private String locationNumber;
@@ -35,9 +40,18 @@ public class WaterMeter {
 	private String bodyNumber;
 	
 	@Column(name="first_number")
-	private Float firstNumber;
+	private Float firstNumber = new Float(0);
 	
-	public WaterMeter() {
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="water_id")
+	private WaterMeterData waterMeterData = new WaterMeterData();
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch=FetchType.EAGER)
+    @JoinTable(name="customer_meter_map",joinColumns={@JoinColumn(name="m_id")},inverseJoinColumns={@JoinColumn(name="c_id")})
+	private Customer customer;
+	
+	
+	public CustomerWaterMeter() {
 		
 	}
 
@@ -57,11 +71,11 @@ public class WaterMeter {
 		this.usage = usage;
 	}
 
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
@@ -95,6 +109,22 @@ public class WaterMeter {
 
 	public void setFirstNumber(Float firstNumber) {
 		this.firstNumber = firstNumber;
+	}
+
+	public WaterMeterData getWaterMeterData() {
+		return waterMeterData;
+	}
+
+	public void setWaterMeterData(WaterMeterData waterMeterData) {
+		this.waterMeterData = waterMeterData;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	

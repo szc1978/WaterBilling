@@ -3,7 +3,6 @@ package org.water.billing.controller.rest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +16,8 @@ import org.water.billing.entity.admin.SysUser;
 import org.water.billing.service.admin.SysUserService;
 import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.CustomerService;
+import org.water.billing.service.biz.CustomerWaterMeterService;
+import org.water.billing.utils.Utils;
 
 @RestController
 public class InternalApi {
@@ -25,6 +26,9 @@ public class InternalApi {
 	
 	@Autowired
 	CustomerService customerService;
+	
+	@Autowired
+	CustomerWaterMeterService waterMeterService;
 	
 	@Autowired
 	BillService billService;
@@ -39,14 +43,13 @@ public class InternalApi {
 	
 	@RequestMapping(value="/api/getpendingmsg",method=RequestMethod.GET)
 	public String getPendingMsgNum(HttpServletRequest request) {
-		SecurityContext securityContext = (SecurityContext) request.getSession().getAttribute("SPRING_SECURITY_CONTEXT");
-		SysUser user = (SysUser) securityContext.getAuthentication().getPrincipal();
+		SysUser user = Utils.getLoginUserInSession(request);
 		int countPendingCustomer = 0;
 		if(sysUserHasCustomerApproverPri(user,ResourceEnum.APPROVE_CUSTOMER))
 			countPendingCustomer = customerService.countPendingCustomerMsg();
 		int countPendingCustomerWater = 0;
 		if(sysUserHasCustomerApproverPri(user,ResourceEnum.APPROVE_CUSTOMER_WATER))
-			countPendingCustomerWater = customerService.countPendingCustomerWaterNumberMsg();
+			countPendingCustomerWater = waterMeterService.countPendingCustomerWaterNumberMsg();
 		int countPendingBill = 0;
 		if(sysUserHasCustomerApproverPri(user,ResourceEnum.APPROVE_CUSTOMER_BILL))
 			countPendingBill = billService.countPendingBill();

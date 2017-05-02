@@ -9,10 +9,30 @@
 
 <body>
 	<div class="container">
-		<div class="formtitle"><span>客户列表</span></div>
+		<div class="formtitle"><span>搜索</span></div>
     	<div class="col-sm-13" align="right">
-  			<a th:href="@{/customer/manage/search}"><button type="button" class="btn btn-default">搜索客户</button></a>
-  			<a th:href="@{/customer/manage/form}"><button type="button" class="btn btn-default">新增客户</button></a>
+    		<form class="form-inline form-group" th:action="@{/customer/manage/search}" method="post" >
+    			<input type="text" class="form-control" name="code" th:placeholder="客户编号" />
+   				<input type="text" class="form-control" name="k" th:placeholder="客户名或者住址关键字" />
+   				<select class="form-control" name="status_customer">
+   					<option value="" th:selected="true">供水片区</option>
+   					<option value="">正常</option>
+   					<option value="">销户</option>
+   					<option value="">欠费</option>
+   				</select>
+   				<select class="form-control" name="status_customer">
+   					<option value="" th:selected="true">客户状态</option>
+   					<option value="">正常</option>
+   					<option value="">销户</option>
+   					<option value="">欠费</option>
+   				</select>
+   				<select class="form-control" name="status_meter">
+   					<option value="" th:selected="true">水表状态</option>
+   					<option value="1">正常</option>
+   					<option value="2">停水</option>
+   				</select>
+  				<input type="submit" value="搜索" class="btn btn-default"/>
+    		</form>
     	</div>
 		<div>
 			<table class="table table-striped">
@@ -48,7 +68,6 @@
 			        </tbody>
 			    </table>
 		    </div>
-		    <div th:include="paging :: paging"></div>
 	</div>
 </body>
 </html>

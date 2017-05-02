@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/js/water.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>水表管理</span></div>
+		<form th:action="@{/customer/manage/watermeter(customerId=${customer_id})}" method="post" th:object="${meter}" >
+			<div class="col-sm-6">
+				<div class=" form-group ">
+					 <label for="name">表位号:</label>
+					 <input type="text" class="form-control" th:value="${meter.locationNumber}" th:field="*{locationNumber}" />
+				</div>
+				<div class=" form-group ">
+					 <label for="name">表身号:</label>
+					 <input type="text" class="form-control" th:value="${meter.bodyNumber}" th:field="*{bodyNumber}"  />
+				</div>
+				<div class=" form-group ">
+					 <label for="name">水表类型:</label>
+					 <select class="form-control" th:field="*{meterType.id}">
+					 	<option th:each="meterType : ${waterMeterTypeList}" th:value="${meterType.id}" th:text="${meterType.name}" th:if="${meter.meterType.id eq meterType.id}" th:selected="true"></option>
+					 	<option th:each="meterType : ${waterMeterTypeList}" th:value="${meterType.id}" th:text="${meterType.name}" th:if="${meter.meterType.id ne meterType.id}" ></option>
+					 </select>
+				</div>
+				<div class=" form-group ">
+					<label for="name">水表用途:</label>
+					<select class="form-control" th:value="${meter.usage}" th:field="*{usage}" >
+					 	<option th:each="usage : ${meter_usage}" th:value="${usage}" th:text="${usage}"></option>
+					 </select>
+				</div>
+				<div class="form-group ">
+					<label for="name">缴费周期首月*:</label>
+					<select class="form-control" th:field="*{waterMeterData.firstMonth}" th:with="curmonth=${#calendars.format(#calendars.createNow(), 'M')}">
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${meter.waterMeterData.firstMonth eq 0 and i+'' == curmonth}" th:value="${i}" th:text="${i}" th:selected="true"></option>
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${meter.waterMeterData.firstMonth ne 0 and i eq meter.waterMeterData.firstMonth}" th:value="${i}" th:text="${i}" th:selected="true"></option>
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${meter.waterMeterData.firstMonth eq 0 and i+'' != curmonth}" th:value="${i}" th:text="${i}"></option>
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${meter.waterMeterData.firstMonth ne 0 and i ne meter.waterMeterData.firstMonth}" th:value="${i}" th:text="${i}"></option>
+					</select>
+				</div>
+				<div class=" form-group ">
+					 <label for="name">水表起度:</label>
+					 <input type="text" class="form-control" th:value="${meter.firstNumber}" th:field="*{firstNumber}" onkeyup="float_input_validate(this)" />
+				</div>
+				<div class="form-group ">
+					<label for="name">当前水表数(对于新增水表，和水表起度应该相同):</label>
+						 <input type="text" class="form-control" th:value="${meter.waterMeterData.orgNumber}" th:field="*{waterMeterData.orgNumber}" onkeyup="float_input_validate(this)" />
+					</div>
+				<div class="">
+					<input type="submit" class="btn btn-default" value="保存" />
+				</div>
+				<input type="hidden" th:field="*{id}" th:value="${meter.id}" />
+			</div>
+			<div class="col-sm-12">* 从每年的该月到下一年该月为一个缴费周期，阶梯计费从该月计算</div>
+		</form>
+	</div>
+</body>
+</html>

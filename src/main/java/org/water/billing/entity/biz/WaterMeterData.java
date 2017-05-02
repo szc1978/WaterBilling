@@ -14,8 +14,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="customer_water")
-public class CustomerWater {
+@Table(name="water_meter_data")
+public class WaterMeterData {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,15 +40,15 @@ public class CustomerWater {
 	@Column(name="year_count")
 	private Float yearCount = new Float(0);
 	
-	@OneToOne(mappedBy = "customerWater")
-	private Customer customer;
+	@OneToOne(mappedBy = "waterMeterData")
+	private CustomerWaterMeter customerWaterMeter;
 	
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public void setCustomerWaterMeter(CustomerWaterMeter customerWaterMeter) {
+		this.customerWaterMeter = customerWaterMeter;
 	}
 	
-	public Customer getCustomer() {
-		return this.customer;
+	public CustomerWaterMeter getCustomerWaterMeter() {
+		return this.customerWaterMeter;
 	}
 	
 	@Column(name = "input_date",length=64,updatable = false)
@@ -59,7 +59,7 @@ public class CustomerWater {
 		inputDate = new Date();
     }
 	
-	public CustomerWater() {
+	public WaterMeterData() {
 		
 	}
 

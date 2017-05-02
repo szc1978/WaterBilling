@@ -1,6 +1,8 @@
 package org.water.billing.entity.biz;
 
 import java.util.Date;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -35,7 +39,7 @@ public class Customer {
 	@Column(name="read_meter_cycle")
 	private String readMeterCycle;
 	
-	/*4 bit, pending|reserve|waterstatus|accountstatus
+	/*4 bit, pending|accountstatus
 	 * 0 : inactive
 	 * 1 : active
 	 * 2 : active -> inactive, pending for approve
@@ -56,17 +60,14 @@ public class Customer {
     @JoinColumn(name = "info_id")
 	private CustomerInfo customerInfo = new CustomerInfo();
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="water_id")
-	private CustomerWater customerWater = new CustomerWater();
-	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="water_meter_id")
-	private WaterMeter waterMeter = new WaterMeter();
+	@OneToMany(cascade = CascadeType.REFRESH, fetch=FetchType.EAGER)
+    @JoinTable(name="customer_meter_map",joinColumns={@JoinColumn(name="c_id")},inverseJoinColumns={@JoinColumn(name="m_id")})
+	private Set<CustomerWaterMeter> meters;
 	
 	@Column(name = "create_time",length=64,updatable = false)
 	@Temporal(TemporalType.TIMESTAMP) 
 	private Date createTime; 
+	
 	@PrePersist
     protected void onCreate() {
 		createTime = new Date();
@@ -161,28 +162,12 @@ public class Customer {
 		this.status = status;
 	}
 
-	/*public Float getPendingWaterNumber() {
-		return pendingWaterNumber;
+	public Set<CustomerWaterMeter> getMeters() {
+		return meters;
 	}
 
-	public void setPendingWaterNumber(Float pendingWaterNumber) {
-		this.pendingWaterNumber = pendingWaterNumber;
-	}*/
-
-	public CustomerWater getCustomerWater() {
-		return customerWater;
-	}
-
-	public void setCustomerWater(CustomerWater customerWater) {
-		this.customerWater = customerWater;
-	}
-
-	public WaterMeter getWaterMeter() {
-		return waterMeter;
-	}
-
-	public void setWaterMeter(WaterMeter waterMeter) {
-		this.waterMeter = waterMeter;
+	public void setMeters(Set<CustomerWaterMeter> meters) {
+		this.meters = meters;
 	}
 	
 }

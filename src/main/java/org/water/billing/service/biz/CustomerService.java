@@ -57,16 +57,8 @@ public class CustomerService {
 		return customerDao.findByStatusGreaterThan(Consts.CUSTOMER_STATUS_ACTIVE_BIT);
 	}
 	
-	public List<Customer> findAllCustomersWhichHaveNewBill() {
-		return customerDao.queryHasPendingWaterNumberCustomer();
-	}
-	
 	public int countPendingCustomerMsg() {
 		return customerDao.countByStatusGreaterThan(Consts.CUSTOMER_STATUS_ACTIVE_BIT);
-	}
-	
-	public int countPendingCustomerWaterNumberMsg() {
-		return customerDao.countPendingWaterNumber();
 	}
 	
 	public Page<Customer> searchCustomer() {

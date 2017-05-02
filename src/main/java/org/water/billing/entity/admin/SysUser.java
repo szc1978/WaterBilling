@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;  
 import javax.persistence.Temporal;  
 import javax.persistence.TemporalType;
@@ -48,6 +49,11 @@ public class SysUser {
 	@Column(name = "createDate", length = 32)  
 	private Date createDate; 
 	
+	@PrePersist
+    protected void onCreate() {
+		createDate = new Date();
+    }
+	
 	@ManyToOne()
 	@JoinColumn(name="water_provider_id")
 	private WaterProvider waterProvider = new WaterProvider();
@@ -57,7 +63,6 @@ public class SysUser {
     private Set<SysRole> sysRoles;
    
 	public SysUser() {  
-		createDate = new Date();
 	}  
    
 	public SysUser(String name, String chineseName,String email, String password, Set<SysRole> sysRoles) {  
@@ -66,7 +71,6 @@ public class SysUser {
 		this.email = email;  
 		this.password = password;  
 		this.sysRoles = sysRoles; 
-		createDate = new Date();
 	}   
  
 	public int getId() {

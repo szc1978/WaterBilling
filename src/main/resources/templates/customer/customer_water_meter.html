@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>客户管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>客户水表</span></div>
+    	
+		<div>
+			<table class="table table-striped">
+				<thead>
+			    	<tr>
+			        	<th>编号<i class="sort"></i></th>
+			        	<th>水表厂家</th>
+			        	<th>表位号</th>
+			        	<th>表身号</th>
+			        	<th>水表数字</th>
+			        	<th>用途</th>
+			        	<th>状态</th>
+			        	<th>操作</th>
+			        </tr>
+			     </thead>
+			     <tbody>
+			        <tr th:each="meter,meterStat : ${meters}"> 
+				        <td th:text="${meterStat.index} + 1">1</td> 
+				        <td th:text="${meter.meterType.producer.configItemValue}"></td> 
+				        <td th:text="${meter.locationNumber}"></td>
+				        <td th:text="${meter.bodyNumber}"></td>
+				        <td th:text="${meter.waterMeterData.orgNumber}"></td>
+				        <td th:text="${meter.usage}"></td>
+				        <td th:if="${meter.status eq 1}" th:text="正常"></td>
+				        <td th:if="${meter.status ne 1}" th:text="停水"></td>
+				        <td>
+				        	<a th:href="@{/customer/manage/watermeterform(meterId=${meter.id},customerId=${customer_id})}">编辑</a>
+				        	<a th:if="${meter.status eq 1}" th:href="@{/customer/manage/watermeter/stop(meterId=${meter.id},customerId=${customer_id})}">停水</a>
+				        	<a th:if="${meter.status eq 2}" th:href="@{/customer/manage/watermeter/use(meterId=${meter.id},customerId=${customer_id})}">复水</a>
+				        	<a th:href="@{/}">检修</a>
+				        	<a th:href="@{/}">换表</a>
+				        </td>
+			        </tr>        
+			    </tbody>
+			</table>
+		</div>
+		<div>
+			<a th:href="@{/customer/manage/watermeterform(customerId=${customer_id})}"><input type="button" class="btn btn-default" value="增加水表" /></a>
+		</div>
+	</div>
+</body>
+</html>

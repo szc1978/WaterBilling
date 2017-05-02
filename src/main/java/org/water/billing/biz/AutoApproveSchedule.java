@@ -10,10 +10,12 @@ import org.water.billing.GlobalConfiguration;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Customer;
-import org.water.billing.entity.biz.CustomerWater;
+import org.water.billing.entity.biz.CustomerWaterMeter;
+import org.water.billing.entity.biz.WaterMeterData;
 import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.CustomerService;
-import org.water.billing.service.biz.CustomerWaterService;
+import org.water.billing.service.biz.CustomerWaterMeterService;
+import org.water.billing.service.biz.WaterMeterDataService;
 
 @Component
 public class AutoApproveSchedule {
@@ -22,7 +24,10 @@ public class AutoApproveSchedule {
 	CustomerService customerService;
 	
 	@Autowired
-	CustomerWaterService customerWaterService;
+	CustomerWaterMeterService customerWaterMeterService;
+	
+	@Autowired
+	WaterMeterDataService waterMeterDataService;
 	
 	@Autowired
 	BillService billService;
@@ -50,20 +55,20 @@ public class AutoApproveSchedule {
 		String disableFlag = GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_DISABLE_APPROVE_CUSTOMER_WATER);
 		if(disableFlag.equals("0"))
 			return;
-		List<Customer> allCustomersWhichHaveNewWaterNumber = customerService.findAllCustomersWhichHaveNewBill();
-		for(Customer customer : allCustomersWhichHaveNewWaterNumber) {
-			BillGenerater billGenerater = new BillGenerater(customer,Consts.BILL_TYPE_WATER);
+		List<CustomerWaterMeter> allCustomersWhichHaveNewWaterNumber = customerWaterMeterService.findAllCustomersWhichHaveNewBill();
+		for(CustomerWaterMeter customerWaterMeter : allCustomersWhichHaveNewWaterNumber) {
+			BillGenerater billGenerater = new BillGenerater(customerWaterMeter,Consts.BILL_TYPE_WATER);
 			Bill bill = billGenerater.genBill();
 			billService.save(bill);
 			
-			CustomerWater customerWater = customer.getCustomerWater();
+			WaterMeterData waterMeterData = customerWaterMeter.getWaterMeterData();
 			
-			customerWater.setOrgNumber(customerWater.getNewNumber());
-			Float yearCount = customerWater.getYearCount() + customerWater.getNewNumber();
-			customerWater.setYearCount(yearCount);
-			customerWater.setNewNumber(new Float(0));
+			waterMeterData.setOrgNumber(waterMeterData.getNewNumber());
+			Float yearCount = waterMeterData.getYearCount() + waterMeterData.getNewNumber();
+			waterMeterData.setYearCount(yearCount);
+			waterMeterData.setNewNumber(new Float(0));
 			
-			customerWaterService.save(customerWater);
+			waterMeterDataService.save(waterMeterData);
 		}
 	}
 	

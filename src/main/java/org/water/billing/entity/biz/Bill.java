@@ -2,11 +2,14 @@ package org.water.billing.entity.biz;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,9 +26,6 @@ public class Bill {
 	
 	@Column(name="name")
 	private String name;
-	
-	@Column(name="customer_code")
-	private String customerCode;
 	
 	@Column(name="begin_water_word")
 	private Float beginWaterWord = new Float(0);
@@ -67,6 +67,12 @@ public class Bill {
 	@Column(name="charge_date")
 	@Temporal(TemporalType.TIMESTAMP) 
 	private Date chargeDate;
+	
+	@Column(name="customer_water_meter_id")
+	private int customerWaterMeterId;
+	
+	@Column(name="customer_code")
+	private String customerCode;
 	
 	public Bill() {
 		
@@ -176,14 +182,6 @@ public class Bill {
 		this.autoChargeFlag = autoChargeFlag;
 	}
 
-	public String getCustomerCode() {
-		return customerCode;
-	}
-
-	public void setCustomerCode(String customerCode) {
-		this.customerCode = customerCode;
-	}
-
 	public int getIsPrintExpenses() {
 		return isPrintExpenses;
 	}
@@ -199,6 +197,30 @@ public class Bill {
 	public void setBillType(int billType) {
 		this.billType = billType;
 	}
+
+	public int getCustomerWaterMeterId() {
+		return customerWaterMeterId;
+	}
+
+	public void setCustomerWaterMeterId(int customerWaterMeterId) {
+		this.customerWaterMeterId = customerWaterMeterId;
+	}
+
+	public String getCustomerCode() {
+		return customerCode;
+	}
+
+	public void setCustomerCode(String customerCode) {
+		this.customerCode = customerCode;
+	}
+
+	/*public CustomerWaterMeter getCustomerWaterMeter() {
+		return customerWaterMeter;
+	}
+
+	public void setCustomerWaterMeter(CustomerWaterMeter customerWaterMeter) {
+		this.customerWaterMeter = customerWaterMeter;
+	}*/
 	
 	
 	

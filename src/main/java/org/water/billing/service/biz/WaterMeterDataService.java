@@ -2,20 +2,20 @@ package org.water.billing.service.biz;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.water.billing.dao.biz.CustomerWaterDao;
-import org.water.billing.entity.biz.CustomerWater;
+import org.water.billing.dao.biz.WaterMeterDataDao;
+import org.water.billing.entity.biz.WaterMeterData;
 
 @Service("CustomerWaterService")
-public class CustomerWaterService {
+public class WaterMeterDataService {
 	
 	@Autowired
-	CustomerWaterDao customerWaterDao;
+	WaterMeterDataDao customerWaterDao;
 	
-	public CustomerWater findById(int id) {
+	public WaterMeterData findById(int id) {
 		return customerWaterDao.findById(id);
 	}
 	
-	public CustomerWater save(CustomerWater customerWater) {
+	public WaterMeterData save(WaterMeterData customerWater) {
 		return customerWaterDao.save(customerWater);
 	}
 }

@@ -11,6 +11,9 @@ public class Consts {
 	public static final int CUSTOMER_STATUS_ACTIVE_BIT = 1;
 	public static final int CUSTOMER_STATUS_PENDING_BIT = 2;
 	
+	public static final int WATER_METER_STATUS_USING = 1;
+	public static final int WATER_METER_STATUS_STOPING = 2;
+	
 	public static final int ACCEPT_PENGDING_MSG = 1;
 	public static final int REJECT_PENDING_MSG = 2;
 	
@@ -28,7 +31,7 @@ public class Consts {
 	public static final String GCK_DISABLE_APPROVE_CUSTOMER_WATER = "disable_approve_customer_water";
 	public static final String GCK_DISABLE_APPROVE_CUSTOMER_BILL = "disable_approve_customer_bill";
 	public static final String GCK_CUSTOMER_WATER_METER_USAGE = "customer_water_meter_usage";
-	public static final String GCK_CUSTOMER_WATER_METER_STATUS = "customer_water_meter_status";
+	//public static final String GCK_CUSTOMER_WATER_METER_STATUS = "customer_water_meter_status";
 	public static final String GCK_CUSTOMER_READ_METER_CYCLE = "customer_read_status_cycle";
 	public static final String GCK_CUSTOMER_CERTIFICATE_NAME = "customer_certificate_name";
 	public static final String GCK_CHARGE_FROM_TYPE = "charge_from_type";

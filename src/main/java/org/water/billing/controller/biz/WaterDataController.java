@@ -20,10 +20,12 @@ import org.water.billing.consts.Consts;
 import org.water.billing.entity.admin.SysUser;
 import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Customer;
-import org.water.billing.entity.biz.CustomerWater;
+import org.water.billing.entity.biz.CustomerWaterMeter;
+import org.water.billing.entity.biz.WaterMeterData;
 import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.CustomerService;
-import org.water.billing.service.biz.CustomerWaterService;
+import org.water.billing.service.biz.CustomerWaterMeterService;
+import org.water.billing.service.biz.WaterMeterDataService;
 import org.water.billing.utils.Utils;
 
 import jxl.Cell;
@@ -38,7 +40,10 @@ public class WaterDataController {
 	CustomerService customerService;
 	
 	@Autowired
-	CustomerWaterService customerWaterService;
+	CustomerWaterMeterService customerWaterMeterService;
+	
+	@Autowired
+	WaterMeterDataService waterMeterDataService;
 	
 	@Autowired
 	BillService billService;
@@ -70,7 +75,7 @@ public class WaterDataController {
 	
 	@OpAnnotation(moduleName="数据录入",option = "录入用水量")
 	@RequestMapping(value="/waterdata/input_water_data",method=RequestMethod.POST)
-	public String inputWaterData(HttpServletRequest request,ModelMap model) throws Exception {
+	public String inputWaterData(HttpServletRequest request,ModelMap model) throws MyException {
 		SysUser user = Utils.getLoginUserInSession(request);
 		
 		String month = request.getParameter("month");
@@ -78,9 +83,11 @@ public class WaterDataController {
 		for(String key : request.getParameterMap().keySet()) {
 			if(!key.startsWith("WaterNumber_"))
 				continue;
-			String code = key.replace("WaterNumber_", "");
+			String[] ss = key.split("_");
+			String code = ss[1];
+			String meterBodyNumber = ss[2];
 			String number = request.getParameter(key);
-			InputData inputData = new InputData(code,month,number);
+			InputData inputData = new InputData(code,meterBodyNumber,month,number);
 			inputDatas.add(inputData);
 		}
 		
@@ -112,7 +119,7 @@ public class WaterDataController {
 	
 	@RequestMapping(value = "/approve/customerwater/list",method=RequestMethod.GET)
 	public String approveCustomerWater(ModelMap model) {
-		List<Customer> allCustomersWhichHaveNewWaterNumber = customerService.findAllCustomersWhichHaveNewBill();
+		List<CustomerWaterMeter> allCustomersWhichHaveNewWaterNumber = customerWaterMeterService.findAllCustomersWhichHaveNewBill();
 		model.addAttribute("allCustomersWhichHaveNewWaterNumber", allCustomersWhichHaveNewWaterNumber);
 		return "/approve/customerwater";
 	}
@@ -124,7 +131,7 @@ public class WaterDataController {
 		if(customer == null)
 			throw new MyException("客户不存在");
 		
-		CustomerWater customerWater = customer.getCustomerWater();
+		WaterMeterData customerWater = new WaterMeterData();
 		if(customerWater.getNewNumber() == new Float(0))
 			throw new MyException("该业务已经处理");
 		
@@ -140,34 +147,35 @@ public class WaterDataController {
 		
 		customerWater.setNewNumber(new Float(0));
 		
-		customerWaterService.save(customerWater);
+		waterMeterDataService.save(customerWater);
 		return "redirect:/approve/customerwater/list";
 	}
 	
 	private void saveData(List<InputData> excelDatas,String inputerName) {
 		for(InputData excelData : excelDatas) {
 			Customer customer = customerService.findByCode(excelData.getCustomerCode());
-			CustomerWater customerWater = customer.getCustomerWater();
+			WaterMeterData customerWater = new WaterMeterData();
 			customerWater.setNewNumber(excelData.getWaterNumber());
 			customerWater.setInputerName(inputerName);
 			customerWater.setPayMonth(excelData.getMonth());
-			customerWaterService.save(customerWater);
+			waterMeterDataService.save(customerWater);
 		}
 	}
 	
 	private void verifyExcelData(List<InputData> excelDatas,SysUser user) throws MyException {
 		for(InputData excelData : excelDatas) {
+			CustomerWaterMeter waterMeter = customerWaterMeterService.finByMeterBodyNumber(excelData.getMeterBodyNumber());
 			Customer customer = customerService.findByCode(excelData.getCustomerCode());
-			if(customer == null)
-				throw new MyException("用户编号" + excelData.getCustomerCode() + "不存在,或者等待审核中");
+			if(customer == null || waterMeter == null)
+				throw new MyException("用户编号" + excelData.getCustomerCode() + "不存在或者水表号" + excelData.getMeterBodyNumber() + "不存在,或者等待审核中");
 			if(user.getWaterProvider().getId() != customer.getWaterProvider().getId())
 				throw new MyException("用户编号" + excelData.getCustomerCode() + "不在您的供水片区");
 			if(excelData.getMonth() < 1 || excelData.getMonth() > 12)
 				throw new MyException("用户编号" + excelData.getCustomerCode() + "对应的月份不是合理的值！！");
-			if(excelData.getMonth() == customer.getCustomerWater().getPayMonth())
-				throw new MyException("用户编号" + excelData.getCustomerCode() + "该月水费已缴，不能重新录入！！");
-			if(excelData.getWaterNumber() < customer.getCustomerWater().getOrgNumber())
-				throw new MyException("用户编号" + excelData.getCustomerCode() + "的用水量低于当前用水量");
+			if(excelData.getMonth() == waterMeter.getWaterMeterData().getPayMonth())
+				throw new MyException("水表号" + excelData.getMeterBodyNumber() + "该月水费已缴，不能重新录入！！");
+			if(excelData.getWaterNumber() < waterMeter.getWaterMeterData().getOrgNumber())
+				throw new MyException("水表号" + excelData.getMeterBodyNumber() + "的用水量低于当前用水量");
 		}
 	}
 
@@ -175,7 +183,7 @@ public class WaterDataController {
 		List<InputData> excelDatas = new ArrayList<InputData>();
 		Sheet sheet;
         Workbook book;
-        Cell customerCode,month,waterNumber;
+        Cell customerCode,meterBodyNumber,month,waterNumber;
         
         try {
 			book= Workbook.getWorkbook(uploadFile.getInputStream());
@@ -187,10 +195,11 @@ public class WaterDataController {
         	customerCode=sheet.getCell(0,i);//（列，行）
             if("".equals(customerCode.getContents())==true || customerCode.getContents().startsWith("EOF"))
             	break;
+            meterBodyNumber=sheet.getCell(1,i);
             month = sheet.getCell(2, i);
             waterNumber = sheet.getCell(3, i);
             try {
-            	InputData excelData = new InputData(customerCode.getContents(),month.getContents(),waterNumber.getContents());
+            	InputData excelData = new InputData(customerCode.getContents(),meterBodyNumber.getContents(),month.getContents(),waterNumber.getContents());
             	excelDatas.add(excelData);
             } catch (NumberFormatException e) {
             	throw new MyException("Excel文件第" + i + "行数据格式不对，请检查后再导入");
@@ -204,11 +213,13 @@ public class WaterDataController {
 
 class InputData {
 	private String customerCode;
+	private String meterBodyNumber;
 	private int month;
 	private Float waterNumber;
 	
-	public InputData(String customerCode,String strMonth,String strWaterNumber) throws NumberFormatException {
+	public InputData(String customerCode,String meterBodyNumber,String strMonth,String strWaterNumber) throws NumberFormatException {
 		this.customerCode = customerCode;
+		this.meterBodyNumber = meterBodyNumber;
 		this.month = Integer.valueOf(strMonth);
 		this.waterNumber = Float.valueOf(strWaterNumber);
 	}
@@ -225,7 +236,9 @@ class InputData {
 		return waterNumber;
 	}
 	
-	
+	public String getMeterBodyNumber() {
+		return meterBodyNumber;
+	}
 	
 }
 	

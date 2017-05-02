@@ -9,10 +9,34 @@
 
 <body>
 	<div class="container">
-		<div class="formtitle"><span>客户列表</span></div>
-    	<div class="col-sm-13" align="right">
-  			<a th:href="@{/customer/manage/search}"><button type="button" class="btn btn-default">搜索客户</button></a>
-  			<a th:href="@{/customer/manage/form}"><button type="button" class="btn btn-default">新增客户</button></a>
+		<div class="formtitle"><span>搜索</span></div>
+    	<div class="col-sm-6 ">
+    		<form class="form-group" th:action="@{/customer/manage/search}" method="get" >
+    			<label>客户编号:</label>
+    			<input type="text" class="form-control" name="customerCode" th:placeholder="如不指定请不填" />
+    			<label>客户姓名:</label>
+   				<input type="text" class="form-control" name="customerName" th:placeholder="如不指定请不填" />
+   				<label>客户地址:</label>
+   				<input type="text" class="form-control" name="customerAddress" th:placeholder="可以只填写关键字" />
+   				<select class="form-control" name="waterProvider">
+   					<option value="" th:selected="true">供水片区</option>
+   					<option value="">正常</option>
+   					<option value="">销户</option>
+   					<option value="">欠费</option>
+   				</select>
+   				<select class="form-control" name="customerStatus">
+   					<option value="" th:selected="true">客户状态</option>
+   					<option value="">正常</option>
+   					<option value="">销户</option>
+   					<option value="">欠费</option>
+   				</select>
+   				<select class="form-control" name="meterStatus">
+   					<option value="" th:selected="true">水表状态</option>
+   					<option value="1">正常</option>
+   					<option value="2">停水</option>
+   				</select>
+  				<input type="submit" value="搜索" class="btn btn-default"/>
+    		</form>
     	</div>
 		<div>
 			<table class="table table-striped">
@@ -48,7 +72,6 @@
 			        </tbody>
 			    </table>
 		    </div>
-		    <div th:include="paging :: paging"></div>
 	</div>
 </body>
 </html>
