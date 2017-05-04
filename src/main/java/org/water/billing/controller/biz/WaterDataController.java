@@ -26,12 +26,9 @@ import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.CustomerService;
 import org.water.billing.service.biz.CustomerWaterMeterService;
 import org.water.billing.service.biz.WaterMeterDataService;
+import org.water.billing.utils.ExcelData;
+import org.water.billing.utils.ExcelHelper;
 import org.water.billing.utils.Utils;
-
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
 
 @Controller
 public class WaterDataController {
@@ -53,23 +50,23 @@ public class WaterDataController {
 		String searchField = request.getParameter("search_key");
 		String searchValue = request.getParameter("search_value");
 		SysUser user = Utils.getLoginUserInSession(request);
-		List<Customer> customers = new ArrayList<Customer>();
+		List<CustomerWaterMeter> meters = null;
 		if(searchField != null && searchValue != null) {
 			switch(searchField) {
 			case "code":
-				Customer customer = customerService.findByCodeAndWaterProvider(searchValue,user.getWaterProvider().getId());
-				if(customer != null)
-					customers.add(customer);
+				meters = customerWaterMeterService
+							.findCustomerMetersByCodeAndWaterProvider(searchValue,user.getWaterProvider().getId());
 				break;
 			case "address":
-				customers = customerService.findByStatusAndAddressAndWaterProvider(searchValue,user.getWaterProvider().getId());
+				meters = customerWaterMeterService
+							.findCustomerMetersByAddressAndWaterProvider(searchValue,user.getWaterProvider().getId());
 				break;
 			default:
 				break;
 			}
 		}
 
-		map.addAttribute("customers",customers);
+		map.addAttribute("meters",meters);
 		return "/waterdata/input_water_data";
 	}
 	
@@ -107,12 +104,20 @@ public class WaterDataController {
 	public String importData(MultipartFile inputfile,HttpServletRequest request,ModelMap model) throws MyException, IOException{
 		MultipartHttpServletRequest multipartRequest  =  (MultipartHttpServletRequest) request;  
         MultipartFile uploadFile = multipartRequest.getFile("inputfile");
-        List<InputData> excelDatas = readExcelFile(uploadFile);
+        
+        ExcelData data = new ExcelData(1,4);
+        ExcelHelper.readExcelFile(uploadFile.getInputStream(), data);
+        
+        List<InputData> inputDatas = new ArrayList<InputData>();
+        for(List<String> item : data.getContent()) {
+        	InputData d = new InputData(item.get(0),item.get(1),item.get(2),item.get(3));
+        	inputDatas.add(d);
+        }
         SysUser user = Utils.getLoginUserInSession(request);
 		
-        verifyExcelData(excelDatas,user);
+        verifyExcelData(inputDatas,user);
 
-        saveData(excelDatas,user.getName());
+        saveData(inputDatas,user.getName());
         model.addAttribute("msg", "导入用户用水量成功！！");
 		return "/msg";
 	}
@@ -120,45 +125,45 @@ public class WaterDataController {
 	@RequestMapping(value = "/approve/customerwater/list",method=RequestMethod.GET)
 	public String approveCustomerWater(ModelMap model) {
 		List<CustomerWaterMeter> allCustomersWhichHaveNewWaterNumber = customerWaterMeterService.findAllCustomersWhichHaveNewBill();
-		model.addAttribute("allCustomersWhichHaveNewWaterNumber", allCustomersWhichHaveNewWaterNumber);
+		model.addAttribute("meters", allCustomersWhichHaveNewWaterNumber);
 		return "/approve/customerwater";
 	}
 	
 	@OpAnnotation(moduleName="业务审核",option="客户用水量")
 	@RequestMapping(value = "/approve/customerwater",method=RequestMethod.GET)
 	public String approveCustomerWater(@RequestParam int id,@RequestParam int action) throws MyException {
-		Customer customer = customerService.findById(id);
-		if(customer == null)
-			throw new MyException("客户不存在");
+		CustomerWaterMeter meter = customerWaterMeterService.findById(id);
+		if(meter == null)
+			throw new MyException("水表不存在");
 		
-		WaterMeterData customerWater = new WaterMeterData();
-		if(customerWater.getNewNumber() == new Float(0))
+		WaterMeterData waterMeterData = meter.getWaterMeterData();
+		if(waterMeterData.getNewNumber() == new Float(0))
 			throw new MyException("该业务已经处理");
 		
 		if(action == Consts.ACCEPT_PENGDING_MSG) {
-			BillGenerater billGenerater = new BillGenerater(customer,Consts.BILL_TYPE_WATER);
+			BillGenerater billGenerater = new BillGenerater(meter,Consts.BILL_TYPE_WATER);
 			Bill bill = billGenerater.genBill();
 			billService.save(bill);
 			
-			customerWater.setOrgNumber(customerWater.getNewNumber());
-			Float yearCount = customerWater.getYearCount() + customerWater.getNewNumber();
-			customerWater.setYearCount(yearCount);
+			waterMeterData.setOrgNumber(waterMeterData.getNewNumber());
+			Float yearCount = waterMeterData.getYearCount() + waterMeterData.getNewNumber();
+			waterMeterData.setYearCount(yearCount);
 		}
 		
-		customerWater.setNewNumber(new Float(0));
+		waterMeterData.setNewNumber(new Float(0));
 		
-		waterMeterDataService.save(customerWater);
+		waterMeterDataService.save(waterMeterData);
 		return "redirect:/approve/customerwater/list";
 	}
 	
 	private void saveData(List<InputData> excelDatas,String inputerName) {
 		for(InputData excelData : excelDatas) {
-			Customer customer = customerService.findByCode(excelData.getCustomerCode());
-			WaterMeterData customerWater = new WaterMeterData();
-			customerWater.setNewNumber(excelData.getWaterNumber());
-			customerWater.setInputerName(inputerName);
-			customerWater.setPayMonth(excelData.getMonth());
-			waterMeterDataService.save(customerWater);
+			CustomerWaterMeter meter = customerWaterMeterService.finByMeterBodyNumber(excelData.getMeterBodyNumber());
+			WaterMeterData meterData = meter.getWaterMeterData();
+			meterData.setNewNumber(excelData.getWaterNumber());
+			meterData.setInputerName(inputerName);
+			meterData.setPayMonth(excelData.getMonth());
+			waterMeterDataService.save(meterData);
 		}
 	}
 	
@@ -179,7 +184,7 @@ public class WaterDataController {
 		}
 	}
 
-	private List<InputData> readExcelFile(MultipartFile uploadFile) throws MyException {
+/*	private List<InputData> readExcelFile(MultipartFile uploadFile) throws MyException {
 		List<InputData> excelDatas = new ArrayList<InputData>();
 		Sheet sheet;
         Workbook book;
@@ -207,7 +212,7 @@ public class WaterDataController {
         }
         book.close(); 
         return excelDatas;
-	}
+	}*/
 	
 }
 

@@ -121,10 +121,8 @@
                             <i class="glyphicon glyphicon-tint"></i> 用水操作 <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul id="water" class="nav nav-list collapse secondmenu" style="height: 0px;">
-                            <li><a href="/waterdata/input_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 数据录入</a></li>
-                            <li><a href="/waterdata/import_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 数据导入</a></li>
-                            <li><a href="/waterdata/import_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 停水复水操作</a></li>
-                            <li><a href="/waterdata/import_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 更换水表</a></li>
+                            <li><a href="/waterdata/input_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 录入水表读数</a></li>
+                            <li><a href="/waterdata/import_water_data" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 导入水表读数</a></li>
                         </ul>
                     </li>
                     <li th:if="${#strings.contains(userResources,'/customer')}">
@@ -134,7 +132,7 @@
                         </a>
                         <ul id="customer" class="nav nav-list collapse secondmenu" style="height: 0px;">
                             <li th:if="${#strings.contains(userResources,'/customer/manage')}"><a href="/customer/manage/list" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户管理</a></li>
-							<li th:if="${#strings.contains(userResources,'/customer/field')}"><a href="/customer/field" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户字段管理</a></li>
+							<li th:if="${#strings.contains(userResources,'/customer/manage')}"><a href="/customer/manage/importmeterstatus" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 批量停水复水</a></li>
                             <li th:if="${#strings.contains(userResources,'/customer/type')}"><a href="/customer/type" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户类型管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/customer/waterprovider')}"><a href="/customer/waterprovider" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 供水片区管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/customer/watermetertype')}"><a href="/customer/watermetertype" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 水表信息管理</a></li>

@@ -10,68 +10,31 @@
 <body>
 	<div class="container">
 		<div class="formtitle"><span>搜索</span></div>
-    	<div class="col-sm-6 ">
-    		<form class="form-group" th:action="@{/customer/manage/search}" method="get" >
+    	<div class="col-sm-4 ">
+    		<form class="form-group" th:action="@{/customer/manage/search}" method="post" >
     			<label>客户编号:</label>
-    			<input type="text" class="form-control" name="customerCode" th:placeholder="如不指定请不填" />
+    			<input type="text" class="form-group form-control" name="customerCode" th:placeholder="如不指定请不填" />
     			<label>客户姓名:</label>
-   				<input type="text" class="form-control" name="customerName" th:placeholder="如不指定请不填" />
+   				<input type="text" class="form-group form-control" name="customerName" th:placeholder="如不指定请不填" />
    				<label>客户地址:</label>
-   				<input type="text" class="form-control" name="customerAddress" th:placeholder="可以只填写关键字" />
-   				<select class="form-control" name="waterProvider">
-   					<option value="" th:selected="true">供水片区</option>
-   					<option value="">正常</option>
-   					<option value="">销户</option>
-   					<option value="">欠费</option>
+   				<input type="text" class="form-group form-control" name="customerAddress" th:placeholder="可以只填写关键字" />
+   				<label>供水片区:</label>
+   				<select class="form-group form-control" name="waterProvider">
+   					<option th:each="waterProvider : ${waterProviders}" th:value="${waterProvider.id}" th:text="${waterProvider.name}"></option>
    				</select>
-   				<select class="form-control" name="customerStatus">
-   					<option value="" th:selected="true">客户状态</option>
-   					<option value="">正常</option>
-   					<option value="">销户</option>
-   					<option value="">欠费</option>
+   				<label>客户状态:</label>
+   				<select class="form-group form-control" name="customerStatus">
+   					<option value="1">正常</option>
+   					<option value="0">销户</option>
    				</select>
-   				<select class="form-control" name="meterStatus">
-   					<option value="" th:selected="true">水表状态</option>
+   				<label>水表状态:</label>
+   				<select class="form-group form-control" name="meterStatus">
    					<option value="1">正常</option>
    					<option value="2">停水</option>
    				</select>
   				<input type="submit" value="搜索" class="btn btn-default"/>
     		</form>
     	</div>
-		<div>
-			<table class="table table-striped">
-				<thead>
-			    	<tr>
-			        	<th>编号<i class="sort"></i></th>
-			        		<th>客户编号</th>
-			        		<th>客户姓名</th>
-			        		<th>客户手机</th>
-			        		<th>账户余额</th>
-			        		<th>状态</th>
-			        		<th>操作</th>
-			        	</tr>
-			        </thead>
-			        <tbody>
-			        <tr th:each="customer,customerStat : ${customers}"> 
-				        <td th:text="${customerStat.index} + 1">1</td> 
-				        <td th:text="${customer.customerInfo.code}"></td> 
-				        <td th:text="${customer.name}"></td>
-				        <td th:text="${customer.customerInfo.mobile}"></td>
-				        <td th:text="${customer.balance}"></td>
-				        <td th:if="${customer.status eq 0}" th:text="销户"></td>
-				        <td th:if="${customer.status eq 1}" th:text="正常"></td>
-				        <td th:if="${customer.status eq 2}" th:text="销户审核等待"></td>
-				        <td th:if="${customer.status eq 0}" th:text="开户审核等待"></td>
-				        <td>
-				        	<a th:href="@{/customer/manage/form(id=${customer.id})}">编辑</a>
-				        	<a th:if="${customer.status eq 0}" th:href="@{/customer/manage/activate(id=${customer.id})}">重新开户</a>
-				        	<a th:if="${customer.status eq 1}" th:href="@{/customer/manage/deactivate(id=${customer.id})}">销户</a>
-				        	<a th:href="@{/customer/manage/watermeter(id=${customer.id})}">编辑水表</a>
-				        </td>
-			        </tr>        
-			        </tbody>
-			    </table>
-		    </div>
 	</div>
 </body>
 </html>

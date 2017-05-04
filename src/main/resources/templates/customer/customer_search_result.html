@@ -9,65 +9,57 @@
 
 <body>
 	<div class="container">
-		<div class="formtitle"><span>搜索</span></div>
-    	<div class="col-sm-13" align="right">
-    		<form class="form-inline form-group" th:action="@{/customer/manage/search}" method="post" >
-    			<input type="text" class="form-control" name="code" th:placeholder="客户编号" />
-   				<input type="text" class="form-control" name="k" th:placeholder="客户名或者住址关键字" />
-   				<select class="form-control" name="status_customer">
-   					<option value="" th:selected="true">供水片区</option>
-   					<option value="">正常</option>
-   					<option value="">销户</option>
-   					<option value="">欠费</option>
-   				</select>
-   				<select class="form-control" name="status_customer">
-   					<option value="" th:selected="true">客户状态</option>
-   					<option value="">正常</option>
-   					<option value="">销户</option>
-   					<option value="">欠费</option>
-   				</select>
-   				<select class="form-control" name="status_meter">
-   					<option value="" th:selected="true">水表状态</option>
-   					<option value="1">正常</option>
-   					<option value="2">停水</option>
-   				</select>
-  				<input type="submit" value="搜索" class="btn btn-default"/>
-    		</form>
-    	</div>
-		<div>
+		<div class="formtitle"><span>搜索结果</span></div>
+    	
+		<div th:if="${not #lists.isEmpty(meters)}">
 			<table class="table table-striped">
 				<thead>
 			    	<tr>
 			        	<th>编号<i class="sort"></i></th>
-			        		<th>客户编号</th>
-			        		<th>客户姓名</th>
-			        		<th>客户手机</th>
-			        		<th>账户余额</th>
-			        		<th>状态</th>
-			        		<th>操作</th>
-			        	</tr>
-			        </thead>
-			        <tbody>
-			        <tr th:each="customer,customerStat : ${customers}"> 
-				        <td th:text="${customerStat.index} + 1">1</td> 
-				        <td th:text="${customer.customerInfo.code}"></td> 
-				        <td th:text="${customer.name}"></td>
-				        <td th:text="${customer.customerInfo.mobile}"></td>
-				        <td th:text="${customer.balance}"></td>
-				        <td th:if="${customer.status eq 0}" th:text="销户"></td>
-				        <td th:if="${customer.status eq 1}" th:text="正常"></td>
-				        <td th:if="${customer.status eq 2}" th:text="销户审核等待"></td>
-				        <td th:if="${customer.status eq 0}" th:text="开户审核等待"></td>
+			        	<th>客户姓名</th>
+			        	<th>客户编号</th>
+			        	<th>表身号</th>
+			        	<th>水表数字</th>
+			        	<th>用途</th>
+			        	<th>状态</th>
+			        	<th>操作</th>
+			        </tr>
+			     </thead>
+			     <tbody>
+			        <tr th:each="meter,meterStat : ${meters}"> 
+				        <td th:text="${meterStat.index} + 1">1</td> 
+				        <td th:text="${meter.customer.name}"></td> 
+				        <td th:text="${meter.customer.customerInfo.code}"></td>
+				        <td th:text="${meter.bodyNumber}"></td>
+				        <td th:text="${meter.waterMeterData.orgNumber}"></td>
+				        <td th:text="${meter.usage}"></td>
+				        <td th:if="${meter.status eq 1}" th:text="正常"></td>
+				        <td th:if="${meter.status ne 1}" th:text="停水"></td>
 				        <td>
-				        	<a th:href="@{/customer/manage/form(id=${customer.id})}">编辑</a>
-				        	<a th:if="${customer.status eq 0}" th:href="@{/customer/manage/activate(id=${customer.id})}">重新开户</a>
-				        	<a th:if="${customer.status eq 1}" th:href="@{/customer/manage/deactivate(id=${customer.id})}">销户</a>
-				        	<a th:href="@{/customer/manage/watermeter(id=${customer.id})}">编辑水表</a>
+				        	<a th:href="@{/customer/manage/watermeterform(meterId=${meter.id},customerId=${customer_id})}">编辑</a>
+				        	<a th:if="${meter.status eq 1}" th:href="@{/customer/manage/watermeter/stop(meterId=${meter.id},customerId=${customer_id})}">停水</a>
+				        	<a th:if="${meter.status eq 2}" th:href="@{/customer/manage/watermeter/use(meterId=${meter.id},customerId=${customer_id})}">复水</a>
+				        	<a th:href="@{/}">检修</a>
+				        	<a th:href="@{/}">换表</a>
 				        </td>
 			        </tr>        
-			        </tbody>
-			    </table>
-		    </div>
+			    </tbody>
+			</table>
+			<div class="col-sm-12">
+				<form th:action="@{/customer/manage/search/download}" method="post" th:object="${meters}">
+					<input type="hidden" name="customerCode" th:value="${customerCode}" />
+					<input type="hidden" name="customerName" th:value="${customerName}" />
+					<input type="hidden" name="customerAddress" th:value="${customerAddress}" />
+					<input type="hidden" name="waterProvider" th:value="${waterProvider}" />
+					<input type="hidden" name="customerStatus" th:value="${customerStatus}" />
+					<input type="hidden" name="meterStatus" th:value="${meterStatus}" />
+					<input type="submit" class="btn btn-default" value="导出数据"/>
+				</form>
+			</div>
+		</div>
+		<div th:if="${#lists.isEmpty(meters)}">
+			无匹配记录!!
+		</div>
 	</div>
 </body>
 </html>

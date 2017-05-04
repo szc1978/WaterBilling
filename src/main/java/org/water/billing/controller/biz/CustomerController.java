@@ -1,7 +1,12 @@
 package org.water.billing.controller.biz;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -11,6 +16,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.water.billing.GlobalConfiguration;
 import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
@@ -27,6 +34,8 @@ import org.water.billing.service.biz.CustomerTypeService;
 import org.water.billing.service.biz.CustomerWaterMeterService;
 import org.water.billing.service.biz.WaterMeterTypeService;
 import org.water.billing.service.biz.WaterProviderService;
+import org.water.billing.utils.ExcelData;
+import org.water.billing.utils.ExcelHelper;
 import org.water.billing.utils.Utils;
 
 @Controller
@@ -60,11 +69,6 @@ public class CustomerController {
 		map.addAttribute("customers",pageInfo.getContent());
 		Utils.setPageInfo4ModelMap(pageInfo, map);
 		return "/customer/customer_list";
-	}
-	
-	@RequestMapping(value="/customer/manage/search",method=RequestMethod.GET)
-	public String searchCustomer() {
-		return "/customer/customer_search_form";
 	}
 	
 	@OpAnnotation(moduleName="客户管理",option="增加修改客户")
@@ -212,5 +216,107 @@ public class CustomerController {
 		meter.setStatus(1);
 		customerWaterMeterService.save(meter);
 		return "redirect:/customer/manage/watermeter?id=" + customerId;
+	}
+	
+	@RequestMapping(value="/customer/manage/search",method=RequestMethod.GET)
+	public String searchCustomer(ModelMap model) {
+		List<WaterProvider> waterProviders = waterProviderService.findAll();
+		model.addAttribute("waterProviders",waterProviders);
+		return "/customer/customer_search_form";
+	}
+	
+	@RequestMapping(value="/customer/manage/search",method=RequestMethod.POST)
+	public String searchCustomer(@RequestParam(defaultValue="") String customerCode,
+								 @RequestParam(defaultValue="") String customerName,
+								 @RequestParam(defaultValue="") String customerAddress,
+								 @RequestParam(defaultValue="0") int waterProvider,
+								 @RequestParam(defaultValue="0") int customerStatus,
+								 @RequestParam(defaultValue="0") int meterStatus,
+								 ModelMap model) {
+		List<CustomerWaterMeter> meters = customerWaterMeterService.diySearch(customerCode,customerName,customerAddress,waterProvider,customerStatus,meterStatus);
+		model.addAttribute("meters", meters);
+		model.addAttribute("customerCode", customerCode);
+		model.addAttribute("customerName", customerName);
+		model.addAttribute("customerAddress", customerAddress);
+		model.addAttribute("waterProvider", waterProvider);
+		model.addAttribute("customerStatus", customerStatus);
+		model.addAttribute("meterStatus", meterStatus);
+		return "/customer/customer_search_result";
+	}
+	
+	@RequestMapping(value="/customer/manage/search/download",method=RequestMethod.POST)
+	public void download(@RequestParam(defaultValue="") String customerCode,
+						 @RequestParam(defaultValue="") String customerName,
+						 @RequestParam(defaultValue="") String customerAddress,
+						 @RequestParam(defaultValue="0") int waterProvider,
+						 @RequestParam(defaultValue="0") int customerStatus,
+						 @RequestParam(defaultValue="0") int meterStatus,
+						 HttpServletResponse resp) throws IOException {
+		List<CustomerWaterMeter> meters = customerWaterMeterService.diySearch(customerCode,customerName,customerAddress,waterProvider,customerStatus,meterStatus);
+		ExcelData excelData = new ExcelData(0,5);
+		List<String> title = new ArrayList<String>();
+		title.add("用户编号");title.add("表号");title.add("水表用途");title.add("水表状态");title.add("水表度数");
+		excelData.setTitle(title);
+		for(CustomerWaterMeter meter : meters) {
+			List<String> row = new ArrayList<String>();
+			row.add(meter.getCustomer().getCustomerInfo().getCode());
+			row.add(meter.getBodyNumber());
+			row.add(meter.getUsage());
+			row.add(String.valueOf(meter.getStatus()));
+			row.add(String.valueOf(meter.getWaterMeterData().getOrgNumber()));
+			excelData.addRowContent(row);
+		}
+		resp.addHeader("Content-disposition", "attachment;filename=export.xls");
+		
+		resp.setContentType("txt/plain");
+		ExcelHelper.writeExcel(excelData, resp.getOutputStream());
+		resp.flushBuffer();
+	}
+	
+	@RequestMapping(value="/customer/manage/importmeterstatus",method=RequestMethod.GET)
+	public String importMeterStatus() {
+		return "/customer/import_meter_status";
+	}
+	
+	@RequestMapping(value="/customer/manage/importmeterstatus",method=RequestMethod.POST)
+	public String importMeterStatus(MultipartFile inputfile,HttpServletRequest request,ModelMap model) throws MyException, IOException {
+		MultipartHttpServletRequest multipartRequest  =  (MultipartHttpServletRequest) request;  
+        MultipartFile uploadFile = multipartRequest.getFile("inputfile");
+        
+        ExcelData data = new ExcelData(1,2);
+        ExcelHelper.readExcelFile(uploadFile.getInputStream(), data);
+        verifyData(data);
+        saveData(data);
+		model.addAttribute("msg", "输入用户用水量成功！！");
+		return "/msg";
+	}
+	
+	private void verifyData(ExcelData data) throws MyException {
+		List<List<String>> content = data.getContent();
+		for(int i=0;i<content.size();i++) {
+			List<String> row = content.get(i);
+			String meterBodyNumber = row.get(0);
+			String status = row.get(1);
+			if(!"停水".equals(status) && !"复水".equals(status))
+				throw new MyException("第" + (i+1) + "行，水表状态只能是停水或者复水");
+			CustomerWaterMeter meter = customerWaterMeterService.finByMeterBodyNumber(meterBodyNumber);
+			if(meter == null)
+				throw new MyException("第" + (i+1) + "行，水表号不存在");
+		}
+	}
+	
+	private void saveData(ExcelData data) {
+		List<List<String>> content = data.getContent();
+		for(int i=0;i<content.size();i++) {
+			List<String> row = content.get(i);
+			String meterBodyNumber = row.get(0);
+			String status = row.get(1);
+			CustomerWaterMeter meter = customerWaterMeterService.finByMeterBodyNumber(meterBodyNumber);
+			if("停水".equals(status))
+				meter.setStatus(Consts.WATER_METER_STATUS_STOPING);
+			if("复水".equals(status))
+				meter.setStatus(Consts.WATER_METER_STATUS_USING);
+			customerWaterMeterService.save(meter);
+		}
 	}
 }

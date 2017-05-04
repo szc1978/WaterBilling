@@ -16,7 +16,7 @@
 
 <body>
 	<div class="container">
-		<div class="formtitle"><span>输入客户用水量</span></div>
+		<div class="formtitle"><span>录入客户用水量</span></div>
 			<div class="col-sm-12">
 				<form class="form-inline" name="search_customer_form" th:action="@{/waterdata/input_water_data}" method="get" >
 					<div class=" form-group ">
@@ -31,19 +31,22 @@
 				</form>
 			</div>
 			<br></br><br></br><br></br>
-			<div class="col-sm-12" th:if="${not #lists.isEmpty(customers)}">
+			<div class="col-sm-12" th:if="${not #lists.isEmpty(meters)}">
 				<form th:action="@{/waterdata/input_water_data}" method="post" th:with="curmonth=${#calendars.format(#calendars.createNow(), 'M')}" >
 					<div class="col-sm-12 form-inline form-group">
 						<label for="name">本期水表数月份:</label>
 						<input type="text" class="form-control" name="month" onkeyup="int_input_validate(this)" th:value="${curmonth}" />
 					</div>
-					<div class="col-sm-12 form-inline form-group" th:each="customer,customerStat : ${customers}">
+					<div class="col-sm-12 form-inline form-group" th:each="meter,meterStat : ${meters}">
 						<label for="name">客户姓名:</label>
-						 <input type="text" class="form-control" th:value="${customer.name}" th:disabled="true" />
-						 <label for="name">&nbsp;&nbsp;上期水表数:</label>
-						 <input type="text" class="form-control" th:value="${customer.customerWater.orgNumber}" th:disabled="true" />
+						<input type="text" class="form-control" th:value="${meter.customer.name}" th:disabled="true" />
+						<label for="name">水表号:</label>
+						<input type="text" class="form-control" th:value="${meter.bodyNumber}" th:disabled="true" />
+						<label for="name">&nbsp;&nbsp;上期水表数:</label>
+						<input type="text" class="form-control" th:value="${meter.waterMeterData.orgNumber}" th:disabled="true" />
 						<label for="name">&nbsp;&nbsp;本期水表数:</label>
-						 <input type="text" class="form-control" th:name="'WaterNumber_' + ${customer.customerInfo.code}" onkeyup="float_input_validate(this)" />
+						<input type="text" class="form-control" th:if="${meter.status eq 1}" th:name="'WaterNumber_' + ${meter.customer.customerInfo.code} + '_' + ${meter.bodyNumber}" onkeyup="float_input_validate(this)" />
+						<input type="text" class="form-control" th:if="${meter.status ne 1}" th:value="水表停水状态" th:disabled="true" />
 					</div>
 					<div class="col-sm-12 form-inline">
 						<input type="submit" value="保存" class="btn btn-default"/>
@@ -51,7 +54,7 @@
 					
 				</form>
 			</div>
-			<div th:if="${#lists.isEmpty(customers)}">
+			<div th:if="${#lists.isEmpty(meters)}">
 				没有匹配的客户信息！！
 			</div>
 		

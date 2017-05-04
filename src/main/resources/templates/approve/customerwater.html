@@ -26,18 +26,18 @@
 			        	</tr>
 			        </thead>
 			        <tbody>
-			        <tr th:each="customer,customerStat : ${allCustomersWhichHaveNewWaterNumber}"> 
-				        <td th:text="${customerStat.index} + 1">1</td> 
-				        <td th:text="${customer.name}"></td> 
-				        <td th:text="${customer.customerInfo.code}"></td>
-				        <td th:text="${customer.customerType.name}"></td>
-				        <td th:text="${customer.customerWater.orgNumber}"></td>
-				        <td th:text="${customer.customerWater.newNumber}"></td>
-				        <td th:text="${customer.customerWater.payMonth}"></td>
-				         <td th:text="${customer.customerWater.yearCount}"></td>
+			        <tr th:each="meter,meterStat : ${meters}"> 
+				        <td th:text="${meterStat.index} + 1">1</td> 
+				        <td th:text="${meter.customer.name}"></td> 
+				        <td th:text="${meter.customer.customerInfo.code}"></td>
+				        <td th:text="${meter.customer.customerType.name}"></td>
+				        <td th:text="${meter.waterMeterData.orgNumber}"></td>
+				        <td th:text="${meter.waterMeterData.newNumber}"></td>
+				        <td th:text="${meter.waterMeterData.payMonth}"></td>
+				         <td th:text="${meter.waterMeterData.yearCount}"></td>
 				        <td>
-				        	<a th:href="@{/approve/customerwater(id=${customer.id},action=1)}">同意</a>
-				        	<a th:href="@{/approve/customerwater(id=${customer.id},action=2)}">拒绝</a>
+				        	<a th:href="@{/approve/customerwater(id=${meter.id},action=1)}">同意</a>
+				        	<a th:href="@{/approve/customerwater(id=${meter.id},action=2)}">拒绝</a>
 				        </td>
 			        </tr>        
 			        </tbody>
