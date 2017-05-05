@@ -43,7 +43,7 @@ public class BillGenerater {
 		bill.setTotalPostage(totalPostage);
 		bill.setDetailContent(detailedBill);
 		bill.setCustomerCode(customer.getCustomerInfo().getCode());
-		bill.setCustomerWaterMeterId(0);
+		//bill.setWaterMeterBodyNumber(customerWaterMeter.getBodyNumber());;
 		return bill;
 	}
 	
@@ -62,7 +62,7 @@ public class BillGenerater {
 		bill.setInputDate(new Date());
 		bill.setInputerName(waterMeterData.getInputerName());
 		bill.setCustomerCode(customer.getCustomerInfo().getCode());
-		bill.setCustomerWaterMeterId(customerWaterMeter.getId());
+		bill.setWaterMeterBodyNumber(customerWaterMeter.getBodyNumber());;
 		if(customer.getBalance() >= totalPostage)
 			bill.setAutoChargeFlag(Consts.BILL_AUTO_CHARGE_FLAG);
 		return bill;

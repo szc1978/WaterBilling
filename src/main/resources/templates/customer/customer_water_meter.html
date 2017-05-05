@@ -39,8 +39,6 @@
 				        	<a th:href="@{/customer/manage/watermeterform(meterId=${meter.id},customerId=${customer_id})}">编辑</a>
 				        	<a th:if="${meter.status eq 1}" th:href="@{/customer/manage/watermeter/stop(meterId=${meter.id},customerId=${customer_id})}">停水</a>
 				        	<a th:if="${meter.status eq 2}" th:href="@{/customer/manage/watermeter/use(meterId=${meter.id},customerId=${customer_id})}">复水</a>
-				        	<a th:href="@{/}">检修</a>
-				        	<a th:href="@{/}">换表</a>
 				        </td>
 			        </tr>        
 			    </tbody>
@@ -48,6 +46,7 @@
 		</div>
 		<div>
 			<a th:href="@{/customer/manage/watermeterform(customerId=${customer_id})}"><input type="button" class="btn btn-default" value="增加水表" /></a>
+			<a th:href="@{/customer/manage/watermetermainhistorylist(customerId=${customer_id})}"><input type="button" class="btn btn-default" value="水表维护记录" /></a>
 		</div>
 	</div>
 </body>

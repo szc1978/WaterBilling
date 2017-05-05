@@ -1,5 +1,7 @@
 package org.water.billing.entity.biz;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.water.billing.consts.Consts;
 
@@ -36,7 +41,7 @@ public class CustomerWaterMeter {
 	@Column(name="location_number")
 	private String locationNumber;
 	
-	@Column(name="body_number")
+	@Column(name="body_number",unique=true)
 	private String bodyNumber;
 	
 	@Column(name="first_number")
@@ -50,6 +55,14 @@ public class CustomerWaterMeter {
     @JoinTable(name="customer_meter_map",joinColumns={@JoinColumn(name="m_id")},inverseJoinColumns={@JoinColumn(name="c_id")})
 	private Customer customer;
 	
+	@Column(name = "latest_check_time",length=64,updatable = false)
+	@Temporal(TemporalType.TIMESTAMP) 
+	private Date latestCheckTime; 
+	
+	@PrePersist
+    protected void onCreate() {
+		latestCheckTime = new Date();
+    }
 	
 	public CustomerWaterMeter() {
 		
@@ -125,6 +138,14 @@ public class CustomerWaterMeter {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public Date getLatestCheckTime() {
+		return latestCheckTime;
+	}
+
+	public void setLatestCheckTime(Date latestCheckTime) {
+		this.latestCheckTime = latestCheckTime;
 	}
 
 	

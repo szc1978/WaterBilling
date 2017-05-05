@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>客户管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="/js/water.js"></script>
+	<script>
+		function search_customer() {
+			document.search_customer_by_code.submit();
+		}
+		
+	</script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>客户缴费</span></div>
+		<form name="pay" th:action="@{/pay/allbills}" method="post">
+			<div class="col-sm-8">
+				<div class="col-sm-12">
+					<div class="col-sm-4 form-group ">
+						<label for="name">用户姓名：</label>
+						<input type="text" class="form-control" th:disabled="true" th:value="${customer.name}"/>
+					</div>
+					<div class="col-sm-8 form-group ">
+						<label for="name">用户地址：</label>
+						<input type="text" class="form-control" th:disabled="true" th:value="${customer.customerInfo.address}"/>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-8">
+				
+				<div class="col-sm-12">
+					<div class="col-sm-4 form-group ">
+						<label for="name">未缴费用：</label>
+						<input type="text" class="form-control" id="unPaied" th:disabled="true" th:value="${un_paied}" />
+					</div>
+					<div class="col-sm-4 form-group ">
+						<label for="name">滞纳金：</label>
+						<input type="text" class="form-control" th:disabled="true" th:value="${late_payment}" />
+					</div>
+					</div>
+				<div class="col-sm-12">
+					<div class="col-sm-4 form-group">
+						<label for="name">上次结余:</label>
+						<input type="text" class="form-control" th:disabled="true" th:value="${customer.balance}" id="balance" />
+					</div>
+					<div class="col-sm-4 form-group ">
+						<label for="name">应付:</label>
+						<input type="text" class="form-control" th:disabled="true" value="0.0" />
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="col-sm-4 form-group">
+						<label for="name">缴费金额:</label>
+						<input type="text" class="form-control form-group" name="payment" onkeyup="float_input_validate(this)" value="0.0"/>
+						<input type="submit" class="btn btn-default" value="缴费" />
+					</div>
+				</div>
+				<input type="hidden" name="customerCode" th:value="${customer_code}" />
+			</div>
+		</form>
+	</div>
+</body>
+</html>

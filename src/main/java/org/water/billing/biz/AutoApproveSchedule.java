@@ -1,6 +1,5 @@
 package org.water.billing.biz;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,14 +79,12 @@ public class AutoApproveSchedule {
 		for(Bill bill : allPendingBill){
 			String customerCode = bill.getCustomerCode();
 			Customer customer = customerService.findByCode(customerCode);
-			if(customer.getBalance() > bill.getTotalPostage()) {
-				customer.setBalance(customer.getBalance() - bill.getTotalPostage());
-				bill.setIsCharged(1);
-				bill.setChargeDate(new Date());
-				billService.save(bill);
-			}
-			bill.setAutoChargeFlag(Consts.NON_BILL_AUTO_CHARGE_FLAG);
-			billService.save(bill);
+			if(customer.getBalance() < bill.getTotalPostage()) 
+				continue;
+
+			customer.setBalance(customer.getBalance() - bill.getTotalPostage());
+			customerService.save(customer);
+			billService.payBill(bill, bill.getTotalPostage(), "");
 		}
 	}
 }

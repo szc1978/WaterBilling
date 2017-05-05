@@ -18,8 +18,8 @@ public interface BillDao extends JpaRepository<Bill, Integer>{
 	
 	public List<Bill> findByCustomerCodeAndIsCharged(String customerCode,int isCharged,Sort sort);
 	
-	@Query(value="select bill from Bill bill where bill.customerCode=:code and bill.inputDate>:fromDate and bill.inputDate<:toDate")
-	public List<Bill> findCustomerBill(@Param("code") String code,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate);
+	@Query(value="select bill from Bill bill where bill.customerCode=:customerCode and bill.inputDate>:fromDate and bill.inputDate<:toDate")
+	public List<Bill> findCustomerBill(@Param("customerCode") String customerCode,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate);
 
 	public int countByAutoChargeFlag(int flag);
 	

@@ -25,6 +25,16 @@ public class BillService {
 		return billDao.findByCustomerCodeAndIsCharged(customerCode, 0,sort);
 	}
 	
+	public Bill payBill(Bill bill,Float paiedValue,String reduceContent) {
+		bill.setAutoChargeFlag(Consts.NON_BILL_AUTO_CHARGE_FLAG);
+		bill.setIsCharged(1);
+		bill.setChargeDate(new Date());
+		bill.setPaied(paiedValue);
+		bill.setReduceContent(reduceContent);
+		bill = billDao.save(bill);
+		return bill;
+	}
+	
 	public Bill save(Bill bill) {
 		return billDao.save(bill);
 	}

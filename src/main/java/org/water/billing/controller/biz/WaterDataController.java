@@ -158,7 +158,7 @@ public class WaterDataController {
 	
 	private void saveData(List<InputData> excelDatas,String inputerName) {
 		for(InputData excelData : excelDatas) {
-			CustomerWaterMeter meter = customerWaterMeterService.finByMeterBodyNumber(excelData.getMeterBodyNumber());
+			CustomerWaterMeter meter = customerWaterMeterService.findByMeterBodyNumber(excelData.getMeterBodyNumber());
 			WaterMeterData meterData = meter.getWaterMeterData();
 			meterData.setNewNumber(excelData.getWaterNumber());
 			meterData.setInputerName(inputerName);
@@ -169,7 +169,7 @@ public class WaterDataController {
 	
 	private void verifyExcelData(List<InputData> excelDatas,SysUser user) throws MyException {
 		for(InputData excelData : excelDatas) {
-			CustomerWaterMeter waterMeter = customerWaterMeterService.finByMeterBodyNumber(excelData.getMeterBodyNumber());
+			CustomerWaterMeter waterMeter = customerWaterMeterService.findByMeterBodyNumber(excelData.getMeterBodyNumber());
 			Customer customer = customerService.findByCode(excelData.getCustomerCode());
 			if(customer == null || waterMeter == null)
 				throw new MyException("用户编号" + excelData.getCustomerCode() + "不存在或者水表号" + excelData.getMeterBodyNumber() + "不存在,或者等待审核中");

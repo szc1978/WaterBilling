@@ -36,7 +36,7 @@
 				        <td th:text="${bill.endWaterWord}"></td>
 				        <td th:text="${bill.totalPostage}"></td>
 				        <td>
-				        	<a th:href="@{/approve/customerbill(customerCode=${bill.customerCode})}">确认</a>
+				        	<a th:href="@{/approve/customerbill(id=${bill.id})}">确认自动缴费</a>
 				        </td>
 			        </tr>        
 			        </tbody>

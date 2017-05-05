@@ -30,7 +30,7 @@ public class CustomerWaterMeterService {
 		return waterMeterDao.countPendingWaterNumber();
 	}
 	
-	public CustomerWaterMeter finByMeterBodyNumber(String bodyNumber) {
+	public CustomerWaterMeter findByMeterBodyNumber(String bodyNumber) {
 		return waterMeterDao.findByBodyNumber(bodyNumber);
 	}
 	

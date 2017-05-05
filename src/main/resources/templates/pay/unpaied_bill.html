@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<script>
+	function search_customer() {
+		document.search_customer_by_code.submit();
+	}
+</script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>搜索客户欠费账单</span></div>
+		<div class="col-sm-8">
+			<form name="search_customer_by_code" th:action="@{/pay/listunpaiedbill}" method="get" >
+				<div class="col-sm-12 form-group ">
+					<label for="name">用户编号:</label>
+				 	<div class="form-inline">
+						<input type="text" class="form-control" name="code" th:value="${customerCode}" />
+						<a href="#" onclick="search_customer();"><span class="glyphicon glyphicon-search"></span></a>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-sm-12" th:if="${not #lists.isEmpty(bills)}">
+			<div>
+			    <table class="table table-striped">
+			    	<thead>
+			    		<tr>
+			        		<th>编号<i class="sort"></i></th>
+			        		<th>账单名称</th>
+			        		<th>起始水表数</th>
+			        		<th>结束水表数</th>
+			        		<th>缴费金额</th>
+			        		<th>缴费</th>
+			        	</tr>
+			        </thead>
+			        <tbody>
+				        <tr th:each="bill,billStat : ${bills}"> 
+					        <td th:text="${billStat.index} + 1">1</td> 
+					        <td th:text="${bill.name}"></td> 
+					        <td th:text="${bill.beginWaterWord}"></td>
+							<td th:text="${bill.endWaterWord}"></td>
+							<td th:text="${bill.totalPostage}"></td>
+							<td><a th:href="@{/pay/onebill(id=${bill.id})}" th:text="缴费"></a></td>
+				       </tr>        
+			    	</tbody>	
+			    </table>
+		    </div>
+		    <div th:if="${#lists.size(bills) gt 1}" >
+		    	<a th:href="@{/pay/allbills(code=${customerCode})}" class="btn btn-default">合并缴费</a>
+		    </div>
+		</div>
+		<div class="col-sm-8" th:if="${#lists.isEmpty(bills) and customerCode != null}">
+			该客户不欠费!
+		</div>
+	</div>
+</body>
+</html>

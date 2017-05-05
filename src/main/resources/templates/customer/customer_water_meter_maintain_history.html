@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>客户管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>客户水表维护记录</span></div>
+		<div>
+			<table class="table table-striped">
+				<thead>
+			    	<tr>
+			        	<th>编号<i class="sort"></i></th>
+			        		<th>客户编号</th>
+			        		<th>客户姓名</th>
+			        		<th>水表号</th>
+			        		<th>动作</th>
+			        		<th>日期</th>
+			        		<th>备注</th>
+			        	</tr>
+			        </thead>
+			        <tbody>
+			        <tr th:each="history,historyStat : ${allhistory}"> 
+				        <td th:text="${historyStat.index} + 1">1</td> 
+				        <td th:text="${history.waterMeter.customer.customerInfo.code}"></td> 
+				        <td th:text="${history.waterMeter.customer.name}"></td>
+				        <td th:text="${history.waterMeter.bodyNumber}"></td>
+				        <td th:if="${history.action eq 1}" th:text="添加"></td>
+				        <td th:if="${history.action eq 3}" th:text="检修"></td>
+				        <td th:if="${history.action eq 4}" th:text="更换"></td>
+				        <td th:text="${history.createTime}"></td>
+				        <td th:text="${history.reason}"></td>
+			        </tr>        
+			        </tbody>
+			    </table>
+		    </div>
+	</div>
+</body>
+</html>

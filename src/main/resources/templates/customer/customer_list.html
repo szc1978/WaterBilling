@@ -37,7 +37,7 @@
 				        <td th:if="${customer.status eq 0}" th:text="销户"></td>
 				        <td th:if="${customer.status eq 1}" th:text="正常"></td>
 				        <td th:if="${customer.status eq 2}" th:text="销户审核等待"></td>
-				        <td th:if="${customer.status eq 0}" th:text="开户审核等待"></td>
+				        <td th:if="${customer.status eq 3}" th:text="开户审核等待"></td>
 				        <td>
 				        	<a th:href="@{/customer/manage/form(id=${customer.id})}">编辑</a>
 				        	<a th:if="${customer.status eq 0}" th:href="@{/customer/manage/activate(id=${customer.id})}">重新开户</a>

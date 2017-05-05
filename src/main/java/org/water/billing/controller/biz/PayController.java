@@ -41,30 +41,140 @@ public class PayController {
 	@Autowired
 	BillService billService;
 	
-	@RequestMapping(value = "/pay/water",method=RequestMethod.GET)
-	public String payForm(@RequestParam(required=false) String code,
-							ModelMap map) throws Exception {
+	@RequestMapping(value="/pay/listunpaiedbill",method=RequestMethod.GET)
+	public String listUnpaiedBill(@RequestParam(required=false) String code,ModelMap map) {
+		List<Bill> bills = billService.findUnchargedBill(code);
+		map.addAttribute("bills", bills);
+		map.addAttribute("customerCode", code);
+		return "/pay/unpaied_bill";
+	}
+	
+	@RequestMapping(value="/pay/onebill",method=RequestMethod.GET)
+	public String payOneBillForm(@RequestParam int id,ModelMap map) throws MyException {
+		Bill bill = billService.findById(id);
+		if(bill == null || bill.getIsCharged() == 1)
+			throw new MyException("账单不存在或者账单已经缴费");
+		Customer customer = customerService.findByCode(bill.getCustomerCode());
+		if(customer == null)
+			throw new MyException("客户不存在");
+		map.addAttribute("bill", bill);
+		map.addAttribute("customer", customer);
+		Float latePaymentValue = getLatePayment4Bill(bill);
+		map.addAttribute("late_payment", latePaymentValue);
+		List<Map<String,String>> chargeDetailedList = getDetailCharge4Bill(bill);
+		map.addAttribute("chargeDetailedList",chargeDetailedList);
+		return "/pay/pay_one_bill_form";
+	}
+	
+	@OpAnnotation(moduleName="客户缴费",option="缴纳水费")
+	@RequestMapping(value="/pay/onebill",method=RequestMethod.POST)
+	public String payOneBillForm(HttpServletRequest request) throws MyException {
+		String customerCode = request.getParameter("customerCode");
+		Customer customer = customerService.findByCode(customerCode);
+		int billId = Integer.valueOf(request.getParameter("bill_id"));
+		Bill bill = billService.findById(billId);
+		if(customer == null)
+			throw new MyException("客户不存在");
+		if(bill == null)
+			throw new MyException("客户账单不存在");
+		//cal reduce items
+		Float thisPay = Float.valueOf(request.getParameter("payment"));
+		String reduceContent = "";
+		Float reduce = new Float(0);
+		for(int i=0;;i++) {
+			String chargeName = request.getParameter("reduce_charge_name_" + i);
+			String orgValue = request.getParameter("reduce_charge_org_value_" + i);
+			String reduceValue = request.getParameter("reduce_charge_reduce_value_" + i);
+			if(chargeName != null && orgValue != null && reduceValue != null) {
+				reduceContent += chargeName + ":" + orgValue + "," + reduceValue + ";";
+			} else {
+				break;
+			}
+			if(Float.valueOf(reduceValue) > Float.valueOf(orgValue))
+				throw new MyException(chargeName + "的减免额度高于原始费用");
+			reduce += Float.valueOf(reduceValue);
+		}
+		
+		String reduceLatePaymentOrgValue = request.getParameter("reduce_late_payment_org_value");
+		String reduceLatePaymentValue = request.getParameter("reduce_late_payment_value");
+		if(Float.valueOf(reduceLatePaymentValue) > Float.valueOf(reduceLatePaymentOrgValue))
+			throw new MyException("滞纳金的减免额度高于原始费用");
+		reduceContent += "滞纳金:" + reduceLatePaymentOrgValue + "," + reduceLatePaymentValue;
+		reduce += Float.valueOf(reduceLatePaymentValue);
+		
+		Float needPay = bill.getTotalPostage() - reduce;
+		doPay4OneBill( bill, thisPay, needPay, reduceContent);
+		
+		return "redirect:/pay/bill?id=" + bill.getId();
+	}
+	
+	@RequestMapping(value = "/pay/allbills",method=RequestMethod.GET)
+	public String payAllBillsForm(@RequestParam String code, ModelMap map) throws Exception {
 		Customer customer = customerService.findByCode(code);
-		if(customer == null && code != null)
+		if(customer == null )
 			throw new MyException("用户不存在");
 		
-		if(customer == null && code == null)
-			customer = new Customer();
-		
-		Map<String,Object> payInformation = getPayInformation(code);
+		List<Bill> bills = billService.findUnchargedBill(code);
+		Map<String,Object> payInformation = getPayInformation(bills);
 		
 		Float unpaied = payInformation.get("unpaied") == null ? new Float(0) : (Float) payInformation.get("unpaied");
 		Float latePayment = payInformation.get("latePayment") == null ? new Float(0) : (Float) payInformation.get("latePayment");
-		Bill latestBill = payInformation.get("latestBill") == null ? new Bill() : (Bill) payInformation.get("latestBill");
 		
-		map.addAttribute("customer_name", customer.getName());
-		map.addAttribute("customer_code", customer.getCustomerInfo().getCode());
-		map.addAttribute("customer_address", customer.getCustomerInfo().getAddress());
-		map.addAttribute("customer_balance", customer.getBalance());
-		map.addAttribute("bill",latestBill);
+		if(unpaied == 0)
+			throw new MyException("用户不欠费");
+		
+		map.addAttribute("customer", customer);
 		map.addAttribute("un_paied",unpaied);
 		map.addAttribute("late_payment",latePayment);
-		return "/pay/water";
+	
+		return "/pay/pay_all_bills_form";
+	}
+	
+	@OpAnnotation(moduleName="客户缴费",option="统一缴费")
+	@RequestMapping(value = "/pay/allbills",method=RequestMethod.POST)
+	public String payAllBills(HttpServletRequest request,ModelMap model) throws MyException {
+		String customerCode = request.getParameter("customerCode");
+		String payment = request.getParameter("payment");
+		Float thisPay = Float.valueOf(payment);
+		
+		Customer customer = customerService.findByCode(customerCode);
+		if(customer == null )
+			throw new MyException("用户不存在");
+		
+		List<Bill> bills = billService.findUnchargedBill(customerCode);
+		Map<String,Object> payInformation = getPayInformation(bills);
+		Float unpaied = payInformation.get("unpaied") == null ? new Float(0) : (Float) payInformation.get("unpaied");
+		Float latePayment = payInformation.get("latePayment") == null ? new Float(0) : (Float) payInformation.get("latePayment");
+		
+		if((customer.getBalance() + thisPay) < (unpaied + latePayment))
+			throw new MyException("费用不够，请检查");
+		
+		Float newBalance = customer.getBalance() + thisPay;
+		customer.setBalance(newBalance);
+		customerService.save(customer);
+		
+		for(Bill bill : bills) {
+			Float thisLatePayment = getLatePayment4Bill(bill);
+			Float needPay = bill.getTotalPostage() + thisLatePayment;
+			doPay4OneBill(bill,new Float(0),needPay,"");
+		}
+
+		model.addAttribute("msg", "统一缴费成功，如果需要打印账单，请前往搜索");
+		return "/msg";
+	}
+	
+	private Bill doPay4OneBill(Bill bill,Float thisPay,Float needPay,String reduceContent) throws MyException {
+		String customerCode = bill.getCustomerCode();
+		Customer customer = customerService.findByCode(customerCode);
+		if((customer.getBalance() + thisPay) < needPay)
+			throw new MyException("所缴费用不够，请检查");
+
+		bill = billService.payBill(bill, needPay, reduceContent);
+
+		Float newBalance = customer.getBalance() + thisPay - needPay;
+		customer.setBalance(newBalance);
+		customerService.save(customer);
+		return bill;
 	}
 	
 	@RequestMapping(value="/pay/biz",method=RequestMethod.GET) 
@@ -88,17 +198,7 @@ public class PayController {
 		return "/pay/business";
 	}
 	
-	@OpAnnotation(moduleName="客户缴费",option="缴纳水费")
-	@RequestMapping(value = "/pay/water",method=RequestMethod.POST)
-	public String pay(HttpServletRequest request) throws Exception {
-		String customerCode = request.getParameter("customerCode");
-		String payment = request.getParameter("payment");
-		Float thisPay = Float.valueOf(payment);
-		
-		Bill bill = doPay(customerCode,thisPay);
-
-		return "redirect:/pay/bill?id=" + bill.getId();
-	}
+	
 	
 	@OpAnnotation(moduleName="客户缴费",option="撤销缴费")
 	@RequestMapping(value = "/pay/pay_rollback",method=RequestMethod.POST)
@@ -143,7 +243,7 @@ public class PayController {
 		Bill bill = billGenerater.genBill4DedivatedCharge("业务缴费", charges);
 		bill.setBillType(Consts.BILL_TYPE_BIZ);
 		
-		doBizPay(customer,bill,thisPay);
+		bill = doPay4OneBill(bill,thisPay,bill.getTotalPostage(),"");
 
 		return "redirect:/pay/bill?id=" + bill.getId();
 	}
@@ -203,8 +303,9 @@ public class PayController {
 	
 	@OpAnnotation(moduleName="客户缴费",option="自动销账")
 	@RequestMapping(value = "/approve/customerbill",method=RequestMethod.GET)
-	public String autoPay(@RequestParam String customerCode) throws Exception {
-		doPay(customerCode,new Float(0));
+	public String autoPay(@RequestParam int id) throws Exception {
+		Bill bill = billService.findById(id);
+		doPay4OneBill(bill,new Float(0),new Float(0),"");
 		return "redirect:/approve/customerbill/list";
 	}
 	
@@ -222,67 +323,50 @@ public class PayController {
 		return "/msg";
 	}
 	
-	private void doBizPay(Customer customer,Bill bill,Float thisPay) throws MyException {
-		if((customer.getBalance() + thisPay) < bill.getTotalPostage())
-			throw new MyException("费用不够，请检查");
-		bill.setAutoChargeFlag(Consts.NON_BILL_AUTO_CHARGE_FLAG);
-		bill.setIsCharged(1);
-		bill.setChargeDate(new Date());
-		bill = billService.save(bill);
-		Float newBalance = customer.getBalance() + thisPay - bill.getTotalPostage();
-		customer.setBalance(newBalance);
-		customerService.save(customer);
-	}
-	
-	private Bill doPay(String customerCode,Float thisPay) throws MyException {
-		Map<String,Object> payInformation = getPayInformation(customerCode);
-		Float unpaied = payInformation.get("unpaied") == null ? new Float(0) : (Float) payInformation.get("unpaied");
-		Float latePayment = payInformation.get("latePayment") == null ? new Float(0) : (Float) payInformation.get("latePayment");
-		Bill latestBill = payInformation.get("latestBill") == null ? new Bill() : (Bill) payInformation.get("latestBill");
-		
-		Customer customer = customerService.findByCode(customerCode);
-		if((customer.getBalance() + thisPay) < (unpaied + latePayment + latestBill.getTotalPostage()))
-				throw new MyException("费用不够，请检查");
-		
-		List<Bill> bills = billService.findUnchargedBill(customerCode);
-		for(Bill bill : bills) {
-			bill.setAutoChargeFlag(Consts.NON_BILL_AUTO_CHARGE_FLAG);
-			bill.setIsCharged(1);
-			bill.setChargeDate(new Date());
-			billService.save(bill);
-		}
-		Float newBalance = customer.getBalance() + thisPay - (unpaied + latePayment + latestBill.getTotalPostage());
-		customer.setBalance(newBalance);
-		customerService.save(customer);
-		
-		return latestBill;
-	}
-	
-	private Map<String,Object> getPayInformation(String customerCode) {
+	private Map<String,Object> getPayInformation(List<Bill> bills) {
 		Map<String,Object> res = new HashMap<String,Object>();
-		List<Bill> bills = billService.findUnchargedBill(customerCode);
 		if(bills.size() == 0)
 			return res;
 		Float unpaied = new Float(0);
 		Float latePayment = new Float(0);
-		Bill latestBill = bills.get(0);
-		Date now = new Date();
-		int latePayDay = Integer.valueOf(GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_DAY));
-		Float latePayRatio = Float.valueOf(GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_RATIO));
-		for(int i=1;i<bills.size();i++) {
-			Float billPostage = bills.get(i).getTotalPostage();
-			unpaied += billPostage;
-			Date inputDate = bills.get(i).getInputDate();
-			Long days = (now.getTime() - inputDate.getTime())/(86400 * 1000);
-			if(days > latePayDay) {
-				Float tmp =  (days - latePayDay) * (billPostage * (latePayRatio/100));
-				latePayment += tmp;
-			}
+
+		for(int i=0;i<bills.size();i++) {
+			unpaied += bills.get(i).getTotalPostage();
+			latePayment += getLatePayment4Bill(bills.get(i));
 		}
 		
 		res.put("unpaied", unpaied);
 		res.put("latePayment", latePayment);
-		res.put("latestBill", latestBill);
+		return res;
+	}
+	
+	private Float getLatePayment4Bill(Bill bill) {
+		int latePayDay = Integer.valueOf(GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_DAY));
+		Float latePayRatio = Float.valueOf(GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_RATIO));
+		Float billPostage = bill.getTotalPostage();
+		Date now = new Date();
+		Long days = (now.getTime() - bill.getInputDate().getTime())/(86400 * 1000);
+		Float latePaymentValue = new Float(0);
+		if(days > latePayDay) {
+			latePaymentValue =  (days - latePayDay) * (billPostage * (latePayRatio/100));
+		}
+		return latePaymentValue;
+	}
+	
+	private List<Map<String,String>> getDetailCharge4Bill(Bill bill) {
+		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
+		String detailedContent = bill.getDetailContent();
+		if(detailedContent == null)
+			return res;
+		for(String s : detailedContent.split(";")) {
+			String[] ss = s.split(":");
+			if(ss.length != 2)
+				continue;
+			Map<String,String> item = new HashMap<String,String>();
+			item.put("charge_name", ss[0]);
+			item.put("charge_value", ss[1]);
+			res.add(item);
+		}
 		return res;
 	}
 }

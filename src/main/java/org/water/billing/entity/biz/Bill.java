@@ -36,6 +36,9 @@ public class Bill {
 	@Column(name="total_postage")
 	private Float totalPostage = new Float(0);
 	
+	@Column(name="paied")
+	private Float paied = new Float(0);
+	
 	@Column(name="reduce_content",length=1024)
 	private String reduceContent;
 	
@@ -65,8 +68,8 @@ public class Bill {
 	@Temporal(TemporalType.TIMESTAMP) 
 	private Date chargeDate;
 	
-	@Column(name="customer_water_meter_id")
-	private int customerWaterMeterId;
+	@Column(name="meter_body_number")
+	private String waterMeterBodyNumber;
 	
 	@Column(name="customer_code")
 	private String customerCode;
@@ -195,12 +198,12 @@ public class Bill {
 		this.billType = billType;
 	}
 
-	public int getCustomerWaterMeterId() {
-		return customerWaterMeterId;
+	public String getWaterMeterBodyNumber() {
+		return waterMeterBodyNumber;
 	}
 
-	public void setCustomerWaterMeterId(int customerWaterMeterId) {
-		this.customerWaterMeterId = customerWaterMeterId;
+	public void setWaterMeterBodyNumber(String waterMeterBodyNumber) {
+		this.waterMeterBodyNumber = waterMeterBodyNumber;
 	}
 
 	public String getCustomerCode() {
@@ -209,6 +212,14 @@ public class Bill {
 
 	public void setCustomerCode(String customerCode) {
 		this.customerCode = customerCode;
+	}
+
+	public Float getPaied() {
+		return paied;
+	}
+
+	public void setPaied(Float paied) {
+		this.paied = paied;
 	}
 
 	/*public CustomerWaterMeter getCustomerWaterMeter() {

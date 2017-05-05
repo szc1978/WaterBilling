@@ -2,6 +2,7 @@ package org.water.billing.controller.biz;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,12 +27,14 @@ import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Customer;
 import org.water.billing.entity.biz.CustomerType;
 import org.water.billing.entity.biz.CustomerWaterMeter;
+import org.water.billing.entity.biz.WaterMeterMaintainHistory;
 import org.water.billing.entity.biz.WaterMeterType;
 import org.water.billing.entity.biz.WaterProvider;
 import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.CustomerService;
 import org.water.billing.service.biz.CustomerTypeService;
 import org.water.billing.service.biz.CustomerWaterMeterService;
+import org.water.billing.service.biz.WaterMeterMaintainHistoryService;
 import org.water.billing.service.biz.WaterMeterTypeService;
 import org.water.billing.service.biz.WaterProviderService;
 import org.water.billing.utils.ExcelData;
@@ -58,6 +61,9 @@ public class CustomerController {
 	
 	@Autowired
 	BillService billService;
+	
+	@Autowired
+	WaterMeterMaintainHistoryService waterMeterMaintainHistoryService;
 
 	@RequestMapping(value="/customer/manage/list",method=RequestMethod.GET)
 	public String customer(@RequestParam(defaultValue="1") int page,
@@ -171,18 +177,44 @@ public class CustomerController {
 		return "/customer/customer_water_meter";
 	}
 	
+	@OpAnnotation(moduleName="客户水表操作",option="水表编辑检修更换")
 	@RequestMapping(value="/customer/manage/watermeter",method=RequestMethod.POST)
-	public String customerWaterMeter(@RequestParam int customerId,@ModelAttribute CustomerWaterMeter customerWaterMeter) throws MyException {
+	public String customerWaterMeter(@RequestParam int customerId,
+									@RequestParam int action,
+									@RequestParam String reason,
+									@ModelAttribute CustomerWaterMeter customerWaterMeter) throws MyException {
 		Customer customer = customerService.findById(customerId);
 		if(customer == null)
 			throw new MyException("客户不存在");
+		
+		if(action != Consts.WATER_METER_MAINTAIN_ACTION_EDIT) {
+			customerWaterMeter.setLatestCheckTime(new Date());
+		}
 		customerWaterMeter.setCustomer(customer);
-		customerWaterMeterService.save(customerWaterMeter);
+		CustomerWaterMeter meter = customerWaterMeterService.save(customerWaterMeter);
+		
+		if(action != Consts.WATER_METER_MAINTAIN_ACTION_EDIT) {
+			WaterMeterMaintainHistory history = new WaterMeterMaintainHistory();
+			history.setAction(action);
+			history.setReason(reason);
+			history.setWaterMeter(meter);;
+			waterMeterMaintainHistoryService.save(history);
+		}
+
 		return "redirect:/customer/manage/watermeter?id=" + customer.getId();
 	}
 	
+	@RequestMapping(value="/customer/manage/watermetermainhistorylist",method=RequestMethod.GET)
+	public String listWaterMeterMaintainHistory(@RequestParam int customerId,ModelMap model) {
+		List<WaterMeterMaintainHistory> allhistory = waterMeterMaintainHistoryService.findHistory4Customer(customerId);
+		model.addAttribute("allhistory", allhistory);
+		return "/customer/customer_water_meter_maintain_history";
+	}
+	
 	@RequestMapping(value="/customer/manage/watermeterform",method=RequestMethod.GET)
-	public String customerWaterMeterForm(@RequestParam(defaultValue="0") int meterId,@RequestParam int customerId,ModelMap model) {
+	public String customerWaterMeterForm(@RequestParam(defaultValue="0") int meterId,
+										@RequestParam int customerId,
+										ModelMap model) {
 		CustomerWaterMeter meter = customerWaterMeterService.findById(meterId);
 		if(meter == null)
 			meter = new CustomerWaterMeter();
@@ -278,6 +310,7 @@ public class CustomerController {
 		return "/customer/import_meter_status";
 	}
 	
+	@OpAnnotation(moduleName="客户水表操作",option="导入水表状态")
 	@RequestMapping(value="/customer/manage/importmeterstatus",method=RequestMethod.POST)
 	public String importMeterStatus(MultipartFile inputfile,HttpServletRequest request,ModelMap model) throws MyException, IOException {
 		MultipartHttpServletRequest multipartRequest  =  (MultipartHttpServletRequest) request;  
@@ -299,7 +332,7 @@ public class CustomerController {
 			String status = row.get(1);
 			if(!"停水".equals(status) && !"复水".equals(status))
 				throw new MyException("第" + (i+1) + "行，水表状态只能是停水或者复水");
-			CustomerWaterMeter meter = customerWaterMeterService.finByMeterBodyNumber(meterBodyNumber);
+			CustomerWaterMeter meter = customerWaterMeterService.findByMeterBodyNumber(meterBodyNumber);
 			if(meter == null)
 				throw new MyException("第" + (i+1) + "行，水表号不存在");
 		}
@@ -311,7 +344,7 @@ public class CustomerController {
 			List<String> row = content.get(i);
 			String meterBodyNumber = row.get(0);
 			String status = row.get(1);
-			CustomerWaterMeter meter = customerWaterMeterService.finByMeterBodyNumber(meterBodyNumber);
+			CustomerWaterMeter meter = customerWaterMeterService.findByMeterBodyNumber(meterBodyNumber);
 			if("停水".equals(status))
 				meter.setStatus(Consts.WATER_METER_STATUS_STOPING);
 			if("复水".equals(status))
