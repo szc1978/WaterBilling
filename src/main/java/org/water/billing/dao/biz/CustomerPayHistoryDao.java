@@ -1,5 +1,8 @@
 package org.water.billing.dao.biz;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +13,6 @@ public interface CustomerPayHistoryDao extends JpaRepository<CustomerPayHistory,
 	public Page<CustomerPayHistory> findAll(Pageable page);
 	
 	public CustomerPayHistory findById(int id);
+	
+	public List<CustomerPayHistory> findByCreateTimeBetween(Date from,Date to);
 }

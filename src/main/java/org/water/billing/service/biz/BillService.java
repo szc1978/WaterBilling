@@ -71,7 +71,11 @@ public class BillService {
 		return billDao.findById(id);
 	}
 
-	public List<Bill> findBills4Statistic(Date fromDate,Date toDate) {
+	public List<Bill> findNewBills4Statistic(Date fromDate,Date toDate) {
 		return billDao.findByInputDateBetween(fromDate, toDate);
+	}
+	
+	public List<Bill> findChargedBills4Statistic(Date fromDate,Date toDate) {
+		return billDao.findByChargeDateBetween(fromDate, toDate);
 	}
 }

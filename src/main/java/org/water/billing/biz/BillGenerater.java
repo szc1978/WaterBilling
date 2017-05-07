@@ -39,11 +39,11 @@ public class BillGenerater {
 		Bill bill = new Bill();
 		bill.setBillType(billType);
 		bill.setName(billName);
-		calPostage4PriceByDedicated(charges);
+		//calPostage4PriceByDedicated(charges);
+		calPostage4SpecialItem(charges);
 		bill.setTotalPostage(totalPostage);
 		bill.setDetailContent(detailedBill);
 		bill.setCustomerCode(customer.getCustomerInfo().getCode());
-		//bill.setWaterMeterBodyNumber(customerWaterMeter.getBodyNumber());;
 		return bill;
 	}
 	
@@ -106,10 +106,21 @@ public class BillGenerater {
 		}
 	}
 	
-	private void calPostage4PriceByDedicated(List<Charge> charges) {
+	/*private void calPostage4PriceByDedicated(List<Charge> charges) {
 		for(Charge charge : charges) {
+			if(charge.getChargeType() != ChargeTypeEnum.CHARGE_BY_DEDICATE_PRICE.getId())
+				continue;
 			totalPostage +=  charge.getChargeParameter().getPriceByDedicated();
 			detailedBill += ";" + charge.getName() + ":" +  charge.getChargeParameter().getPriceByDedicated();
+		}
+	}*/
+	
+	private void calPostage4SpecialItem(List<Charge> charges) {
+		for(Charge charge : charges) {
+			if(charge.getChargeType() != ChargeTypeEnum.CHARGE_BY_SPECIAL.getId())
+				continue;
+			totalPostage +=  charge.getChargeParameter().getSpecialItemPrice();
+			detailedBill += ";" + charge.getName() + ":" +  charge.getChargeParameter().getSpecialItemPrice();
 		}
 	}
 	

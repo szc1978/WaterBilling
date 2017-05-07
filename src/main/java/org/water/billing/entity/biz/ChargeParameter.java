@@ -46,6 +46,9 @@ public class ChargeParameter {
 	@Column(name="bottom_price")
 	private Float bottomPrice = new Float(0.00);
 	
+	@Column(name="special_item_price")
+	private Float specialItemPrice = new Float(0);
+	
 	@OneToOne(mappedBy = "chargeParameter")
 	private Charge charge;
 	
@@ -139,6 +142,14 @@ public class ChargeParameter {
 
 	public void setBottomPrice(Float bottomPrice) {
 		this.bottomPrice = bottomPrice;
+	}
+
+	public Float getSpecialItemPrice() {
+		return specialItemPrice;
+	}
+
+	public void setSpecialItemPrice(Float specialItemPrice) {
+		this.specialItemPrice = specialItemPrice;
 	}
 	
 }

@@ -15,12 +15,15 @@
 		<div class="col-sm-8">
 			<form name="search" th:action="@{/admin/statistic}" method="post" >
 				<div class="col-sm-12 form-group form-inline" >
-					<select name="year" class="form-control">
-						<option th:each="year : ${years}" th:value="${year}" th:text="${year}"></option>
+					<select name="year" class="form-control" th:with="curyear=${#calendars.format(#calendars.createNow(), 'y')}">
+						<option th:value="${#numbers.formatDecimal(curyear, 1, 0) } - 2" th:text="${#numbers.formatDecimal(curyear, 1, 0) } - 2"></option>
+						<option th:value="${#numbers.formatDecimal(curyear, 1, 0) } - 1" th:text="${#numbers.formatDecimal(curyear, 1, 0) } - 1"></option>
+						<option th:value="${curyear}" th:text="${curyear}" th:selected="true"></option>
 					</select>
 					<select name="month" class="form-control" >
-						 <option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${i+'' == curmonth}" th:value="${i}" th:text="${i}" th:selected="true"></option>
-						 <option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${i+'' != curmonth}" th:value="${i}" th:text="${i}"></option>
+						<option value="0">全年</option>
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${i+'' == curmonth}" th:value="${i}" th:text="${i}" th:selected="true"></option>
+						<option th:each="i : ${#numbers.sequence( 1, 12)}" th:if="${i+'' != curmonth}" th:value="${i}" th:text="${i}"></option>
 					</select>
 					<input type="submit" class="btn btn-default" value="搜索"/>
 				</div>
@@ -29,6 +32,35 @@
 		<div class="col-sm-8">
 			<p th:text="'总用水量:'+${totalWaterNumber} + '吨'"/>
 			<p th:text="'总费用:' + ${totalMoney} + '元'"/>
+			<p th:text="'客户缴费:' + ${totalMoney} + '元'"/>
+			<p></p>
+			<div>
+				<table class="table table-striped">
+					<thead>
+				    	<tr>
+				        	<th>收费名目</th>
+				        	<th>应收金额(元)</th>
+				        	<th>优惠金额(元)</th>
+				        	<th>实收金额(元)</th>
+				        </tr>
+					</thead>
+					<tbody>
+						<tr th:each="item : ${chargeitems}"> 
+					        <td th:text="${item.chargename}"></td> 
+					        <td th:text="${item.needpay}"></td>
+					        <td th:text="${item.reduce}"></td>
+					        <td th:text="${item.paied}"></td>
+				        </tr>
+				        <tr>
+				        	<td ><b th:text="合计"></b></td> 
+					        <td><b th:text="${totalNeedPay}"></b></td>
+					        <td><b th:text="${totalReduce}"></b></td>
+					        <td><b th:text="${totalPaied}"></b></td>
+				        </tr>      
+					</tbody>
+				</table>
+				<p>注：实收金额表示付费，客户缴费表示客户存入账户的金额</p>
+			</div>
 		</div>
     </div>
 </body>

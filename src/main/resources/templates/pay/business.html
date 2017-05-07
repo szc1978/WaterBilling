@@ -45,9 +45,9 @@
 			<form name="pay" th:action="@{/pay/biz}" method="post" th:object="${customer}">
 				<div class="col-sm-12">
 					<div class="col-sm-4 form-group">
-						<label>选择缴费项目:</label>
+						<label>选择缴费项目(不支持减免优惠):</label>
 						<div th:each="charge : ${charges}">
-							<label><input type="checkbox" th:name="${'Charge_' + charge.name}" th:value="${charge.chargeParameter.priceByDedicated}" onchange="change_checkbox(this)" th:text="${charge.name}"></input> </label>
+							<label><input type="checkbox" th:name="${'Charge_' + charge.name}" th:value="${charge.chargeParameter.specialItemPrice}" onchange="change_checkbox(this)" th:text="${charge.name}"></input> </label>
 						</div>
 					</div>
 				</div>

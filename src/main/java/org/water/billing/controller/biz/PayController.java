@@ -158,14 +158,6 @@ public class PayController {
 		if((customer.getBalance() + thisPay) < (unpaied + latePayment))
 			throw new MyException("费用不够，请检查");
 		
-		/*Float newBalance = customer.getBalance() + thisPay;
-		customer.setBalance(newBalance);
-		customerService.save(customer);
-		
-		CustomerPayHistory payHistory = new CustomerPayHistory();
-		payHistory.setCustomer(customer);payHistory.setPayNumber(thisPay);payHistory.setCustomerBalance(newBalance);
-		payHistoryDao.save(payHistory);*/
-		
 		customerPay(customer,thisPay,new Float(0));
 		
 		for(Bill bill : bills) {
@@ -186,17 +178,9 @@ public class PayController {
 
 		customerPay(customer,thisPay,needPay);
 		Float newBalance = customer.getBalance() + thisPay - needPay;
-		//customer.setBalance(newBalance);
-		//customerService.save(customer);
 		
 		bill = billService.payBill(bill, needPay, newBalance, reduceContent);
-		
-		//if(thisPay != 0) {
-		//	CustomerPayHistory payHistory = new CustomerPayHistory();
-		//	payHistory.setCustomer(customer);payHistory.setPayNumber(thisPay);payHistory.setCustomerBalance(newBalance);
-		//	payHistoryDao.save(payHistory);
-		//}
-		
+
 		return bill;
 	}
 	
@@ -219,7 +203,7 @@ public class PayController {
 		
 		List<Charge> charges = new ArrayList<Charge>();
 		for(Charge charge : chargeService.findAll()) {
-			if(charge.getChargeType() == ChargeTypeEnum.CHARGE_BY_DEDICATE_PRICE.getId()) {
+			if(charge.getChargeType() == ChargeTypeEnum.CHARGE_BY_SPECIAL.getId()) {
 				charges.add(charge);
 			}
 		}
@@ -261,20 +245,23 @@ public class PayController {
 		String payment = request.getParameter("payment");
 		Float thisPay = Float.valueOf(payment);
 		
+		String reduceContent = "";
 		List<Charge> charges = new ArrayList<Charge>();
 		for(String key : request.getParameterMap().keySet()) {
 			if(key.startsWith("Charge_")) {
 				String chargeName = key.replace("Charge_", "");
 				Charge charge = chargeService.findByName(chargeName);
-				if(charge != null)
+				if(charge != null) {
 					charges.add(charge);
+					reduceContent += chargeName + ":" + charge.getChargeParameter().getSpecialItemPrice() + ",0;";
+				}
 			}
 		}
 		BillGenerater billGenerater = new BillGenerater(customer,Consts.BILL_TYPE_BIZ);
 		Bill bill = billGenerater.genBill4DedivatedCharge("业务缴费", charges);
 		bill.setBillType(Consts.BILL_TYPE_BIZ);
 		
-		bill = doPay4OneBill(bill,thisPay,bill.getTotalPostage(),"");
+		bill = doPay4OneBill(bill,thisPay,bill.getTotalPostage(),reduceContent);
 
 		return "redirect:/pay/billdetail?id=" + bill.getId();
 	}

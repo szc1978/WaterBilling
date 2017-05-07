@@ -1,5 +1,6 @@
 package org.water.billing.service.biz;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,10 @@ public class CustomerPayHistoryService {
 	
 	public List<CustomerPayHistory> findAll() {
 		return historyDao.findAll();
+	}
+	
+	public List<CustomerPayHistory> findHistory4Statistic(Date from,Date to) {
+		return historyDao.findByCreateTimeBetween(from, to);
 	}
 	
 	public CustomerPayHistory newPay(Customer customer,Float thisPay) {

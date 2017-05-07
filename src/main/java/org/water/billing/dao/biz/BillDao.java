@@ -28,4 +28,6 @@ public interface BillDao extends JpaRepository<Bill, Integer>{
 	public List<Bill> findByAutoChargeFlag(int flag);
 	
 	public List<Bill> findByInputDateBetween(Date fromDate,Date toDate);
+	
+	public List<Bill> findByChargeDateBetween(Date fromDate,Date toDate);
 }

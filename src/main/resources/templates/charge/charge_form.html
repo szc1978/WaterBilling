@@ -10,17 +10,26 @@
 	<script>
 		function change_charge_type() {
 			var type = document.getElementById("charge_type").value;
+			if(type == "5") {
+				document.getElementById("pricepernumber").style.display="none";
+				document.getElementById("pricebydedicate").style.display="none";
+				document.getElementById("pricebystep").style.display="none";
+				document.getElementById("pricebybottom").style.display="none";
+				document.getElementById("specialitemprice").style.display="";
+			}
 			if(type == "4") {
 				document.getElementById("pricepernumber").style.display="none";
 				document.getElementById("pricebydedicate").style.display="none";
 				document.getElementById("pricebystep").style.display="none";
 				document.getElementById("pricebybottom").style.display="";
+				document.getElementById("specialitemprice").style.display="none";
 			}
 			if(type == "3") {
 				document.getElementById("pricepernumber").style.display="none";
 				document.getElementById("pricebydedicate").style.display="none";
 				document.getElementById("pricebystep").style.display="";
 				document.getElementById("pricebybottom").style.display="none";
+				document.getElementById("specialitemprice").style.display="none";
 			}
 			if(type == "2") {
 				document.getElementById("pricepernumber").style.display="none";
@@ -33,6 +42,7 @@
 				document.getElementById("pricebydedicate").style.display="none";
 				document.getElementById("pricebystep").style.display="none";
 				document.getElementById("pricebybottom").style.display="none";
+				document.getElementById("specialitemprice").style.display="none";
 			}
 		}
 	</script>
@@ -42,7 +52,7 @@
 	<div class="container">
 		<div class="formtitle"><span>资费管理</span></div>
 		<form th:action="@{/charge/type}" method="post" th:object="${charge}">
-			<div class="col-sm-6">
+			<div class="col-sm-8">
 				<div class="form-group">
 					 <label for="name">名称:</label>
 					 <input type="text" class="form-control" th:value="${charge.name}" th:field="*{name}" />
@@ -91,7 +101,10 @@
 					<label for="name">每吨水价(元/吨)：</label>
 					<input type="text" class="form-control" th:value="${charge.chargeParameter.pricePerNumber}" th:field="*{chargeParameter.pricePerNumber}" onkeyup="float_input_validate(this)"/>
 				</div>
-				
+				<div class="form-group form-inline" id="specialitemprice">
+					<label for="name">金额：</label>
+					<input type="text" class="form-control" th:value="${charge.chargeParameter.specialItemPrice}" th:field="*{chargeParameter.specialItemPrice}" onkeyup="float_input_validate(this)" />
+				</div>
 				<div class="form-group form-inline" id="pricebydedicate">
 					<label for="name">每月收费(元/月)：</label>
 					<input type="text" class="form-control" th:value="${charge.chargeParameter.priceByDedicated}" th:field="*{chargeParameter.priceByDedicated}" onkeyup="float_input_validate(this)" />
