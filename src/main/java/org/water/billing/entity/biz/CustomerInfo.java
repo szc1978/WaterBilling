@@ -8,6 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.json.simple.JSONObject;
+
 @Entity
 @Table(name = "customer_info")
 public class CustomerInfo {
@@ -16,9 +19,11 @@ public class CustomerInfo {
 	@Column ( name = "id",length=10)
 	private int id;
 	
+	@NotBlank(message = "客户编号不能为空")
 	@Column(name="code",nullable = false, unique = true)
 	private String code;
 	
+	@NotBlank(message = "客户地址不能为空")
 	@Column(name="address",nullable = false)
 	private String address;
 	
@@ -31,6 +36,7 @@ public class CustomerInfo {
 	@Column(name="certificate_name",nullable = false)
 	private String certificateName;
 	
+	@NotBlank(message = "证件号不能为空")
 	@Column(name="certificate_id",nullable = false)
 	private String certificateId;
 	
@@ -112,5 +118,17 @@ public class CustomerInfo {
 
 	public void setCertificateId(String certificateId) {
 		this.certificateId = certificateId;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJson() {
+		JSONObject json = new JSONObject();
+		json.put("编号", code);
+		json.put("地址", address);
+		json.put("电话", telephony);
+		json.put("手机", mobile);
+		json.put("证件类型", certificateName);
+		json.put("证件号码", certificateId);
+		return json;
 	}
 }

@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
 @Table(name = "water_provider")
 public class WaterProvider {
@@ -15,6 +17,7 @@ public class WaterProvider {
 	@Column ( name = "id",length=10)
 	private int id;
 	
+	@NotBlank(message = "片区名称不能为空")
 	@Column(name="name",unique=true)
 	private String name;
 	

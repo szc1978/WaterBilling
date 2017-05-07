@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.json.simple.JSONObject;
 import org.water.billing.consts.Consts;
 
 @Entity
@@ -48,7 +49,7 @@ public class CustomerWaterMeter {
 	private Float firstNumber = new Float(0);
 	
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="water_id")
+	@JoinColumn(name="meter_data_id")
 	private WaterMeterData waterMeterData = new WaterMeterData();
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch=FetchType.EAGER)
@@ -148,5 +149,14 @@ public class CustomerWaterMeter {
 		this.latestCheckTime = latestCheckTime;
 	}
 
-	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJson() {
+		JSONObject json = new JSONObject();
+		json.put("表位号", locationNumber);
+		json.put("表身号", bodyNumber);
+		json.put("状态", status);
+		json.put("用途", usage);
+		json.put("水表信息",meterType.toJson());
+		return json;
+	}
 }

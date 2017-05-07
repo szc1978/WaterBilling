@@ -32,6 +32,7 @@ public class Consts {
 	
 	public static final String GCK_LATE_PAY_DAY = "late_pay_day";
 	public static final String GCK_LATE_PAY_RATIO = "late_pay_ratio";
+	public static final String GCK_PRESS_PAYMENT_DAY = "press_payment_day";
 	public static final String GCK_DISABLE_APPROVE_CUSTOMER = "disable_approve_customer";
 	public static final String GCK_DISABLE_APPROVE_CUSTOMER_WATER = "disable_approve_customer_water";
 	public static final String GCK_DISABLE_APPROVE_CUSTOMER_BILL = "disable_approve_customer_bill";

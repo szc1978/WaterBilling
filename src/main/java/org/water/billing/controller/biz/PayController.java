@@ -25,9 +25,12 @@ import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
 import org.water.billing.entity.biz.Charge;
 import org.water.billing.entity.biz.Customer;
+import org.water.billing.entity.biz.CustomerWaterMeter;
 import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.ChargeService;
+import org.water.billing.service.biz.CustomerPayHistoryService;
 import org.water.billing.service.biz.CustomerService;
+import org.water.billing.service.biz.CustomerWaterMeterService;
 
 @Controller
 public class PayController {
@@ -39,7 +42,13 @@ public class PayController {
 	CustomerService customerService;
 	
 	@Autowired
+	CustomerWaterMeterService customerWaterMeterService;
+	
+	@Autowired
 	BillService billService;
+	
+	@Autowired
+	CustomerPayHistoryService payHistoryService;
 	
 	@RequestMapping(value="/pay/listunpaiedbill",method=RequestMethod.GET)
 	public String listUnpaiedBill(@RequestParam(required=false) String code,ModelMap map) {
@@ -105,7 +114,7 @@ public class PayController {
 		Float needPay = bill.getTotalPostage() - reduce;
 		doPay4OneBill( bill, thisPay, needPay, reduceContent);
 		
-		return "redirect:/pay/bill?id=" + bill.getId();
+		return "redirect:/pay/billdetail?id=" + bill.getId();
 	}
 	
 	@RequestMapping(value = "/pay/allbills",method=RequestMethod.GET)
@@ -149,9 +158,15 @@ public class PayController {
 		if((customer.getBalance() + thisPay) < (unpaied + latePayment))
 			throw new MyException("费用不够，请检查");
 		
-		Float newBalance = customer.getBalance() + thisPay;
+		/*Float newBalance = customer.getBalance() + thisPay;
 		customer.setBalance(newBalance);
 		customerService.save(customer);
+		
+		CustomerPayHistory payHistory = new CustomerPayHistory();
+		payHistory.setCustomer(customer);payHistory.setPayNumber(thisPay);payHistory.setCustomerBalance(newBalance);
+		payHistoryDao.save(payHistory);*/
+		
+		customerPay(customer,thisPay,new Float(0));
 		
 		for(Bill bill : bills) {
 			Float thisLatePayment = getLatePayment4Bill(bill);
@@ -169,12 +184,26 @@ public class PayController {
 		if((customer.getBalance() + thisPay) < needPay)
 			throw new MyException("所缴费用不够，请检查");
 
-		bill = billService.payBill(bill, needPay, reduceContent);
-
+		customerPay(customer,thisPay,needPay);
 		Float newBalance = customer.getBalance() + thisPay - needPay;
-		customer.setBalance(newBalance);
-		customerService.save(customer);
+		//customer.setBalance(newBalance);
+		//customerService.save(customer);
+		
+		bill = billService.payBill(bill, needPay, newBalance, reduceContent);
+		
+		//if(thisPay != 0) {
+		//	CustomerPayHistory payHistory = new CustomerPayHistory();
+		//	payHistory.setCustomer(customer);payHistory.setPayNumber(thisPay);payHistory.setCustomerBalance(newBalance);
+		//	payHistoryDao.save(payHistory);
+		//}
+		
 		return bill;
+	}
+	
+	private void customerPay(Customer customer,Float thisPay,Float needPay) {
+		customer = customerService.pay(customer, thisPay, needPay);
+		
+		payHistoryService.newPay(customer, thisPay);
 	}
 	
 	@RequestMapping(value="/pay/biz",method=RequestMethod.GET) 
@@ -198,26 +227,28 @@ public class PayController {
 		return "/pay/business";
 	}
 	
-	
-	
 	@OpAnnotation(moduleName="客户缴费",option="撤销缴费")
-	@RequestMapping(value = "/pay/pay_rollback",method=RequestMethod.POST)
+	@RequestMapping(value = "/pay/pay_rollback",method=RequestMethod.GET)
 	public String payRollback(@RequestParam int id,ModelMap model) throws Exception {
 		Bill bill = billService.findById(id);
 		if(bill == null)
 			throw new MyException("账单不存在");
 		if(bill.getIsPrintExpenses() == 1)
 			throw new MyException("该账单已经打印过发票，无法撤销");
-		bill.setIsCharged(0);
-		if(bill.getBillType() == Consts.BILL_TYPE_WATER)
-			billService.save(bill);
+		
+		if(bill.getBillType() == Consts.BILL_TYPE_WATER) {
+			String customerCode = bill.getCustomerCode();
+			Customer customer = customerService.findByCode(customerCode);
+			
+			customer = customerService.rollbackPay(customer, bill.getPaied());
+			billService.rollbackPay(bill, customer.getBalance());
+		}
 		if(bill.getBillType() == Consts.BILL_TYPE_BIZ)
 			billService.delete(bill);
 
 		model.addAttribute("msg", "该账单缴费撤销成功！");
 		return "/msg";
 	}
-
 	
 	@OpAnnotation(moduleName="客户缴费",option="业务缴费")
 	@RequestMapping(value = "/pay/biz",method=RequestMethod.POST)
@@ -245,16 +276,17 @@ public class PayController {
 		
 		bill = doPay4OneBill(bill,thisPay,bill.getTotalPostage(),"");
 
-		return "redirect:/pay/bill?id=" + bill.getId();
+		return "redirect:/pay/billdetail?id=" + bill.getId();
 	}
 	
 	
-	@RequestMapping(value="/pay/bill",method=RequestMethod.GET)
+	@RequestMapping(value="/pay/billdetail",method=RequestMethod.GET)
 	public String paySuccess(int id,ModelMap model) throws MyException {
 		Bill bill = billService.findById(id);
 		if(bill == null)
 			throw new MyException("账单不存在");
 		
+		Float total = new Float(0);
 		List<Map<String,String>> payItems = new ArrayList<Map<String,String>>();
 		for(String s : bill.getDetailContent().split(";")) {
 			if(s.length() == 0)
@@ -266,10 +298,12 @@ public class PayController {
 			sss.put("name", ss[0]);
 			sss.put("price", ss[1]);
 			payItems.add(sss);
+			total += Float.valueOf(ss[1]);
 		}
 		model.addAttribute("payitems", payItems);
 		model.addAttribute("bill", bill);
-		return "/pay/pay_bill";
+		model.addAttribute("total", total);
+		return "/pay/pay_bill_detail";
 	}
 	
 	@RequestMapping(value="/pay/history",method=RequestMethod.GET)
@@ -284,7 +318,7 @@ public class PayController {
 			try {
 				Date fromDate = sdf.parse(strFromDate);
 				Date toDate = sdf.parse(strToDate);
-				List<Bill> bills = billService.findCustomerBill(customerCode,fromDate,toDate);
+				List<Bill> bills = billService.findCustomerChargedBill(customerCode,fromDate,toDate);
 				model.addAttribute("bills", bills);
 			} catch (ParseException e) {
 				e.printStackTrace();
@@ -310,7 +344,7 @@ public class PayController {
 	}
 	
 	@OpAnnotation(moduleName="客户缴费",option="打印账单发票")
-	@RequestMapping(value = "/pay/print_expenses",method=RequestMethod.POST)
+	@RequestMapping(value = "/pay/print_expenses",method=RequestMethod.GET)
 	public String printExpenses(@RequestParam int id,ModelMap model) throws Exception {
 		Bill bill = billService.findById(id);
 		if(bill.getIsCharged() == 0)
@@ -321,6 +355,47 @@ public class PayController {
 		billService.save(bill);
 		model.addAttribute("msg", "该账单发票已打印，将无法再打印");
 		return "/msg";
+	}
+	
+	@RequestMapping(value="/customer/presspayment",method=RequestMethod.GET)
+	public String pressPayment(ModelMap model) {
+		List<Bill> bills = billService.findAllUnchargedBill();
+		Map<String,Map<String,Object>> ss = new HashMap<String,Map<String,Object>>();
+		Date now = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd");
+		String time = formatter.format(now);
+		for(Bill bill : bills) {
+			String customerCode = bill.getCustomerCode();
+			Customer customer = customerService.findByCode(customerCode);
+			String meterBodyNumber = bill.getWaterMeterBodyNumber();
+			CustomerWaterMeter meter = customerWaterMeterService.findByMeterBodyNumber(meterBodyNumber);
+			if(!ss.containsKey(meterBodyNumber)) {
+				Map<String,Object> item = new HashMap<String,Object>();
+				item.put("unpaied", new Float(0));
+				item.put("latepayment", new Float(0));
+				item.put("waternumber",new Float(0));
+				item.put("customercode",customerCode);
+				item.put("customername",customer.getName());
+				item.put("customeraddress",customer.getCustomerInfo().getAddress());
+				item.put("meterbodynumber",meter.getBodyNumber());
+				ss.put(meterBodyNumber, item);
+			}
+			Map<String,Object> item = ss.get(meterBodyNumber);
+			Float unpaied = bill.getTotalPostage() + (Float)item.get("unpaied");
+			Float latepayment = getLatePayment4Bill(bill) + (Float)item.get("latepayment");
+			Float waternumber = bill.getEndWaterWord() - bill.getBeginWaterWord() + (Float)item.get("waternumber");
+			item.put("unpaied",unpaied);
+			item.put("latepayment",latepayment);
+			item.put("waternumber", waternumber);
+			item.put("msg",customerCode + "(" + meterBodyNumber + ")用户，截止" 
+							+ time + " 时间，你已累计用水 " 
+							+ waternumber + "吨，合计"
+							+ unpaied +"元，滞纳金"
+							+ latepayment +"元，合计"
+							+ (unpaied + latepayment) +"元，请尽快缴费");
+		}
+		model.addAttribute("bill_message", ss.values());
+		return "/customer/press_payment";
 	}
 	
 	private Map<String,Object> getPayInformation(List<Bill> bills) {

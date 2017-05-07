@@ -39,14 +39,17 @@ public class Bill {
 	@Column(name="paied")
 	private Float paied = new Float(0);
 	
+	@Column(name="customer_balance_after_pay")
+	private Float customerBalanceAfterPay = new Float(0);
+	
 	@Column(name="reduce_content",length=1024)
 	private String reduceContent;
 	
 	@Column(name="detail_content",length=1024)
 	private String detailContent;
 	
-	@Column(name="status",length=1)
-	private int status = 0;
+	//@Column(name="status",length=1)
+	//private int status = 0;
 	
 	@Column(name="is_charged",length=1)
 	private int isCharged = 0;
@@ -73,6 +76,7 @@ public class Bill {
 	
 	@Column(name="customer_code")
 	private String customerCode;
+	
 	
 	public Bill() {
 		
@@ -142,13 +146,13 @@ public class Bill {
 		this.detailContent = detailContent;
 	}
 
-	public int getStatus() {
+	/*public int getStatus() {
 		return status;
 	}
 
 	public void setStatus(int status) {
 		this.status = status;
-	}
+	}*/
 
 	public Date getInputDate() {
 		return inputDate;
@@ -220,6 +224,14 @@ public class Bill {
 
 	public void setPaied(Float paied) {
 		this.paied = paied;
+	}
+
+	public Float getCustomerBalanceAfterPay() {
+		return customerBalanceAfterPay;
+	}
+
+	public void setCustomerBalanceAfterPay(Float customerBalanceAfterPay) {
+		this.customerBalanceAfterPay = customerBalanceAfterPay;
 	}
 
 	/*public CustomerWaterMeter getCustomerWaterMeter() {

@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.json.simple.JSONObject;
+
 @Entity
 @Table(name="water_meter_type")
 public class WaterMeterType {
@@ -18,6 +21,7 @@ public class WaterMeterType {
 	@Column ( name = "id",length=10)
 	private int id = 0;
 	
+	@NotBlank(message = "水表名称不能为空")
 	@Column(name="name",unique = true)
 	private String name;
 	
@@ -75,5 +79,15 @@ public class WaterMeterType {
 
 	public void setSize(WaterMeterConfig size) {
 		this.size = size;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJson() {
+		JSONObject json = new JSONObject();
+		json.put("水表名称", name);
+		json.put("水表厂家", producer.getConfigItemValue());
+		json.put("水表型号", model.getConfigItemValue());
+		json.put("水表口径", size.getConfigItemValue());
+		return json;
 	}
 }

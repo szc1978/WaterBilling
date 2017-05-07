@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
 @Table(name = "charge")
 public class Charge {
@@ -23,6 +25,7 @@ public class Charge {
 	@Column ( name = "id",length=10)
 	private int id;
 	
+	@NotBlank(message = "收费名称不能为空")
 	@Column(name="name",unique=true,nullable=true)
 	private String name;
 	

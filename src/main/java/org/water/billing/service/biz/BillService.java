@@ -16,8 +16,8 @@ public class BillService {
 	@Autowired
 	BillDao billDao;
 	
-	public List<Bill> findCustomerBill(String customerCode,Date fromDate,Date toDate) {
-		return billDao.findCustomerBill(customerCode, fromDate, toDate);
+	public List<Bill> findCustomerChargedBill(String customerCode,Date fromDate,Date toDate) {
+		return billDao.findCustomerChargedBill(customerCode, fromDate, toDate);
 	}
 	
 	public List<Bill> findUnchargedBill(String customerCode) {
@@ -25,14 +25,30 @@ public class BillService {
 		return billDao.findByCustomerCodeAndIsCharged(customerCode, 0,sort);
 	}
 	
-	public Bill payBill(Bill bill,Float paiedValue,String reduceContent) {
+	public List<Bill> findAllUnchargedBill() {
+		Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC,"id"));
+		return billDao.findByIsCharged( 0,sort);
+	}
+	
+	public Bill payBill(Bill bill,Float paiedValue,Float customerBalance,String reduceContent) {
 		bill.setAutoChargeFlag(Consts.NON_BILL_AUTO_CHARGE_FLAG);
 		bill.setIsCharged(1);
 		bill.setChargeDate(new Date());
 		bill.setPaied(paiedValue);
 		bill.setReduceContent(reduceContent);
+		bill.setCustomerBalanceAfterPay(customerBalance);
 		bill = billDao.save(bill);
 		return bill;
+	}
+	
+	public Bill rollbackPay(Bill bill,Float customerBalance) {
+		bill.setIsCharged(0);
+		bill.setPaied(new Float(0));
+		
+		bill.setReduceContent("");
+		bill.setChargeDate(null);
+		bill.setCustomerBalanceAfterPay(customerBalance + bill.getPaied());
+		return billDao.save(bill);
 	}
 	
 	public Bill save(Bill bill) {
@@ -55,4 +71,7 @@ public class BillService {
 		return billDao.findById(id);
 	}
 
+	public List<Bill> findBills4Statistic(Date fromDate,Date toDate) {
+		return billDao.findByInputDateBetween(fromDate, toDate);
+	}
 }

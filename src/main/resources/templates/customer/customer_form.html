@@ -14,15 +14,15 @@
 		<form th:action="@{/customer/manage}" method="post" th:object="${customer}" >
 			<div class="col-sm-8">
 				<div class="col-sm-6 form-group ">
-					 <label for="name">客户姓名:</label>
+					 <label for="name">客户姓名(*):</label>
 					 <input type="text" class="form-control" th:value="${customer.name}" th:field="*{name}" />
 				</div>
 				<div class="col-sm-6 form-group ">
-					 <label for="name">客户编号:</label>
+					 <label for="name">客户编号(*):</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.code}" th:field="*{customerInfo.code}" />
 				</div>
 				<div class="col-sm-12 form-group ">
-					 <label for="name">客户地址:</label>
+					 <label for="name">客户地址:(*)</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.address}" th:field="*{customerInfo.address}" />
 				</div>
 				<div class="col-sm-6 form-group ">
@@ -40,7 +40,7 @@
 					 </select>
 				</div>
 				<div class="col-sm-6 form-group ">
-					 <label for="name">证件号码:</label>
+					 <label for="name">证件号码(*):</label>
 					 <input type="text" class="form-control" th:value="${customer.customerInfo.certificateId}" th:field="*{customerInfo.certificateId}" />
 				</div>
 				<div class="col-sm-4 form-group ">

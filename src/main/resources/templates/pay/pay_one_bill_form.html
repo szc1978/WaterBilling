@@ -102,8 +102,8 @@
 					</div>
 					<div class="col-sm-4 form-group ">
 						<label for="name">应付:</label>
-						<input type="text" class="form-control" th:disabled="true" th:if="${(late_payment + bill.totalPostage - customer.balance) gt 0}" th:value="${late_payment + bill.totalPostage - customer.balance}" id="need_pay" />
-						<input type="text" class="form-control" th:disabled="true" th:if="${(late_payment + bill.totalPostage - customer.balance) lt 0}" value="0.0" />
+						<input type="text" class="form-control" id="need_pay" th:disabled="true" th:if="${(late_payment + bill.totalPostage - customer.balance) gt 0}" th:value="${late_payment + bill.totalPostage - customer.balance}" />
+						<input type="text" class="form-control" id="need_pay" th:disabled="true" th:if="${(late_payment + bill.totalPostage - customer.balance) lt 0}" value="0.0" />
 					</div>
 				</div>
 				<div class="col-sm-12">

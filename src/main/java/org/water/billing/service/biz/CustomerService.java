@@ -37,6 +37,18 @@ public class CustomerService {
 		return customerDao.save(customer);
 	}
 	
+	public Customer pay(Customer customer,Float thisPay,Float needPay) {
+		customer.setBalance(customer.getBalance() + thisPay - needPay);
+		return customerDao.save(customer);
+	}
+	
+	public Customer rollbackPay(Customer customer,Float paied) {
+		Float balance = customer.getBalance();
+		Float newBalance = balance + paied;
+		customer.setBalance(newBalance);
+		return customerDao.save(customer);
+	}
+	
 	public Customer findById(int id) {
 		return customerDao.findById(id);
 	}
@@ -61,7 +73,7 @@ public class CustomerService {
 		return customerDao.countByStatusGreaterThan(Consts.CUSTOMER_STATUS_ACTIVE_BIT);
 	}
 	
-	public Page<Customer> searchCustomer() {
-		return null;
+	public Boolean existsByCustomerCode(String customerCode) {
+		return customerInfoDao.existsByCode(customerCode);
 	}
 }

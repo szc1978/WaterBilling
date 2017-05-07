@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.admin.SysRole;
@@ -62,13 +63,13 @@ public class AdminUserController {
 		if(sysUser.getId() != 0) {
 			SysUser dbUser = sysUserService.findById(sysUser.getId());
 			if(Consts.SuperAdminName.equals(dbUser.getName()))
-				throw new Exception("默认超级用户无法在此处修改密码，请使用 sys登录并在首页修改密码");
+				throw new MyException("默认超级用户无法在此处修改密码，请使用 sys登录并在首页修改密码");
 			sysUser.setName(dbUser.getName());
 		}
 		if(resetpwd == 1 || sysUser.getId() == 0) {
 			BCryptPasswordEncoder bc=new BCryptPasswordEncoder(4);
 			if(sysUser.getPassword().length() < Consts.MIN_ADMIN_USER_PWD_LENGTH)
-				throw new Exception("密码最小长度：" + Consts.MIN_ADMIN_USER_PWD_LENGTH);
+				throw new MyException("密码最小长度：" + Consts.MIN_ADMIN_USER_PWD_LENGTH);
 			sysUser.setPassword(bc.encode(sysUser.getPassword()));
 		}
 		
@@ -96,7 +97,7 @@ public class AdminUserController {
 	public String active(@RequestParam int id) throws Exception {
 		SysUser user = sysUserService.findById(id);
 		if("sys".equals(user.getName()))
-			throw new Exception("默认超级用户无法做此项操作");
+			throw new MyException("默认超级用户无法做此项操作");
 		user.setActive(1);
 		sysUserService.save(user);
 		return "redirect:/admin/user/" + id;
@@ -107,7 +108,7 @@ public class AdminUserController {
 	public String deactivate(@RequestParam int id) throws Exception {
 		SysUser user = sysUserService.findById(id);
 		if("sys".equals(user.getName()))
-			throw new Exception("默认超级用户无法做此项操作");
+			throw new MyException("默认超级用户无法做此项操作");
 		user.setActive(0);
 		sysUserService.save(user);
 		return "redirect:/admin/user/" + id;

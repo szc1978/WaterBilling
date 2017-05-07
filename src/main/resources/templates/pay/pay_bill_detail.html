@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>缴费成功</title>
+	<title>账单清单</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href="/css/style.css" rel="stylesheet" type="text/css" />
 	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -12,31 +12,44 @@
 <body>
 	<div class="container">
 		<div class="formtitle"><span>客户缴费清单</span></div>
-		<div id="printContent">
-			<div>缴费清单</div>
+		<div id="printContent" style="width:500px" >
+			<div align="center">缴费清单</div>
 			<div>
 				<table border="0">
 					<tr>
-						<td width="250">名称</td>
-						<td width="50">小计</td>
+						<td height="1" bgcolor="#333333"></td>
+						<td height="1" bgcolor="#333333"></td>
+					</tr>
+					<tr>
+						<td width="400">名称</td>
+						<td width="100">小计</td>
+					</tr>
+					<tr>
+						<td height="1" bgcolor="#333333"></td>
+						<td height="1" bgcolor="#333333"></td>
 					</tr>
 					<tr th:each="item : ${payitems}">
 						<td th:text="${item.name}"></td>
 						<td th:text="${item.price}"></td>
 					</tr>
+					<tr>
+						<td height="1" bgcolor="#333333"></td>
+						<td height="1" bgcolor="#333333"></td>
+					</tr>
+					<tr>
+						<td th:text="合计"></td>
+						<td th:text="${total}"></td>
+					</tr>
 				</table>
 			</div>
+			<div align="right" th:text="'缴费日期:'+${bill.chargeDate}"></div>
 		</div>
+		<p></p>
+		<p></p>
 		<div th:if="${bill.isPrintExpenses eq 0}">
 			<input class="btn btn-default" type="button" id="btnPrint" value="打印"/>
-			<form name="print_complete" th:action="@{/pay/print_expenses}" method="post">
-				<input type="hidden" th:value="${bill.id}" name="id"/>
-				<input class="btn btn-default" type="submit" id="btnPrint" value="打印完成"/>
-			</form>
-			<form name="rollback_pay" th:action="@{/pay/pay_rollback}" method="post">
-				<input type="hidden" th:value="${bill.id}" name="id"/>
-				<input class="btn btn-default" type="submit" id="btnRollback" value="撤销缴费"/>
-			</form>
+			<a th:href="@{/pay/print_expenses(id=${bill.id})}"><input type="button" class="btn btn-default" value="打印完成" /></a>
+			<a th:href="@{/pay/pay_rollback(id=${bill.id})}"><input type="button" class="btn btn-default" value="撤销缴费" /></a>
 			<div>完成打印后务必点击打印完成</div>
 		</div>
 		<div th:if="${bill.isPrintExpenses eq 1}">

@@ -36,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override  
     protected void configure(HttpSecurity http) throws Exception {  
         http
+        .csrf().disable()
         .headers().disable()
         .addFilterBefore(mySecurityFilter, FilterSecurityInterceptor.class)
         .authorizeRequests()
@@ -43,6 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/js/*").permitAll()
         .antMatchers("/images/*").permitAll()
         .antMatchers("/files/*").permitAll()
+        .antMatchers("/rest/*").permitAll()
         .antMatchers("/logout").permitAll()
         .anyRequest().authenticated()  
         .and()  

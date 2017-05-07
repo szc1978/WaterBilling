@@ -38,7 +38,7 @@
 			    </tbody>
 			</table>
 			<div class="col-sm-12">
-				<form th:action="@{/customer/manage/search/download}" method="post" th:object="${meters}">
+				<form th:action="@{/customer/manage/search/export}" method="post" th:object="${meters}">
 					<input type="hidden" name="customerCode" th:value="${customerCode}" />
 					<input type="hidden" name="customerName" th:value="${customerName}" />
 					<input type="hidden" name="customerAddress" th:value="${customerAddress}" />

@@ -82,9 +82,8 @@ public class AutoApproveSchedule {
 			if(customer.getBalance() < bill.getTotalPostage()) 
 				continue;
 
-			customer.setBalance(customer.getBalance() - bill.getTotalPostage());
-			customerService.save(customer);
-			billService.payBill(bill, bill.getTotalPostage(), "");
+			customerService.pay(customer, new Float(0), bill.getTotalPostage());
+			billService.payBill(bill, bill.getTotalPostage(),customer.getBalance() - bill.getTotalPostage(), "");
 		}
 	}
 }

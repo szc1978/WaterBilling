@@ -53,7 +53,7 @@
 				        <td th:text="${bill.beginWaterWord}"></td>
 						<td th:text="${bill.endWaterWord}"></td>
 						<td th:text="${bill.totalPostage}"></td>
-						<td ><a th:href="@{/pay/bill(id=${bill.id})}" th:text="明细"></a></td>
+						<td ><a th:href="@{/pay/billdetail(id=${bill.id})}" th:text="明细"></a></td>
 			        </tr>        
 			        </tbody>
 			    </table>

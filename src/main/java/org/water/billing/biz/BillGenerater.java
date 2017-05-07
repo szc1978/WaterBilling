@@ -58,7 +58,7 @@ public class BillGenerater {
 		bill.setEndWaterWord(waterMeterData.getNewNumber());
 		bill.setTotalPostage(totalPostage);
 		bill.setDetailContent(detailedBill);
-		bill.setName(customerWaterMeter.getBodyNumber() + waterMeterData.getPayMonth() + "月账单");
+		bill.setName("表号:" + customerWaterMeter.getBodyNumber() + "在" + waterMeterData.getPayMonth() + "月账单");
 		bill.setInputDate(new Date());
 		bill.setInputerName(waterMeterData.getInputerName());
 		bill.setCustomerCode(customer.getCustomerInfo().getCode());
@@ -131,9 +131,9 @@ public class BillGenerater {
 	private Float calPostage4Step(Charge charge,Float waterNumber) {
 		ChargeParameter cp = charge.getChargeParameter();
 		Float postage = new Float(0);
-		if(waterNumber < cp.getStep2Number())
+		if(waterNumber <= cp.getStep2Number())
 			postage += waterNumber * cp.getStep1Price();
-		if(waterNumber > cp.getStep2Number() && waterNumber < cp.getStep3Number())
+		if(waterNumber > cp.getStep2Number() && waterNumber <= cp.getStep3Number())
 			postage += (waterNumber - cp.getStep2Number()) * cp.getStep2Price();
 		if(waterNumber > cp.getStep3Number() ) {
 			postage += (cp.getStep3Number() - cp.getStep2Number()) * cp.getStep2Price();

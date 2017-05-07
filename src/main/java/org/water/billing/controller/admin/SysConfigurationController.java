@@ -29,6 +29,8 @@ public class SysConfigurationController {
 							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_DAY));
 		map.addAttribute("late_pay_ratio",
 							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_LATE_PAY_RATIO));
+		map.addAttribute("press_payment_day",
+							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_PRESS_PAYMENT_DAY));
 		map.addAttribute("disable_approve_customer",
 							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_DISABLE_APPROVE_CUSTOMER));
 		map.addAttribute("disable_approve_customer_water",
@@ -37,8 +39,6 @@ public class SysConfigurationController {
 							GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_DISABLE_APPROVE_CUSTOMER_BILL));
 		map.addAttribute("customer_water_meter_usage",
 				GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_CUSTOMER_WATER_METER_USAGE));
-		//map.addAttribute("customer_water_meter_status",
-		//		GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_CUSTOMER_WATER_METER_STATUS));
 		map.addAttribute("customer_certificate_name",
 				GlobalConfiguration.getInstance().getConfigValueByItemName(Consts.GCK_CUSTOMER_CERTIFICATE_NAME));
 		map.addAttribute("charge_from_type",

@@ -19,7 +19,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
+import org.hibernate.validator.constraints.NotBlank;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.water.billing.consts.Consts;
 
 @Entity
@@ -30,6 +32,7 @@ public class Customer {
 	@Column ( name = "id",length=10)
 	private int id = 0;
 	
+	@NotBlank(message = "客户名字不能为空")
 	@Column(name="name",nullable=false)
 	private String name;
 	
@@ -170,4 +173,20 @@ public class Customer {
 		this.meters = meters;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public JSONObject toJson() {
+		JSONObject json = new JSONObject();
+		json.put("姓名", name);
+		json.put("供水片区", waterProvider.getName());
+		json.put("状态", status);
+		json.put("基本信息", customerInfo.toJson());
+		JSONArray meterJsons = new JSONArray();
+		if(meters != null) {
+			for(CustomerWaterMeter meter : meters) {
+				meterJsons.add(meter.toJson());
+			}
+		}
+		json.put("水表", meterJsons);
+		return json;
+	}
 }

@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;  
 import javax.persistence.TemporalType;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.WaterProvider;  
     
@@ -30,6 +31,7 @@ public class SysUser {
 	@Column(name = "id", length=10)
 	private int id = 0;
 	
+	@NotBlank(message = "用户名称不能为空")
 	@Column(name = "name", unique = true, nullable = false,length = 64)
 	private String name;
 	

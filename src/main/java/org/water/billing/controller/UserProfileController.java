@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.water.billing.GlobalConfiguration;
+import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.admin.LoginHistory;
@@ -74,10 +75,10 @@ public class UserProfileController {
 		//String oldEncryptPassword = bc.encode(oldPassword);
 		
 		if(oldPassword == null || !bc.matches(oldPassword, user.getPassword())) 
-			throw new Exception("您提供的旧密码不正确，如果忘记旧密码，请联系管理员");
+			throw new MyException("您提供的旧密码不正确，如果忘记旧密码，请联系管理员");
 		
 		if(newPassword1 == null || newPassword1.length() < Consts.MIN_ADMIN_USER_PWD_LENGTH || !newPassword1.equals(newPassword2))
-			throw new Exception("新密码长度不少于 "+Consts.MIN_ADMIN_USER_PWD_LENGTH+"或者两次新密码不一致！！");
+			throw new MyException("新密码长度不少于 "+Consts.MIN_ADMIN_USER_PWD_LENGTH+"或者两次新密码不一致！！");
 			
 		SysUser dbUser = sysUserService.findByName(user.getName());
 		dbUser.setPassword(bc.encode(newPassword1));

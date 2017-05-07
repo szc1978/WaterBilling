@@ -10,8 +10,7 @@
 <body>
 	<div class="container">
 		<div class="formtitle"><span>错误</span></div>
-		<div th:if="${exception != null}" th:text="${exception.message}"></div>
-		<div th:if="${exception == null}">未知内部错误</div>
+		<div th:text="${message}"></div>
 	</div>
 	
 </body>

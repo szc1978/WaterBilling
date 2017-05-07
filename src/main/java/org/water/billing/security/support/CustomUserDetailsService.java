@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {  
         SysUser user = userService.findActiveUserByName(userName);  
         if (user == null) {  
-            throw new UsernameNotFoundException("UserName " + userName + " not found");  
+            throw new UsernameNotFoundException("用户名 " + userName + " 不存在");  
         }  
 
         SecurityUser seu = new SecurityUser(user);  

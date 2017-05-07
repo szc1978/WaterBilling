@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
 @Table(name = "customer_type")
 public class CustomerType {
@@ -21,6 +23,7 @@ public class CustomerType {
 	@Column ( name = "id",length=10)
 	private int id;
 	
+	@NotBlank(message = "客户类型名称不能为空")
 	@Column(name="name",unique=true)
 	private String name;
 	

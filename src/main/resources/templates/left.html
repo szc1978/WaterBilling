@@ -136,6 +136,7 @@
                             <li th:if="${#strings.contains(userResources,'/customer/type')}"><a href="/customer/type" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 客户类型管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/customer/waterprovider')}"><a href="/customer/waterprovider" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 供水片区管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/customer/watermetertype')}"><a href="/customer/watermetertype" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 水表信息管理</a></li>
+                            <li th:if="${#strings.contains(userResources,'/customer/presspayment')}"><a href="/customer/presspayment" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 催费通知</a></li>
                         </ul>
                     </li>
                     <li th:if="${#strings.contains(userResources,'/charge')}">
@@ -181,7 +182,7 @@
                             <li th:if="${#strings.contains(userResources,'/admin/privilege')}"><a href="/admin/privilege" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 页面功能管理</a></li>
                             <li th:if="${#strings.contains(userResources,'/admin/configuration')}"><a href="/admin/configuration" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 系统全局配置</a></li>
                             <li th:if="${#strings.contains(userResources,'/admin/announcement')}"><a href="/admin/announcement/list" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 公告管理</a></li>
-                            <li th:if="${#strings.contains(userResources,'/admin/configuration')}"><a href="/admin/configuration" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 统计数据</a></li>
+                            <li th:if="${#strings.contains(userResources,'/admin/statistic')}"><a href="/admin/statistic" target="rightFrame"><i class="glyphicon glyphicon-chevron-right"></i> 统计数据</a></li>
                         </ul>
                     </li>
                     <li th:if="${#strings.contains(userResources,'/log')}">

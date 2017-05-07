@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="container">
+		<div class="formtitle"><span>欠费清单</span></div>
+    	<div class="col-sm-12 ">
+    		<table class="table table-striped">
+				<thead>
+			    	<tr>
+			        	<th>客户姓名</th>
+			        	<th>客户住址</th>
+			        	<th>欠费信息</th>
+			        </tr>
+				</thead>
+				<tbody>
+			        <tr th:each="message : ${bill_message}"> 
+				        <td th:text="${message.customername}"></td>
+				        <td th:text="${message.customeraddress}"></td>
+				        <td th:text="${message.msg}"></td>
+			        </tr>        
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>

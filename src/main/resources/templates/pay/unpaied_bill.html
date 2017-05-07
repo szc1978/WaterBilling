@@ -34,6 +34,7 @@
 			    		<tr>
 			        		<th>编号<i class="sort"></i></th>
 			        		<th>账单名称</th>
+			        		<th>表号</th>
 			        		<th>起始水表数</th>
 			        		<th>结束水表数</th>
 			        		<th>缴费金额</th>
@@ -44,6 +45,7 @@
 				        <tr th:each="bill,billStat : ${bills}"> 
 					        <td th:text="${billStat.index} + 1">1</td> 
 					        <td th:text="${bill.name}"></td> 
+					        <td th:text="${bill.waterMeterBodyNumber}"></td> 
 					        <td th:text="${bill.beginWaterWord}"></td>
 							<td th:text="${bill.endWaterWord}"></td>
 							<td th:text="${bill.totalPostage}"></td>

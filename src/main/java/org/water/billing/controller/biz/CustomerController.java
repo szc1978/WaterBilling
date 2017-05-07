@@ -79,7 +79,9 @@ public class CustomerController {
 	
 	@OpAnnotation(moduleName="客户管理",option="增加修改客户")
 	@RequestMapping(value="/customer/manage",method=RequestMethod.POST)
-	public String customer(@ModelAttribute Customer customer) {
+	public String customer(@ModelAttribute Customer customer) throws MyException {
+		if(customer.getId() == 0 && customerService.existsByCustomerCode(customer.getCustomerInfo().getCode()))
+			throw new MyException("增加的新客户编号已经存在");
 		Customer tmp = customerService.save(customer);
 		return "redirect:/customer/manage/list/" + tmp.getId();
 	}
@@ -276,7 +278,7 @@ public class CustomerController {
 		return "/customer/customer_search_result";
 	}
 	
-	@RequestMapping(value="/customer/manage/search/download",method=RequestMethod.POST)
+	@RequestMapping(value="/customer/manage/search/export",method=RequestMethod.POST)
 	public void download(@RequestParam(defaultValue="") String customerCode,
 						 @RequestParam(defaultValue="") String customerName,
 						 @RequestParam(defaultValue="") String customerAddress,
