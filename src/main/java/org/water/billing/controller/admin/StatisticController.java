@@ -14,10 +14,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
-import org.water.billing.entity.biz.CustomerPayHistory;
 import org.water.billing.service.biz.BillService;
-import org.water.billing.service.biz.CustomerPayHistoryService;
 
 @Controller
 public class StatisticController {
@@ -25,26 +24,22 @@ public class StatisticController {
 	@Autowired
 	BillService billService;
 	
-	@Autowired
-	CustomerPayHistoryService payHistoryService;
-	
 	@RequestMapping(value="/admin/statistic",method={RequestMethod.POST,RequestMethod.GET})
 	public String statistic(@RequestParam(defaultValue="0") String year,@RequestParam(defaultValue="0") String month,ModelMap model) {
 		Date from = getFromDate(year,month);
 		Date to = getToDate(year,month);
 		
 		Float totalWaterNumber = getTotalWaterNumber(from,to);
-		Float totalMoney = getTotalPaiedMoney(from,to);
 		
 		List<Bill> bills = billService.findChargedBills4Statistic(from,to);
 		BillStatistic stat = new BillStatistic(bills);
 		
 	    model.addAttribute("totalWaterNumber", totalWaterNumber);
-	    model.addAttribute("totalMoney", totalMoney);
 	    model.addAttribute("chargeitems", stat.getItemContent());
 	    model.addAttribute("totalNeedPay", stat.getTotalNeedPay());
 	    model.addAttribute("totalReduce", stat.getTotalReduce());
 	    model.addAttribute("totalPaied", stat.getTotalPaied());
+	    model.addAttribute("totalMoney", stat.getTotalMoney());
 	    
 		return "/admin/statistic";
 	}
@@ -56,15 +51,6 @@ public class StatisticController {
 	    	totalWaterNumber += (bill.getEndWaterWord() - bill.getBeginWaterWord());
 		}
 		return totalWaterNumber;
-	}
-	
-	private Float getTotalPaiedMoney(Date fromDate,Date toDate) {
-		Float totalMoney = new Float(0);
-		List<CustomerPayHistory> allhistory = payHistoryService.findHistory4Statistic(fromDate,toDate);
-		for(CustomerPayHistory history : allhistory) {
-			totalMoney += history.getPayNumber();
-		}
-		return totalMoney;
 	}
 	
 	private Date getFromDate(String year,String month) {
@@ -108,11 +94,24 @@ public class StatisticController {
 	 Float totalNeedPay = new Float(0);
 	 Float totalReduce = new Float(0);
 	 Float totalPaied = new Float(0);
+	 Float totalMoney = new Float(0);
 	 Map<String,Map<String,Object>> items = new HashMap<String,Map<String,Object>>();
 	 
 	 public BillStatistic(List<Bill> bills) {
 		 for(Bill bill : bills) {
-		    String reduceString = bill.getReduceContent();
+		    if(bill.getBillType() == Consts.BILL_TYPE_PAY)
+		    	handlePayBill(bill);
+		    else
+		    	handleBizBill(bill);
+		}
+	 }
+	 
+	 private void handlePayBill(Bill bill) {
+		 totalMoney += bill.getPaied();
+	 }
+	 
+	 private void handleBizBill(Bill bill) {
+		 String reduceString = bill.getReduceContent();
 		    for(String s : reduceString.split(";")) {
 		    	String[] ss = s.split(":");
 		    	if(ss.length != 2)
@@ -139,7 +138,6 @@ public class StatisticController {
 		    	totalReduce += reduce;
 		    	totalPaied += needPay - reduce;
 		    }
-		}
 	 }
 	 
 	 public Float getTotalNeedPay() {
@@ -152,6 +150,10 @@ public class StatisticController {
 	 
 	 public Float getTotalPaied() {
 		 return totalPaied;
+	 }
+	 
+	 public Float getTotalMoney() {
+		 return totalMoney;
 	 }
 	 
 	 public Collection<Map<String, Object>> getItemContent() {

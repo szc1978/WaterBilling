@@ -20,8 +20,9 @@ public class Consts {
 	public static final int BILL_AUTO_CHARGE_FLAG = 1;
 	public static final int NON_BILL_AUTO_CHARGE_FLAG = 0;
 	
-	public static final int BILL_TYPE_WATER = 1;
-	public static final int BILL_TYPE_BIZ = 2;
+	public static final int BILL_TYPE_WATER = 1; //用水账单
+	public static final int BILL_TYPE_BIZ = 2; //特殊业务账单
+	public static final int BILL_TYPE_PAY = 0; //充值
 	
 	public static final int WATER_METER_MAINTAIN_ACTION_ADD = 1;
 	public static final int WATER_METER_MAINTAIN_ACTION_EDIT = 2;

@@ -28,7 +28,6 @@ import org.water.billing.entity.biz.Customer;
 import org.water.billing.entity.biz.CustomerWaterMeter;
 import org.water.billing.service.biz.BillService;
 import org.water.billing.service.biz.ChargeService;
-import org.water.billing.service.biz.CustomerPayHistoryService;
 import org.water.billing.service.biz.CustomerService;
 import org.water.billing.service.biz.CustomerWaterMeterService;
 
@@ -46,9 +45,6 @@ public class PayController {
 	
 	@Autowired
 	BillService billService;
-	
-	@Autowired
-	CustomerPayHistoryService payHistoryService;
 	
 	@RequestMapping(value="/pay/listunpaiedbill",method=RequestMethod.GET)
 	public String listUnpaiedBill(@RequestParam(required=false) String code,ModelMap map) {
@@ -112,7 +108,11 @@ public class PayController {
 		reduce += Float.valueOf(reduceLatePaymentValue);
 		
 		Float needPay = bill.getTotalPostage() - reduce;
-		doPay4OneBill( bill, thisPay, needPay, reduceContent);
+		if(customer.getBalance() + thisPay < needPay)
+			throw new MyException("缴费金额不足");
+		
+		customerPayOnly(customer,thisPay);
+		doPay4OneBill( bill, needPay, reduceContent);
 		
 		return "redirect:/pay/billdetail?id=" + bill.getId();
 	}
@@ -158,36 +158,31 @@ public class PayController {
 		if((customer.getBalance() + thisPay) < (unpaied + latePayment))
 			throw new MyException("费用不够，请检查");
 		
-		customerPay(customer,thisPay,new Float(0));
+		customerPayOnly(customer,thisPay);
 		
 		for(Bill bill : bills) {
 			Float thisLatePayment = getLatePayment4Bill(bill);
 			Float needPay = bill.getTotalPostage() + thisLatePayment;
-			doPay4OneBill(bill,new Float(0),needPay,"");
+			doPay4OneBill(bill,needPay,null);
 		}
 
 		model.addAttribute("msg", "统一缴费成功，如果需要打印账单，请前往搜索");
 		return "/msg";
 	}
 	
-	private Bill doPay4OneBill(Bill bill,Float thisPay,Float needPay,String reduceContent) throws MyException {
+	private Bill doPay4OneBill(Bill bill,Float needPay,String reduceContent) throws MyException {
 		String customerCode = bill.getCustomerCode();
 		Customer customer = customerService.findByCode(customerCode);
-		if((customer.getBalance() + thisPay) < needPay)
-			throw new MyException("所缴费用不够，请检查");
 
-		customerPay(customer,thisPay,needPay);
-		Float newBalance = customer.getBalance() + thisPay - needPay;
-		
-		bill = billService.payBill(bill, needPay, newBalance, reduceContent);
+		customer = customerService.pay(customer, needPay);
+		bill = billService.payBill(bill, needPay, customer.getBalance(), reduceContent);
 
 		return bill;
 	}
 	
-	private void customerPay(Customer customer,Float thisPay,Float needPay) {
-		customer = customerService.pay(customer, thisPay, needPay);
-		
-		payHistoryService.newPay(customer, thisPay);
+	private void customerPayOnly(Customer customer,Float money) {
+		billService.customerPayOnlyBill(customer, money);
+		customerService.pay(customer, money * -1);
 	}
 	
 	@RequestMapping(value="/pay/biz",method=RequestMethod.GET) 
@@ -209,29 +204,6 @@ public class PayController {
 		}
 		model.addAttribute("charges", charges);
 		return "/pay/business";
-	}
-	
-	@OpAnnotation(moduleName="客户缴费",option="撤销缴费")
-	@RequestMapping(value = "/pay/pay_rollback",method=RequestMethod.GET)
-	public String payRollback(@RequestParam int id,ModelMap model) throws Exception {
-		Bill bill = billService.findById(id);
-		if(bill == null)
-			throw new MyException("账单不存在");
-		if(bill.getIsPrintExpenses() == 1)
-			throw new MyException("该账单已经打印过发票，无法撤销");
-		
-		if(bill.getBillType() == Consts.BILL_TYPE_WATER) {
-			String customerCode = bill.getCustomerCode();
-			Customer customer = customerService.findByCode(customerCode);
-			
-			customer = customerService.rollbackPay(customer, bill.getPaied());
-			billService.rollbackPay(bill, customer.getBalance());
-		}
-		if(bill.getBillType() == Consts.BILL_TYPE_BIZ)
-			billService.delete(bill);
-
-		model.addAttribute("msg", "该账单缴费撤销成功！");
-		return "/msg";
 	}
 	
 	@OpAnnotation(moduleName="客户缴费",option="业务缴费")
@@ -261,11 +233,34 @@ public class PayController {
 		Bill bill = billGenerater.genBill4DedivatedCharge("业务缴费", charges);
 		bill.setBillType(Consts.BILL_TYPE_BIZ);
 		
-		bill = doPay4OneBill(bill,thisPay,bill.getTotalPostage(),reduceContent);
+		if(customer.getBalance() + thisPay < bill.getTotalPostage())
+			throw new MyException("缴费金额不足");
+		customerPayOnly(customer,thisPay);
+		bill = doPay4OneBill(bill,bill.getTotalPostage(),reduceContent);
 
 		return "redirect:/pay/billdetail?id=" + bill.getId();
 	}
 	
+	@OpAnnotation(moduleName="客户缴费",option="撤销缴费")
+	@RequestMapping(value = "/pay/pay_rollback",method=RequestMethod.GET)
+	public String payRollback(@RequestParam int id,ModelMap model) throws Exception {
+		Bill bill = billService.findById(id);
+		if(bill == null)
+			throw new MyException("账单不存在");
+		if(bill.getIsPrintExpenses() == 1)
+			throw new MyException("该账单已经打印过发票，无法撤销");
+		
+		Customer customer = customerService.findByCode(bill.getCustomerCode());
+		customerService.pay(customer, bill.getPaied() * -1);
+		if(bill.getBillType() == Consts.BILL_TYPE_WATER) {
+			billService.rollbackPay(bill, customer.getBalance() + bill.getPaied());
+		}
+		if(bill.getBillType() == Consts.BILL_TYPE_BIZ)
+			billService.delete(bill);
+
+		model.addAttribute("msg", "该账单缴费撤销成功！");
+		return "/msg";
+	}
 	
 	@RequestMapping(value="/pay/billdetail",method=RequestMethod.GET)
 	public String paySuccess(int id,ModelMap model) throws MyException {
@@ -326,7 +321,7 @@ public class PayController {
 	@RequestMapping(value = "/approve/customerbill",method=RequestMethod.GET)
 	public String autoPay(@RequestParam int id) throws Exception {
 		Bill bill = billService.findById(id);
-		doPay4OneBill(bill,new Float(0),new Float(0),"");
+		doPay4OneBill(bill,new Float(0),"");
 		return "redirect:/approve/customerbill/list";
 	}
 	

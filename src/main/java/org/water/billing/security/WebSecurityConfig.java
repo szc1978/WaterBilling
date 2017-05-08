@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .invalidateHttpSession(true)  
         .and()  
         .rememberMe()
-        .tokenValiditySeconds(1209600);  
+        .tokenValiditySeconds(86400);  
     }  
  
 	public void configure(WebSecurity web) throws Exception {  

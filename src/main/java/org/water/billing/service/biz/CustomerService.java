@@ -37,15 +37,8 @@ public class CustomerService {
 		return customerDao.save(customer);
 	}
 	
-	public Customer pay(Customer customer,Float thisPay,Float needPay) {
-		customer.setBalance(customer.getBalance() + thisPay - needPay);
-		return customerDao.save(customer);
-	}
-	
-	public Customer rollbackPay(Customer customer,Float paied) {
-		Float balance = customer.getBalance();
-		Float newBalance = balance + paied;
-		customer.setBalance(newBalance);
+	public Customer pay(Customer customer,Float payMoney) {
+		customer.setBalance(customer.getBalance() - payMoney);
 		return customerDao.save(customer);
 	}
 	

@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.water.billing.entity.biz.Bill;
 
 public interface BillDao extends JpaRepository<Bill, Integer>{
@@ -19,10 +17,9 @@ public interface BillDao extends JpaRepository<Bill, Integer>{
 	public List<Bill> findByIsCharged(int isCharged,Sort sort);
 	
 	public List<Bill> findByCustomerCodeAndIsCharged(String customerCode,int isCharged,Sort sort);
-	
-	@Query(value="select bill from Bill bill where bill.customerCode=:customerCode and isCharged = 1 and bill.inputDate>:fromDate and bill.inputDate<:toDate")
-	public List<Bill> findCustomerChargedBill(@Param("customerCode") String customerCode,@Param("fromDate") Date fromDate,@Param("toDate") Date toDate);
 
+	public List<Bill> findByCustomerCodeAndIsChargedAndChargeDateBetween(String customerCode,int isCharged,Date fromDate,Date toDate,Sort sort);
+	
 	public int countByAutoChargeFlag(int flag);
 	
 	public List<Bill> findByAutoChargeFlag(int flag);

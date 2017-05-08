@@ -42,6 +42,7 @@
 			        		<th>起始水表数</th>
 			        		<th>结束水表数</th>
 			        		<th>缴费金额</th>
+			        		<th>余额</th>
 			        		<th>缴费明细</th>
 			        	</tr>
 			        </thead>
@@ -50,10 +51,14 @@
 				        <td th:text="${billStat.index} + 1">1</td> 
 				        <td th:text="${bill.name}"></td> 
 				        <td th:text="${bill.chargeDate}"></td>
-				        <td th:text="${bill.beginWaterWord}"></td>
-						<td th:text="${bill.endWaterWord}"></td>
-						<td th:text="${bill.totalPostage}"></td>
-						<td ><a th:href="@{/pay/billdetail(id=${bill.id})}" th:text="明细"></a></td>
+				        <td th:if="${bill.billType ne 0}" th:text="${bill.beginWaterWord}"></td>
+						<td th:if="${bill.billType eq 0}"></td>
+						<td th:if="${bill.billType ne 0}" th:text="${bill.endWaterWord}"></td>
+						<td th:if="${bill.billType eq 0}"></td>
+						<td th:text="${bill.paied}"></td>
+						<td th:text="${bill.customerBalanceAfterPay}"></td>
+						<td th:if="${bill.billType ne 0}"><a th:href="@{/pay/billdetail(id=${bill.id})}" th:text="明细"></a></td>
+						<td th:if="${bill.billType eq 0}"> </td>
 			        </tr>        
 			        </tbody>
 			    </table>

@@ -81,9 +81,9 @@ public class AutoApproveSchedule {
 			Customer customer = customerService.findByCode(customerCode);
 			if(customer.getBalance() < bill.getTotalPostage()) 
 				continue;
-
-			customerService.pay(customer, new Float(0), bill.getTotalPostage());
-			billService.payBill(bill, bill.getTotalPostage(),customer.getBalance() - bill.getTotalPostage(), "");
+				
+			customer = customerService.pay(customer, bill.getTotalPostage());
+			billService.payBill(bill, bill.getTotalPostage(),customer.getBalance(), null);
 		}
 	}
 }

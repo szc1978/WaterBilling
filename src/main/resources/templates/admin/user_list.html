@@ -30,7 +30,6 @@
 			        		<th>中文名</th>
 			        		<th>邮件地址</th>
 			        		<th>权限列表</th>
-			        		<th>状态</th>
 			        		<th>最后修改日期</th>
 			        		<th>操作</th>
 			        	</tr>
@@ -46,12 +45,11 @@
 				        		[<b th:text="${myrole.name}"/>]
 				        	</font>
 				        </td>
-				        <td th:text="${user.active}"></td>
 				        <td th:text="${user.createDate}"></td>
 				        <td>
 				        	<a th:href="@{/admin/user/form(id=${user.id})}">编辑</a>
-				        	<a th:href="@{/admin/user/activate(id=${user.id})}">恢复</a>
-				        	<a th:href="@{/admin/user/deactivate(id=${user.id})}">禁用</a>
+				        	<a th:if="${user.active eq 0}" th:href="@{/admin/user/activate(id=${user.id})}">恢复</a>
+				        	<a th:if="${user.active eq 1}" th:href="@{/admin/user/deactivate(id=${user.id})}">禁用</a>
 				        </td>
 			        </tr>        
 			        </tbody>
