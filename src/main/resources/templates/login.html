@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>自来水管理系统</title>
@@ -33,11 +33,11 @@
 				<div class="login_padding" id="login_model">
 					<h2>USERNAME<font th:if="${param.error}" color="#ff0000">&nbsp;&nbsp;&nbsp;&nbsp;用户名或密码错误!</font><font th:if="${param.logout}">&nbsp;&nbsp;&nbsp;&nbsp;您已经登出. </font></h2>
 					<label>
-						<input type="text" name="username" id="username" class="txt_input txt_input2" onfocus="if (value ==&#39;Your name&#39;){value =&#39;&#39;}" onblur="if (value ==&#39;&#39;){value=&#39;Your name&#39;}" value="sys" />
+						<input type="text" name="username" id="username" class="txt_input txt_input2"  th:placeholder="系统用户名" />
 					</label>
 					<h2>PASSWORD</h2>
 					<label>
-						<input type="password" name="password" id="userpwd" class="txt_input" onfocus="if (value ==&#39;******&#39;){value =&#39;&#39;}" onblur="if (value ==&#39;&#39;){value=&#39;******&#39;}" value="pass" />
+						<input type="password" name="password" id="userpwd" class="txt_input" th:placeholder="用户密码" />
 					</label>
 					<div class="rem_sub">
 						<label>
