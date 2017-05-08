@@ -15,6 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;  
 import javax.persistence.Temporal;  
 import javax.persistence.TemporalType;
@@ -51,6 +52,7 @@ public class SysUser {
 	@Column(name = "createDate", length = 32)  
 	private Date createDate; 
 	
+	@PreUpdate
 	@PrePersist
     protected void onCreate() {
 		createDate = new Date();

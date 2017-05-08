@@ -180,6 +180,8 @@ public class Customer {
 		json.put("供水片区", waterProvider.getName());
 		json.put("状态", status);
 		json.put("基本信息", customerInfo.toJson());
+		json.put("账户余额", balance);
+		json.put("客户类型", customerType.getName());
 		JSONArray meterJsons = new JSONArray();
 		if(meters != null) {
 			for(CustomerWaterMeter meter : meters) {

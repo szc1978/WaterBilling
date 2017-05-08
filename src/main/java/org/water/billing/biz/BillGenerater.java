@@ -144,9 +144,12 @@ public class BillGenerater {
 		Float postage = new Float(0);
 		if(waterNumber <= cp.getStep2Number())
 			postage += waterNumber * cp.getStep1Price();
-		if(waterNumber > cp.getStep2Number() && waterNumber <= cp.getStep3Number())
+		if(waterNumber > cp.getStep2Number() && waterNumber <= cp.getStep3Number()){
+			postage += cp.getStep2Number() * cp.getStep1Price();
 			postage += (waterNumber - cp.getStep2Number()) * cp.getStep2Price();
+		}
 		if(waterNumber > cp.getStep3Number() ) {
+			postage += cp.getStep2Number() * cp.getStep1Price();
 			postage += (cp.getStep3Number() - cp.getStep2Number()) * cp.getStep2Price();
 			postage += (waterNumber - cp.getStep3Number()) * cp.getStep3Price();
 		}
