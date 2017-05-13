@@ -16,10 +16,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.water.billing.GlobalConfiguration;
 import org.water.billing.MyException;
 import org.water.billing.annotation.OpAnnotation;
 import org.water.billing.biz.BillGenerater;
+import org.water.billing.biz.BillHelper;
 import org.water.billing.consts.ChargeTypeEnum;
 import org.water.billing.consts.Consts;
 import org.water.billing.entity.biz.Bill;
@@ -64,7 +64,7 @@ public class PayController {
 			throw new MyException("客户不存在");
 		map.addAttribute("bill", bill);
 		map.addAttribute("customer", customer);
-		Float latePaymentValue = getLatePayment4Bill(bill);
+		Float latePaymentValue = BillHelper.getLatePayment4Bill(bill);
 		map.addAttribute("late_payment", latePaymentValue);
 		List<Map<String,String>> chargeDetailedList = getDetailCharge4Bill(bill);
 		map.addAttribute("chargeDetailedList",chargeDetailedList);
@@ -124,10 +124,10 @@ public class PayController {
 			throw new MyException("用户不存在");
 		
 		List<Bill> bills = billService.findUnchargedBill(code);
-		Map<String,Object> payInformation = getPayInformation(bills);
+		Map<String,Float> payInformation = BillHelper.getPayInformation(bills);
 		
-		Float unpaied = payInformation.get("unpaied") == null ? new Float(0) : (Float) payInformation.get("unpaied");
-		Float latePayment = payInformation.get("latePayment") == null ? new Float(0) : (Float) payInformation.get("latePayment");
+		Float unpaied = payInformation.get("unpaied") == null ? new Float(0) : payInformation.get("unpaied");
+		Float latePayment = payInformation.get("latePayment") == null ? new Float(0) : payInformation.get("latePayment");
 		
 		if(unpaied == 0)
 			throw new MyException("用户不欠费");
@@ -151,9 +151,9 @@ public class PayController {
 			throw new MyException("用户不存在");
 		
 		List<Bill> bills = billService.findUnchargedBill(customerCode);
-		Map<String,Object> payInformation = getPayInformation(bills);
-		Float unpaied = payInformation.get("unpaied") == null ? new Float(0) : (Float) payInformation.get("unpaied");
-		Float latePayment = payInformation.get("latePayment") == null ? new Float(0) : (Float) payInformation.get("latePayment");
+		Map<String,Float> payInformation = BillHelper.getPayInformation(bills);
+		Float unpaied = payInformation.get("unpaied") == null ? new Float(0) : payInformation.get("unpaied");
+		Float latePayment = payInformation.get("latePayment") == null ? new Float(0) : payInformation.get("latePayment");
 		
 		if((customer.getBalance() + thisPay) < (unpaied + latePayment))
 			throw new MyException("费用不够，请检查");
@@ -161,7 +161,7 @@ public class PayController {
 		customerPayOnly(customer,thisPay);
 		
 		for(Bill bill : bills) {
-			Float thisLatePayment = getLatePayment4Bill(bill);
+			Float thisLatePayment = BillHelper.getLatePayment4Bill(bill);
 			Float needPay = bill.getTotalPostage() + thisLatePayment;
 			doPay4OneBill(bill,needPay,null);
 		}
@@ -364,7 +364,7 @@ public class PayController {
 			}
 			Map<String,Object> item = ss.get(meterBodyNumber);
 			Float unpaied = bill.getTotalPostage() + (Float)item.get("unpaied");
-			Float latepayment = getLatePayment4Bill(bill) + (Float)item.get("latepayment");
+			Float latepayment = BillHelper.getLatePayment4Bill(bill) + (Float)item.get("latepayment");
 			Float waternumber = bill.getEndWaterWord() - bill.getBeginWaterWord() + (Float)item.get("waternumber");
 			item.put("unpaied",unpaied);
 			item.put("latepayment",latepayment);
@@ -380,7 +380,7 @@ public class PayController {
 		return "/customer/press_payment";
 	}
 	
-	private Map<String,Object> getPayInformation(List<Bill> bills) {
+	/*private Map<String,Object> getPayInformation(List<Bill> bills) {
 		Map<String,Object> res = new HashMap<String,Object>();
 		if(bills.size() == 0)
 			return res;
@@ -408,7 +408,7 @@ public class PayController {
 			latePaymentValue =  (days - latePayDay) * (billPostage * (latePayRatio/100));
 		}
 		return latePaymentValue;
-	}
+	}*/
 	
 	private List<Map<String,String>> getDetailCharge4Bill(Bill bill) {
 		List<Map<String,String>> res = new ArrayList<Map<String,String>>();
