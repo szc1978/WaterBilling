@@ -289,10 +289,10 @@ public class PayController {
 	}
 	
 	@RequestMapping(value="/pay/history",method=RequestMethod.GET)
-	public String payHistory(HttpServletRequest request,ModelMap model) {
+	public String payHistory(HttpServletRequest request,ModelMap model) throws MyException {
 		String customerCode = request.getParameter("customerCode");
 		String fromToDate = request.getParameter("from_to_date");
-		if(customerCode != null && fromToDate != null) {
+		if(customerCode != null && fromToDate != null && fromToDate.contains("-")) {
 			String[] tmp = fromToDate.split(" - ");
 			String strFromDate = tmp[0];
 			String strToDate = tmp[1];

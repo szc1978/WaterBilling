@@ -46,22 +46,25 @@
 			        		<th>缴费明细</th>
 			        	</tr>
 			        </thead>
-			        <tbody>
-			        <tr th:each="bill,billStat : ${bills}"> 
-				        <td th:text="${billStat.index} + 1">1</td> 
-				        <td th:text="${bill.name}"></td> 
-				        <td th:text="${bill.chargeDate}"></td>
-				        <td th:if="${bill.billType ne 0}" th:text="${bill.beginWaterWord}"></td>
-						<td th:if="${bill.billType eq 0}"></td>
-						<td th:if="${bill.billType ne 0}" th:text="${bill.endWaterWord}"></td>
-						<td th:if="${bill.billType eq 0}"></td>
-						<td th:text="${bill.paied}"></td>
-						<td th:text="${bill.customerBalanceAfterPay}"></td>
-						<td th:if="${bill.billType ne 0}"><a th:href="@{/pay/billdetail(id=${bill.id})}" th:text="明细"></a></td>
-						<td th:if="${bill.billType eq 0}"> </td>
-			        </tr>        
+			        <tbody th:if="${not #lists.isEmpty(bills)}">
+				        <tr th:each="bill,billStat : ${bills}"> 
+					        <td th:text="${billStat.index} + 1">1</td> 
+					        <td th:text="${bill.name}"></td> 
+					        <td th:text="${bill.chargeDate}"></td>
+					        <td th:if="${bill.billType ne 0}" th:text="${bill.beginWaterWord}"></td>
+							<td th:if="${bill.billType eq 0}"></td>
+							<td th:if="${bill.billType ne 0}" th:text="${bill.endWaterWord}"></td>
+							<td th:if="${bill.billType eq 0}"></td>
+							<td th:text="${bill.paied}"></td>
+							<td th:text="${bill.customerBalanceAfterPay}"></td>
+							<td th:if="${bill.billType ne 0}"><a th:href="@{/pay/billdetail(id=${bill.id})}" th:text="明细"></a></td>
+							<td th:if="${bill.billType eq 0}"> </td>
+				        </tr>        
 			        </tbody>
 			    </table>
+			    <div class="col-sm-8" th:if="${#lists.isEmpty(bills) }">
+					没有找到缴费记录!
+				</div>
 		    </div>
     	</div>
     	

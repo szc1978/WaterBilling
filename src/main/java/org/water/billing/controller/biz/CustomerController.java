@@ -82,6 +82,9 @@ public class CustomerController {
 	public String customer(@ModelAttribute Customer customer) throws MyException {
 		if(customer.getId() == 0 && customerService.existsByCustomerCode(customer.getCustomerInfo().getCode()))
 			throw new MyException("增加的新客户编号已经存在");
+		Customer customerInDB = customerService.findById(customer.getId());
+		if(customerInDB != null)
+			customer.setMeters(customerInDB.getMeters());
 		Customer tmp = customerService.save(customer);
 		return "redirect:/customer/manage/list/" + tmp.getId();
 	}
